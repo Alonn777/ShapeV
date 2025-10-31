@@ -1,0 +1,144 @@
+.WorkoutDay-dashboard {
+    padding: 0 2rem;
+}
+
+.header-workout-day {
+    display: flex;
+    flex-direction: column;
+    background-color: hsl(226, 44%, 11%);
+    padding: 2rem 1rem;
+    width: 100%;
+    min-height: 35vh;
+    border: 1px solid #1f2937;
+    border-radius: 15px;
+    margin: 0 auto;
+    margin-top: 3rem;
+
+}
+
+.back-box {
+    margin-bottom: 0.8rem;
+}
+
+.back-box button {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.5rem;
+    gap: 8px;
+    background-color: transparent;
+    color: #f5f5f5;
+    border: none;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s ease-in;
+    border-radius: 5px;
+}
+
+.back-box button:hover {
+    background-color: #1581fd;
+}
+
+.workout-day-content form {
+    display: flex;
+}
+
+.workout-day-content .control-content {
+    padding: 1rem;
+    width: 100%;
+}
+
+.workout-day-content .control-content input {
+    width: 100%;
+    padding: 0.8rem 0.5rem;
+    outline: none;
+    border-radius: 15px;
+    background-color: #070813;
+    border: 1px solid #1f2937;
+    color: #fff;
+}
+
+.workout-day-content .control-content input::placeholder {
+    color: #f5f5f5;
+}
+
+.workout-day-content .control-content input:hover {
+    transition: 0.2s ease-in;
+    outline: 1px solid #1581fd;
+}
+
+.workout-day-content p {
+    margin-top: 0.5rem;
+}
+
+.workout-day-content button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+/* Estilização dos exercicios */
+.exercise-container {
+    margin-top: 3rem;
+    padding: 1.5rem 1.5rem;
+}
+
+
+.exercise-box .exercise-card {
+    background-color: hsl(226, 44%, 11%);
+    border: 1px solid #1f2937;
+    margin-top: 1.5rem;
+    padding: 1rem 2rem;
+}
+
+.exercise-content .form-control-header {
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+}
+
+.form-control-header .inputs-box {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+}
+
+.form-control-header .inputs-box input[type="text"] {
+    width: 100%;
+}
+
+.form-control-header .inputs-box input[type="checkbox"] {
+    appearance: none;
+
+    width: 30px;
+    height: 30px;
+    border-radius: 20px;
+    border: 2px solid #b6b6b6;
+    cursor: pointer;
+}
+
+.form-control-header .inputs-box input[type="checkbox"]:checked {
+    background-color: #15fd2186;
+    border: 2px solid #00a816;
+}
+
+.form-control-header .inputs-box input[type="checkbox"]:checked::after {
+    content: "✓";
+    color: #ffff;
+    font-size: 1rem;
+    margin-left: 6px;
+    margin-top: 10px;
+
+    text-align: center;
+}
+
+.form-control-header .inputs-box input[type="text"] {
+    background-color: #070813;
+    padding: 0.8rem 0.5rem;
+    outline: none;
+    border-radius: 20px;
+    border: 1px solid #1f2937;
+    color: #fff;
+}
+
+;

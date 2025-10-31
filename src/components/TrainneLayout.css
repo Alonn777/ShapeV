@@ -1,0 +1,109 @@
+.box-insight-trainning {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+    justify-content: space-around;
+    align-items: center;
+    padding: 1.5rem 2rem;
+}
+
+.week-day,
+.time-week-trainning,
+.progress-corporal {
+    background: hsl(224, 44%, 6%);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    backdrop-filter: blur(8px);
+    padding: 2rem;
+    width: 30vw;
+    border: 1px solid #1f2937;
+    border-radius: 10px;
+}
+
+.calendar-icon {
+    background: hsla(213, 93%, 58%, 0.2);
+    padding: 1rem;
+    border-radius: 15px;
+    max-height: 65px;
+}
+
+.progress-icon {
+    background: hsla(142, 71%, 45%, 0.2);
+    padding: 1rem;
+    border-radius: 15px;
+    max-height: 65px;
+}
+
+.time-icon {
+    background: hsla(45, 93%, 58%, 0.2);
+    padding: 1rem;
+    border-radius: 15px;
+    max-height: 65px;
+}
+.workouts-main{
+    display: flex;
+    justify-content: space-evenly;
+    padding: 2rem 2rem ;
+}
+.workout-week, .box-progress-corporal{
+  background: hsl(224, 44%, 6%);
+  border: 1px solid  #1f2937;
+  border-radius: 15px;
+  padding: 2rem;
+  margin-left: 2rem;
+  min-height: 100vh;
+  width: 60vw;
+}
+.header-workout, .corporal-header{
+    display: flex;
+    gap: 1rem;
+}
+.workout{
+    background: hsl(226, 44%, 11%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 1.5rem;
+    border: 1px solid #1f2937;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.workout .day-description h4{
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+.workout .day-description p{
+    font-size: 0.9rem;
+    color: #dddddd;
+}
+.btn-exercise, .btn-start-trainning{
+    padding: 0.6rem 1.3rem;
+    border: none;
+    background-color: #020611;
+    color: #f5f5f5;
+    border: 1px solid #1f2937;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+
+
+}
+
+.btn-exercise:hover, .btn-start-trainning:hover{
+    transition: 0.3s ease-in;
+    background-color: #093cc9;
+}
+
+/* Estilizando o FormCreateExercise */
+
+.overlay-workout{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    top: 0;
+    left: 0;
+    background-color: #070813 ;
+}

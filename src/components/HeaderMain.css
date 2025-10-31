@@ -1,0 +1,48 @@
+.muscle-search{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: hsla(224, 44%, 6%, 0.5);
+    border-bottom: 1px solid #1f2937;
+}
+
+.search-box{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.search-form form{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.search-form form input[type="text"]{
+    padding: 0.6rem 1rem;
+    width: 35vw;
+    outline: none;
+    background-color:  #060718;
+    border: 1px solid #1f2937;
+    border-radius: 5px;
+    color: #ffff;
+}
+.search-form form input[type="text"]::placeholder{
+    color: #f5f5f5;
+}
+
+.navbar-button, .search-button, .notification-user{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+    padding: 0.6rem 0.8rem;
+}
+
+.navbar-button:hover {
+    transition: 0.3s;
+    background-color: #1f2937;
+}
+ .notification-user:hover{
+    transition: 0.2s ease-in;
+    background-color: #053f91;
+}
