@@ -1,64 +1,57 @@
 import { useState, useEffect } from "react";
-import { Calendar } from "lucide-react";
+import { Calendar, ArrowLeft } from "lucide-react";
 import { TrendingUp } from "lucide-react";
 import { Clock10 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { SessionStorage } from "../hooks/SessionStorage";
-import "./TrainneLayout.css";
+import "../css/TrainneLayout.css";
 
 const TrainneLayout = () => {
   const navigate = useNavigate();
   const { data: id, getStorageUser } = SessionStorage();
-  useEffect(()=> getStorageUser(), [])
 
-  
+  useEffect(() => {
+    getStorageUser();
+  }, []);
+
   const [exercisesDay, SetExercisesDay] = useState([]);
   const [SelectDay, SetSelectDay] = useState(null);
   //  REQUISIÇÃO DE EXERCICIOS
   const requestExercises = async (url) => {
     const exercisesData = await fetch(url);
-    const user = exercisesData.json();
-    workoutDaysData(user)
+    const user = await exercisesData.json();
+    workoutDaysData(user);
   };
 
-  const workoutDaysData = async (user) => {
-    const userData = await user;
+  const workoutDaysData = (user) => {
+    const userData = user;
     const workouts = userData.workouts;
-    SetExercisesDay(workouts)
-    
+    SetExercisesDay(workouts);
   };
-  useEffect(() => {
-       if(!id) return console.log("carregando...");
-       
-       const url = "http://localhost:3000/app/users/" + id;
-       requestExercises(url)
-  }, [id]);
- 
-  
 
-  // //  ATUALIZAÇÃO DO ESTADO DO BOTÃO CRIAR/INICIAR
-  // const updateTrainnig = async (itemId, trainningCreate) => {
-  //   const updateData = await fetch(
-  //     `http://localhost:3000/users/282/workouts/${itemId}`,
-  //     {
-  //       method: "PATCH",
-  //       body: JSON.stringify({ trainningCreate }),
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     }
-  //   );
-  //   const res = await updateData.json();
-  //   console.log(res);
-  //   console.log(trainningCreate);
-  // };
+  useEffect(() => {
+    if (!id) return console.log("carregando...");
+    const url = "http://localhost:3000/app/users/" + id;
+    requestExercises(url);
+  }, [id]);
+
+
+  // 
   const handleExercise = (itemDay) => {
-    if(!id) return console.log("aguardando o id")
-    navigate(`/home/workouts/exercise/${itemDay.id}`, {state: {userid: id}})
-   };
-  
+    if (!id) return console.log("aguardando o id");
+    navigate(`/home/workouts/exercise/${itemDay.id}`, {
+      state: { userid: id },
+    });
+  };
+  const BackHome = () => {
+    navigate("/home");
+  };
+
   return (
     <div className="dashboard-trainnig">
+      <button type="button" className="home-back" onClick={BackHome}>
+        <ArrowLeft /> <span>Voltar para home</span>
+      </button>
       <div className="box-insight-trainning">
         <div className="week-day">
           <div className="calendar-icon">
@@ -97,13 +90,14 @@ const TrainneLayout = () => {
           </div>
           <div className="wokout-box">
             <div className="workout-days">
-               { exercisesDay.map((item) => (
+              {exercisesDay.map((item) => (
                 <div className="workout" key={item.id}>
                   <div className="day-description">
                     <h4>{item.day}</h4>
+                    <p></p>
                   </div>
                   <div className="start-trainning">
-                    {item.tranningCreate ? (
+                    {item.trainningCreate ? (
                       <button
                         className="btn-start-trainning"
                         onClick={() => handleExercise(item)}
@@ -120,7 +114,7 @@ const TrainneLayout = () => {
                     )}
                   </div>
                 </div>
-              ))} 
+              ))}
             </div>
           </div>
         </div>

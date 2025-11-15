@@ -1,0 +1,380 @@
+import { ArrowLeft, Pencil, Save, Plus, Trash } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { UsePost } from "../../hooks/usePost.jsx";
+import { UseGet } from "../../hooks/useGet.jsx";
+import { UsePut } from "../../hooks/usePut.jsx";
+import { UseDelete } from "../../hooks/useDelete.jsx";
+import "../../css/WorkoutsDashboard.css";
+
+const WorkoutsDashboard = () => {
+  // definição dos identificadores/URL
+  const { id } = useParams();
+  const location = useLocation();
+  const { userid } = location.state;
+  const url = `http://localhost:3000/app/users/${userid}/exercises/${id}`;
+  const navigate = useNavigate();
+
+  // Hooks de requisição
+  const { httpConfig } = UsePost(url);
+  const { Exercise: ExerciseServer, Workout } = UseGet(
+    `http://localhost:3000/app/users/${userid}`,
+    id
+  );
+  const { UpdateExercise, UpdateWorkout } = UsePut();
+  const { DeleteExercise } = UseDelete();
+
+  // Salvando dados vindo do servidor
+  useEffect(() => {
+    if (ExerciseServer) {
+      SetExercise(ExerciseServer);
+    }
+    if (Workout) {
+      SetWorkout(Workout);
+    }
+  }, [ExerciseServer, Workout]);
+
+  // ESTADOS DA APLICAÇÃO
+  const [WorkoutPrev, SetWorkout] = useState({});
+  const [exercises, SetExercise] = useState([]);
+  const [completedExercises, setCompletedExercises] = useState([]);
+  // Botão de voltar
+  const Back = () => {
+    navigate("/home/workouts");
+  };
+
+  // função para criar novo exercicio
+  const createExercise = async () => {
+    const exerciseCard = {
+      name: "Novo Exercício",
+      series: 3,
+      reps: 12,
+      weight: "0kg",
+      time: "60s",
+      save: false,
+    };
+    httpConfig(exerciseCard, "POST");
+    UpdateState();
+  };
+
+  const UpdateState = async () => {
+    const DataUser = await fetch(`http://localhost:3000/app/users/${userid}`);
+    const UserJson = await DataUser.json();
+    const workouts = UserJson.workouts.find(
+      (workout) => workout.id === parseInt(id)
+    );
+    SetExercise(workouts.exercises);
+    SetWorkout(workouts);
+  };
+  // Funções de controle de estado
+  const HandleChange = (id, name, value) => {
+    SetExercise((PrevExercise) =>
+      PrevExercise.map((ex) => (ex.id === id ? { ...ex, [name]: value } : ex))
+    );
+  };
+
+  const WorkoutDayChange = (name, ChangeDay) => {
+    SetWorkout((PrevWorkout) => ({
+      ...PrevWorkout,
+      [name]: ChangeDay,
+    }));
+  };
+  const toggleExerciseCompletion = (exerciseId) => {
+    setCompletedExercises((prev) =>
+      prev.includes(exerciseId)
+        ? prev.filter((id) => id !== exerciseId)
+        : [...prev, exerciseId]
+    );
+  };
+  // Manipulação do dia dia do treino
+  const UpdateWorkoutDayEX = (e, WorkoutID) => {
+    e.preventDefault();
+    const WorkoutPatch = {
+      workout: WorkoutPrev.workout,
+      save: true,
+      trainningCreate: WorkoutPrev.trainningCreate,
+    };
+    UpdateWorkout(
+      `http://localhost:3000/app/users/${userid}/workouts/${WorkoutID}`,
+      WorkoutPatch
+    );
+    UpdateState();
+  };
+  const EditWorkoutDay = () => {
+    const WorkoutSave = {
+      workout: WorkoutPrev.workout,
+      save: false,
+      trainningCreate: WorkoutPrev.trainningCreate,
+    };
+    UpdateWorkout(
+      `http://localhost:3000/app/users/${userid}/workouts/${WorkoutPrev.id}`,
+      WorkoutSave
+    );
+    UpdateState();
+  };
+
+  // Manipulação dos dados de exercicio
+  const SubmitExercise = async (e, ExID) => {
+    e.preventDefault();
+    const ExerciseItem = exercises.find((ex) => ex.id === ExID);
+    ExerciseItem.save = true;
+    await UpdateExercise(
+      `http://localhost:3000/app/users/${userid}/exercises/${id}/${ExID}`,
+      ExerciseItem
+    );
+    UpdateState();
+  };
+
+  const EditExercise = async (ExID) => {
+    const ExerciseItem = exercises.find((ex) => ex.id === ExID);
+    ExerciseItem.save = false;
+    await UpdateExercise(
+      `http://localhost:3000/app/users/${userid}/exercises/${id}/${ExID}`,
+      ExerciseItem
+    );
+    UpdateState();
+  };
+  const deleteExercise = async (ExID) => {
+    const ExerciseItem = exercises.find((ex) => ex.id === ExID);
+    await DeleteExercise(
+      `http://localhost:3000/app/users/${userid}/exercises/${id}/${ExID}`,
+      ExerciseItem
+    );
+    UpdateState();
+  };
+  // Salvando todas as informações referente ao gerenciamento de exercicio
+  const AllSave = () => {
+    navigate("/home/workouts");
+    const AllWorkoutSave = {
+      workout: WorkoutPrev.workout,
+      save: WorkoutPrev.save,
+      trainningCreate: true,
+    };
+    console.log(AllWorkoutSave);
+    UpdateWorkout(
+      `http://localhost:3000/app/users/${userid}/workouts/${WorkoutPrev.id}`,
+      AllWorkoutSave
+    );
+  };
+
+  // Função para alternar o estado de conclusão do exercício
+  return (
+    <div className="WorkoutDay-dashboard">
+      <div className="header-workout-day">
+        <div className="back-box">
+          <button className="btn-back" onClick={Back}>
+            <ArrowLeft color="#f5f5f5f5" /> <span>Voltar</span>
+          </button>
+        </div>
+
+        <div className="workout-day-content">
+          {WorkoutPrev.save ? (
+            <div className="workout-day-save">
+              <div className="control-content">
+                <h2>{WorkoutPrev.workout}</h2>
+                <p>{WorkoutPrev.day}</p>
+              </div>
+              <button type="button" onClick={EditWorkoutDay}>
+                <Pencil color="#f5f5f5" />
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={(e) => UpdateWorkoutDayEX(e, WorkoutPrev.id)}>
+              <div className="control-content">
+                <input
+                  type="text"
+                  placeholder="Digite o nome do treino"
+                  id="day-exercise"
+                  value={WorkoutPrev.workout || ""}
+                  onChange={(e) => WorkoutDayChange("workout", e.target.value)}
+                ></input>
+                {<p>{WorkoutPrev.day}</p>}
+              </div>
+              <button type="submit">
+                <Save color="#1bff14ff" />
+              </button>
+            </form>
+          )}
+        </div>
+      </div>
+
+      <div className="exercise-container">
+        <div className="exercise-box">
+          {exercises && exercises.length > 0 ? (
+            exercises.map((exercise) => (
+              <div
+                className={`exercise-card ${
+                  completedExercises.includes(exercise.id) ? "completed" : ""
+                }`}
+                key={exercise.id}
+              >
+                <div className="exercise-content">
+                  {exercise.save ? (
+                    <div className="content">
+                      <div className="content-header">
+                        <div className="exercise-name">
+                          <input
+                            type="checkbox"
+                            className="checkmark"
+                            checked={completedExercises.includes(exercise.id)}
+                            onChange={() =>
+                              toggleExerciseCompletion(exercise.id)
+                            }
+                          />
+                          <h2>{exercise.name}</h2>
+                        </div>
+                        <div className="actions">
+                          <button
+                            type="button"
+                            onClick={() => EditExercise(exercise.id)}
+                            className="main-action"
+                          >
+                            <Pencil color="#ffff" />
+                          </button>
+                          <button
+                            type="button"
+                            className="delete-btn"
+                            onClick={() => deleteExercise(exercise.id)}
+                          >
+                            <Trash color="#fd0000ff" />
+                          </button>
+                        </div>
+                      </div>
+                      <div className="content-infos">
+                        <div className="info-box">
+                          <label>Series:</label>
+                          <div className="info">{exercise.series}</div>
+                        </div>
+                        <div className="info-box">
+                          <label>Reps:</label>
+                          <div className="info">{exercise.reps}</div>
+                        </div>
+                        <div className="info-box">
+                          <label>Peso:</label>
+                          <div className="info">{exercise.weight}</div>
+                        </div>
+                        <div className="info-box">
+                          <label>Descanso:</label>
+                          <div className="info">{exercise.time}</div>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <form onSubmit={(e) => SubmitExercise(e, exercise.id)}>
+                      <div className="form-control-header">
+                        <div className="inputs-box">
+                          <input
+                            type="checkbox"
+                            className="checkmark"
+                            checked={completedExercises.includes(exercise.id)}
+                            onChange={() =>
+                              toggleExerciseCompletion(exercise.id)
+                            }
+                          />
+                          <input
+                            type="text"
+                            placeholder="Digite o nome do seu exercício"
+                            value={exercise.name || ""}
+                            onChange={(e) =>
+                              HandleChange(exercise.id, "name", e.target.value)
+                            }
+                          />
+                        </div>
+                        <div className="actions">
+                          <button type="submit" className="main-action">
+                            <Save color="#1bff14ff" />
+                          </button>
+                          <button
+                            type="button"
+                            className="delete-btn"
+                            onClick={() => deleteExercise(exercise.id)}
+                          >
+                            <Trash color="#fd0000ff" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="infos">
+                        <div className="control-infos">
+                          <label htmlFor="series">Séries:</label>
+                          <input
+                            type="number"
+                            value={exercise.series || ""}
+                            className="input-info"
+                            onChange={(e) =>
+                              HandleChange(
+                                exercise.id,
+                                "series",
+                                e.target.value
+                              )
+                            }
+                          />
+                        </div>
+
+                        <div className="control-infos">
+                          <label htmlFor="Reps">Reps:</label>
+                          <input
+                            type="number"
+                            value={exercise.reps || ""}
+                            className="input-info"
+                            onChange={(e) =>
+                              HandleChange(exercise.id, "reps", e.target.value)
+                            }
+                          />
+                        </div>
+
+                        <div className="control-infos">
+                          <label htmlFor="Peso">Peso:</label>
+                          <input
+                            type="text"
+                            value={exercise.weight || ""}
+                            className="input-info"
+                            onChange={(e) =>
+                              HandleChange(
+                                exercise.id,
+                                "weight",
+                                e.target.value
+                              )
+                            }
+                          />
+                        </div>
+
+                        <div className="control-infos">
+                          <label htmlFor="Descanso">Descanso:</label>
+                          <input
+                            type="text"
+                            value={exercise.time || ""}
+                            className="input-info"
+                            onChange={(e) =>
+                              HandleChange(exercise.id, "time", e.target.value)
+                            }
+                          />
+                        </div>
+                      </div>
+                    </form>
+                  )}
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>Ainda não existe exercicios aqui!</p>
+          )}
+        </div>
+        <button type="button" className="add-exercise" onClick={createExercise}>
+          <Plus size={30} />
+          <span>Adcionar exercicío</span>
+        </button>
+      </div>
+      <div className="footer-buttons">
+        <button type="button" className="btn-save-trainning" onClick={AllSave}>
+          Salvar e Sair
+        </button>
+        <button type="button" className="finnish-trainning">
+          Finalizar treino
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default WorkoutsDashboard;

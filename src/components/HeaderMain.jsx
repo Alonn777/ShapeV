@@ -2,7 +2,7 @@ import React from "react";
 import { PanelsTopLeft } from "lucide-react";
 import { Search } from "lucide-react";
 import { Bell } from "lucide-react";
-import './HeaderMain.css'
+import '../css/HeaderMain.css'
 const HeaderMain = () => {
   return (
     <header className="muscle-search">

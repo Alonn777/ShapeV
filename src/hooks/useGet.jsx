@@ -15,7 +15,7 @@ export const UseGet= (url, id) => {
 
    const exerciseData = async (data)=>{
         const user = await data
-        const dayExercise = user.workouts.find((dayExercise)=> dayExercise.id == id)
+        const dayExercise = user.workouts.find((dayExercise)=> dayExercise.id === parseInt(id))
         SetWorkout(dayExercise)
         SetExercise(dayExercise.exercises)
     }

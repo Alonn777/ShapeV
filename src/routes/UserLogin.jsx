@@ -1,14 +1,13 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import {SessionStorage} from "../hooks/SessionStorage.jsx"
 import { useNavigate } from "react-router-dom";
-import "./userLogin.css";
+import "../css/userLogin.css";
 
 const UserLogin = () => {
   const navigate = useNavigate();
   const {storageUser} = SessionStorage()
 
   const [islogin, SetLogin] = useState(true);
-  const [enterLogin, SetEnterLogin] = useState(null);
   const [email, SetEmail] = useState("");
   const [password, SetPassowrd] = useState("");
   const [nameCadaster, SetNameCadaster] = useState("");
@@ -36,7 +35,7 @@ const UserLogin = () => {
     SetLogin(true);
   };
   const createDataUser = async (user) => {
-    const postData = await fetch("http://localhost:3000/app/users/register", {
+    const PostData = await fetch("http://localhost:3000/app/users/register", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -57,8 +56,8 @@ const UserLogin = () => {
       const usersData = await fetch("http://localhost:3000/app/users");
       const result = await usersData.json();
       authenticationUser(result.users)
-    } catch (error) {
-      console.error("erro na requisição");
+    } catch  {
+      console.log("erro na requisição");
     }
   };
 

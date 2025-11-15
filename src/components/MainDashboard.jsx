@@ -1,24 +1,34 @@
 import { useNavigate } from "react-router-dom";
 import { Dumbbell, Apple } from "lucide-react";
+import "../css/MainDashboard.css";
 const MainDashboard = () => {
   const navigate = useNavigate();
-  const HandleExercise = ()=>{
-    navigate('/home/workouts')
-  }
-  const HandleDiet = ()=>{
-   navigate('/home/diets')
-  }
+  const HandleExercise = () => {
+    navigate("/home/workouts");
+  };
+  const HandleDiet = () => {
+    navigate("/home/diets");
+  };
   return (
     <div className="main-dashboard">
-      <h2>Seja bem-vindo ao ShapeV</h2>
-      <p>Explore as funcionalidades abaixo</p>
-      <div className="action-buttons">
-        <button type="button" onClick={HandleExercise}>
-          <Dumbbell /> <span>Gerencie e construa o seu treino</span>
-        </button>
-        <button type="button" onClick={HandleDiet}>
-          <Apple /> <span>Descubra, gerencie e construa a sua dieta!</span>
-        </button>
+      <div className="title-main">
+        <h2>Seja bem-vindo ao ShapeV</h2>
+        <p>Explore as nossas prinicpais funcionalidades abaixo</p>
+      </div>
+
+      <div className="action-card">
+        <div className="card-section" onClick={HandleExercise}>
+          <Dumbbell />
+          <h4>Treino</h4>
+          <p>Gerencie sua rotina de exercícios e acompanhe seu progresso</p>
+          <span>Acessar</span>
+        </div>
+        <div className="card-section" onClick={HandleDiet}>
+          <Apple />
+          <h4>Dieta</h4>
+          <p>Controle sua alimentação e sua hidratação diaria</p>
+          <span>Acessar</span>
+        </div>
       </div>
     </div>
   );
