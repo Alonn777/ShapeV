@@ -1,13 +1,21 @@
 import { useNavigate } from "react-router-dom";
 import { Dumbbell, Apple } from "lucide-react";
+import { SessionStorage } from "../hooks/SessionStorage";
 import "../css/MainDashboard.css";
+import { useEffect } from "react";
 const MainDashboard = () => {
   const navigate = useNavigate();
+  const { data: id, getStorageUser } = SessionStorage();
+
+  useEffect(() => {
+    getStorageUser();
+  }, []);
+
   const HandleExercise = () => {
     navigate("/home/workouts");
   };
   const HandleDiet = () => {
-    navigate("/home/diets");
+    navigate(`/home/diets/${id}`);
   };
   return (
     <div className="main-dashboard">

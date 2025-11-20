@@ -31,7 +31,7 @@ const router = createBrowserRouter([
         element: <TrainneLayout />,
       },
       {
-        path: "/home/diets",
+        path: "/home/diets/:id",
         element: <DietsLayout />,
       },
       {
