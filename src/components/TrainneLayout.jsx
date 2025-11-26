@@ -31,7 +31,7 @@ const TrainneLayout = () => {
 
   useEffect(() => {
     if (!id) return console.log("carregando...");
-    const url = "http://localhost:3000/app/users/" + id;
+    const url = "http://localhost:3000/users/" + id;
     requestExercises(url);
   }, [id]);
 

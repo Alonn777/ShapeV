@@ -35,7 +35,7 @@ const UserLogin = () => {
     SetLogin(true);
   };
   const createDataUser = async (user) => {
-    const PostData = await fetch("http://localhost:3000/app/users/register", {
+    const PostData = await fetch("http://localhost:3000/users/register", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -53,7 +53,7 @@ const UserLogin = () => {
 //  REQUISIÇÃO NO SERVIDOR 
   const requestUsers = async () => {
     try {
-      const usersData = await fetch("http://localhost:3000/app/users");
+      const usersData = await fetch("http://localhost:3000/users");
       const result = await usersData.json();
       authenticationUser(result.users)
     } catch  {

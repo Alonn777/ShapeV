@@ -1,5 +1,5 @@
 export const UsePut = () => {
-  const UpdateExercise = async (url, exercise) => {
+  const UpdatePut = async (url, exercise) => {
     try {
       const Request = await fetch(url, {
         method: "PUT",
@@ -27,5 +27,5 @@ export const UsePut = () => {
     }
   };
 
-  return { UpdateExercise, UpdateWorkout};
+  return { UpdatePut, UpdateWorkout};
 };

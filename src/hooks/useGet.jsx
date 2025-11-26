@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 export const UseGet = (url, id) => {
   const [Exercise, SetExercise] = useState([]);
   const [Workout, SetWorkout] = useState();
-  const [DietServer, SetDietServer] = useState([]);
+  const [DietServer, SetDietServer] = useState({});
 
   useEffect(() => {
     const requestData = async () => {

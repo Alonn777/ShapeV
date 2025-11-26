@@ -1,7 +1,8 @@
 import "../css/DietsLayout.css";
 import WaterManage from "./subcomponents/WaterManage";
+import SnackDiary from "./subcomponents/SnackDiary.jsx";
 import { useNavigate, useParams } from "react-router-dom";
-import { Search, Calendar, Plus, ArrowLeft } from "lucide-react";
+import { Search, Calendar, Plus, ArrowLeft, Utensils } from "lucide-react";
 import { UseGet } from "../hooks/useGet";
 import { useEffect, useState } from "react";
 
@@ -9,7 +10,7 @@ const DietsLayout = () => {
   // Request dos dados da dieta
   const navigate = useNavigate();
   const { id } = useParams();
-  const { DietServer } = UseGet(`http://localhost:3000/app/users/${id}/diets`);
+  const { DietServer } = UseGet(`http://localhost:3000/users/${id}/diets`);
 
   useEffect(() => {
     if (DietServer) {
@@ -17,7 +18,8 @@ const DietsLayout = () => {
     }
   }, [DietServer]);
 
-  const [DietData, SetDietData] = useState([]);
+  const [DietData, SetDietData] = useState({});
+
 
   // configurando o dia da semana
   const date = new Date();
@@ -31,16 +33,16 @@ const DietsLayout = () => {
     navigate("/home");
   };
 
-  console.log(DietServer)
   return (
     <div className="Diet-Layout">
       <button type="button" className="home-back" onClick={BackHome}>
         <ArrowLeft /> <span>Voltar para home</span>
       </button>
+
       <div className="Diet-header">
         <div className="day-box">
           <div className="calendar">
-            <Calendar />
+            <Calendar size={30} />
           </div>
           <div className="day">
             <h2>Hoje</h2>
@@ -48,13 +50,13 @@ const DietsLayout = () => {
           </div>
         </div>
         <div className="action-header">
-          <button type="button">
+          <button type="button" className="Search-food">
             <span>
-              <Search />
+              <Search color="#f5f5f5" />
             </span>
             Buscar alimento
           </button>
-          <button type="button">
+          <button type="button" className="Create-snack">
             <span>
               <Plus />
             </span>
@@ -69,16 +71,26 @@ const DietsLayout = () => {
         </div>
 
         <div className="hidatration-container">
-          {DietData.length > 0 ? ( 
-            DietData.filter((item)=> item.hidration)
-            .map((item) => {
-              return <WaterManage HidrateItem={item}/>
-            })) : (<p>Carregando os dados...</p>)
-          }
+
+
+          { DietData  ? (
+              
+              <WaterManage HidrateItem={DietData} /> 
+            )
+           : (
+            <p>Carregando os dados...</p>
+          ) } 
+          
         </div>
 
-        <div className="meal-container">
-          <h3>Diario de refeições</h3>
+        <div className="snack-container">
+          <div className="title">
+            <div className="utensils-icon">
+              <Utensils color="#f5f5f5" />
+            </div>
+            <h3>Diário de refeições</h3>
+          </div>
+          <SnackDiary />
         </div>
         <div className="fast-cardap"></div>
       </div>
