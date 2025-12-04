@@ -1,6 +1,7 @@
 import "../css/DietsLayout.css";
 import WaterManage from "./subcomponents/WaterManage";
 import SnackDiary from "./subcomponents/SnackDiary.jsx";
+import SearchNutri from "./subcomponents/SearchNutri.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { Search, Calendar, Plus, ArrowLeft, Utensils } from "lucide-react";
 import { UseGet } from "../hooks/useGet";
@@ -10,7 +11,9 @@ const DietsLayout = () => {
   // Request dos dados da dieta
   const navigate = useNavigate();
   const { id } = useParams();
-  const { DietServer } = UseGet(`http://localhost:3000/users/${id}/diets`);
+  const { DietServer, GetFood, FoodServer } = UseGet(
+    `http://localhost:3000/users/${id}/diets`
+  );
 
   useEffect(() => {
     if (DietServer) {
@@ -18,8 +21,9 @@ const DietsLayout = () => {
     }
   }, [DietServer]);
 
+  // States para controlar a aplicação
   const [DietData, SetDietData] = useState({});
-
+  const [SearchDiet, SetSearchDiet] = useState(false);
 
   // configurando o dia da semana
   const date = new Date();
@@ -33,6 +37,13 @@ const DietsLayout = () => {
     navigate("/home");
   };
 
+  const ChangeSearchDiet = () => {
+    SetSearchDiet(true);
+    GetFood("http://localhost:3000/taco");
+  };
+  const ModalClick = () => {
+    SetSearchDiet(false);
+  };
   return (
     <div className="Diet-Layout">
       <button type="button" className="home-back" onClick={BackHome}>
@@ -50,7 +61,11 @@ const DietsLayout = () => {
           </div>
         </div>
         <div className="action-header">
-          <button type="button" className="Search-food">
+          <button
+            type="button"
+            className="Search-food"
+            onClick={ChangeSearchDiet}
+          >
             <span>
               <Search color="#f5f5f5" />
             </span>
@@ -64,23 +79,25 @@ const DietsLayout = () => {
           </button>
         </div>
       </div>
-
+      {SearchDiet ? (
+        <div className="search-container">
+          <SearchNutri ChangeDiet={SetSearchDiet} FoodInfos={FoodServer} />
+          <div className="shadow-search" onClick={ModalClick}></div>
+        </div>
+      ) : (
+        ""
+      )}
       <div className="main-diet">
         <div className="nutrition-container">
           <h3>Resumo Nutricional</h3>
         </div>
 
         <div className="hidatration-container">
-
-
-          { DietData  ? (
-              
-              <WaterManage HidrateItem={DietData} /> 
-            )
-           : (
+          {DietData ? (
+            <WaterManage HidrateItem={DietData} />
+          ) : (
             <p>Carregando os dados...</p>
-          ) } 
-          
+          )}
         </div>
 
         <div className="snack-container">
