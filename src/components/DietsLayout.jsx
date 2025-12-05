@@ -79,6 +79,7 @@ const DietsLayout = () => {
           </button>
         </div>
       </div>
+
       {SearchDiet ? (
         <div className="search-container">
           <SearchNutri ChangeDiet={SetSearchDiet} FoodInfos={FoodServer} />
@@ -102,12 +103,11 @@ const DietsLayout = () => {
 
         <div className="snack-container">
           <div className="title">
-            <div className="utensils-icon">
               <Utensils color="#f5f5f5" />
-            </div>
+          
             <h3>Diário de refeições</h3>
           </div>
-          <SnackDiary />
+          <SnackDiary SnackDiet={DietData} />
         </div>
         <div className="fast-cardap"></div>
       </div>
