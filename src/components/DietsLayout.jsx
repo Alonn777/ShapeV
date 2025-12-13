@@ -45,12 +45,12 @@ const DietsLayout = () => {
     SetSearchDiet(false);
   };
   return (
-    <div className="Diet-Layout">
+    <main className="Diet-Layout">
       <button type="button" className="home-back" onClick={BackHome}>
         <ArrowLeft /> <span>Voltar para home</span>
       </button>
 
-      <div className="Diet-header">
+      <header className="Diet-header">
         <div className="day-box">
           <div className="calendar">
             <Calendar size={30} />
@@ -78,40 +78,40 @@ const DietsLayout = () => {
             Nova refeição
           </button>
         </div>
-      </div>
+      </header>
 
       {SearchDiet ? (
-        <div className="search-container">
+        <section className="search-container">
           <SearchNutri ChangeDiet={SetSearchDiet} FoodInfos={FoodServer} />
           <div className="shadow-search" onClick={ModalClick}></div>
-        </div>
+        </section>
       ) : (
         ""
       )}
       <div className="main-diet">
-        <div className="nutrition-container">
+        <section className="nutrition-container">
           <h3>Resumo Nutricional</h3>
-        </div>
+        </section>
 
-        <div className="hidatration-container">
+        <section className="hidatration-container">
           {DietData ? (
             <WaterManage HidrateItem={DietData} />
           ) : (
             <p>Carregando os dados...</p>
           )}
-        </div>
+        </section>
 
-        <div className="snack-container">
-          <div className="title">
+        <section className="snack-container">
+          <header className="title">
               <Utensils color="#f5f5f5" />
           
             <h3>Diário de refeições</h3>
-          </div>
+          </header>
           <SnackDiary SnackDiet={DietData} />
-        </div>
+        </section>
         <div className="fast-cardap"></div>
       </div>
-    </div>
+    </main>
   );
 };
 

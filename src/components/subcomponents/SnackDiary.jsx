@@ -1,12 +1,24 @@
+import AddNutri from "./AddNutri";
+import { UseGet } from "../../hooks/useGet";
+
 import { Coffee, Utensils, Apple } from "lucide-react";
 import { ChevronDown, ChevronUp, Pencil, Trash, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
-import { UseGet } from "../../hooks/useGet";
 
 const SnackDiary = ({ SnackDiet }) => {
-  const [DietList, SetDiet] = useState([]);
-  const [kcalSnack, SetKcalSnack] = useState(0);
+  const { GetFood, FoodServer } = UseGet();
 
+  const [Food, SetFood] = useState([]);
+  const [DietList, SetDiet] = useState([]);
+  const [ViewNutrient, SetViewNutrient] = useState(false);
+  const [kcalSnack, SetKcalSnack] = useState(0);
+  const [SnackSectionID, SetSnackSection] = useState(null);
+
+  useEffect(() => {
+    if (FoodServer) {
+      SetFood(FoodServer);
+    }
+  }, [FoodServer]);
   useEffect(() => {
     if (SnackDiet) {
       SetDiet(SnackDiet.SnackDiary);
@@ -29,16 +41,29 @@ const SnackDiary = ({ SnackDiet }) => {
     }
   };
 
+  const ViewCardAdd = (SectionID) => {
+    if (ViewNutrient === false) {
+      SetViewNutrient(true);
+      GetFood("http://localhost:3000/taco");
+      SetSnackSection(SectionID);
+    }
+  };
+  const invisibleCard = () => {
+    if (ViewNutrient === true) {
+      SetViewNutrient(false);
+    }
+  };
   return (
     <div className="snack-box">
       {DietList &&
         DietList.map((snackitem) => (
-          <div
-            className="snack-card"
-            onClick={() => ExpandCard(snackitem.id, snackitem.expand)}
-            key={snackitem.id}
-          >
-            <div className="name-snack">
+          <div className="snack-card" key={snackitem.id}>
+            <div
+              className="name-snack"
+              onClick={() => {
+                ExpandCard(snackitem.id, snackitem.expand);
+              }}
+            >
               <div className="name-info">
                 <div className="icon-coffe">
                   <Coffee color="#2da0ffff" />
@@ -56,64 +81,66 @@ const SnackDiary = ({ SnackDiet }) => {
 
             {/* Local dos alimentos */}
             {snackitem.expand ? (
-              <div className="snack-nutrients">
-                <div className="nutrient-box">
-                  <div className="nutrient-card">
-                    <div className="name-nutrient">
-                      <h4>Aveia</h4>
-                      <p>50g</p>
-                    </div>
+              <div>
+                {snackitem.SnackList.map((item) => (
+                  <div className="snack-nutrients" key={item.id}>
+                    <div className="nutrient-box">
+                      <div className="nutrient-card">
+                        <div className="name-nutrient">
+                          <h4>{item.description}</h4>
+                          <p>100g</p>
+                        </div>
 
-                    <div className="info-box">
-                      <div className="info-nutrient">
-                        <p className="kcal-nutri">50kcal</p>
-                        <p className="macro-info">
-                          Proteina: | Gordura: | Carboidrato:{" "}
-                        </p>
-                      </div>
+                        <div className="info-box">
+                          <div className="info-nutrient">
+                            <p className="kcal-nutri">
+                              {Number(item.energy_kcal || 0).toFixed(0)}kcal
+                            </p>
+                            <p className="macro-info">
+                              Proteina: {Number(item.protein_g || 0).toFixed(1)} |
+                              Gordura: {Number(item.carbohydrate_g  || 0).toFixed(1)} |
+                              Carboidrato: {Number(item.lipid_g || 0).toFixed(1)}
+                            </p>
+                          </div>
 
-                      <div className="action-buttons">
-                        <button type="button">
-                          <Pencil color="#fff" />
-                        </button>
-                        <button type="button">
-                          <Trash color="#f71818ff" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="nutrient-card">
-                    <div className="name-nutrient">
-                      <h4>Aveia</h4>
-                      <p>50g</p>
-                    </div>
-                    <div className="info-box">
-                      <div className="info-nutrient">
-                        <p className="kcal-nutri">50kcal</p>
-                        <p className="macro-info">
-                          Proteina: | Gordura: | Carboidrato:{" "}
-                        </p>
-                      </div>
-
-                      <div className="action-buttons">
-                        <button type="button">
-                          <Pencil />
-                        </button>
-                        <button type="button">
-                          <Trash />
-                        </button>
+                          <div className="action-buttons">
+                            <button type="button">
+                              <Pencil color="#fff" />
+                            </button>
+                            <button type="button">
+                              <Trash color="#f71818ff" />
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                
-                <button type="button" className="add-nutrient">
+                ))}
+
+                <button
+                  type="button"
+                  className="add-nutrient"
+                  onClick={() => ViewCardAdd(snackitem.id)}
+                >
                   <span>
                     <Plus color="#ffff" />
                   </span>
                   Adicionar
                 </button>
+              </div>
+            ) : (
+              ""
+            )}
+
+            {ViewNutrient ? (
+              <div className="search-container" onClick={ViewCardAdd}>
+                <AddNutri
+                  BackDash={SetViewNutrient}
+                  FoodInfos={Food}
+                  SnackSection={SnackSectionID}
+                  SetDiet={SetDiet}
+                />
+                <div className="shadow-search" onClick={invisibleCard}></div>
               </div>
             ) : (
               ""

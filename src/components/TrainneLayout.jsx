@@ -48,7 +48,7 @@ const TrainneLayout = () => {
   };
 
   return (
-    <div className="dashboard-trainnig">
+    <main className="dashboard-trainnig">
       <button type="button" className="home-back" onClick={BackHome}>
         <ArrowLeft /> <span>Voltar para home</span>
       </button>
@@ -83,11 +83,11 @@ const TrainneLayout = () => {
       </div>
 
       <div className="workouts-main">
-        <div className="workout-week">
-          <div className="header-workout">
+        <section className="workout-week">
+          <header className="header-workout">
             <Calendar size={30} color="#2da0ffff" />
             <h2>Rotina Semanal</h2>
-          </div>
+          </header>
           <div className="wokout-box">
             <div className="workout-days">
               {exercisesDay.map((item) => (
@@ -117,15 +117,15 @@ const TrainneLayout = () => {
               ))}
             </div>
           </div>
-        </div>
-        <div className="box-progress-corporal">
-          <div className="corporal-header">
+        </section>
+        <section className="box-progress-corporal">
+          <header className="corporal-header">
             <TrendingUp size={30} color="#2da0ffff" />
             <h2>Evolução da massa corporal</h2>
-          </div>
-        </div>
+          </header>
+        </section>
       </div>
-    </div>
+    </main>
   );
 };
 

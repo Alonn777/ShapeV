@@ -25,7 +25,6 @@ const WaterManage = ({ HidrateItem }) => {
   useEffect(() => {
     if (cups) {
       const total = cups.filter((c) => c.drunk).length;
-      console.log(total);
       SetCupDrunk(total);
     }
   }, [cups]);
