@@ -1,20 +1,19 @@
-import {  useState } from "react";
-import {SessionStorage} from "../hooks/SessionStorage.jsx"
+import { useState } from "react";
+import { SessionStorage } from "../hooks/SessionStorage.jsx";
 import { useNavigate } from "react-router-dom";
 import "../css/userLogin.css";
 
 const UserLogin = () => {
   const navigate = useNavigate();
-  const {storageUser} = SessionStorage()
+  const { storageUser } = SessionStorage();
 
   const [islogin, SetLogin] = useState(true);
-  const [email, SetEmail] = useState("");
-  const [password, SetPassowrd] = useState("");
+  const [emailLogin, SetEmail] = useState("");
+  const [passwordLogin, SetPassowrd] = useState("");
   const [nameCadaster, SetNameCadaster] = useState("");
   const [emailCadaster, SetEmailCadaster] = useState("");
   const [passowrdCadaster, SetPasswordCadaster] = useState("");
 
- 
   // CADASTRO DE USUÁRIO
   const buttonNewUser = (e) => {
     e.preventDefault();
@@ -47,33 +46,30 @@ const UserLogin = () => {
   // BOTÃO PARA LOGAR
   const buttonLoginUser = (e) => {
     e.preventDefault();
-    requestUsers();
+    loginUser();
   };
 
-//  REQUISIÇÃO NO SERVIDOR 
-  const requestUsers = async () => {
+  //  REQUISIÇÃO NO SERVIDOR
+  const loginUser = async () => {
     try {
-      const usersData = await fetch("http://localhost:3000/users");
-      const result = await usersData.json();
-      authenticationUser(result.users)
-    } catch  {
-      console.log("erro na requisição");
-    }
-  };
-
-  const authenticationUser = async (users) => {
-    const usersData = await users;
-    const userFind = usersData.find(
-      (user) => user.email === email && user.password === password
-    );
+      const response = await fetch("http://localhost:3000/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: emailLogin, password: passwordLogin }),
+      });
+      const user = await response.json();
     
-    if (userFind) {
-      console.log("Logado com sucesso");
-      storageUser(userFind.id)
-      navigate("/home")
-      
-    } else {
-      console.log("usuário com senha ou email errado");
+      if (response.ok) {
+        navigate("/home");
+        storageUser(user[0].id)
+        
+      } else {
+        console.log("Sua senha ou email está incorreta tente novamente");
+      }
+    } catch {
+      console.log("erro na requisição");
     }
   };
 
@@ -88,7 +84,7 @@ const UserLogin = () => {
             <input
               type="email"
               placeholder="Seu email..."
-              value={email}
+              value={emailLogin}
               onChange={(e) => SetEmail(e.target.value)}
               required
             />
@@ -98,7 +94,7 @@ const UserLogin = () => {
             <input
               type="password"
               placeholder="Sua Senha.."
-              value={password}
+              value={passwordLogin}
               onChange={(e) => SetPassowrd(e.target.value)}
               required
             />

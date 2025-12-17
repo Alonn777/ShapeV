@@ -18,20 +18,15 @@ const TrainneLayout = () => {
   const [SelectDay, SetSelectDay] = useState(null);
   //  REQUISIÇÃO DE EXERCICIOS
   const requestExercises = async (url) => {
-    const exercisesData = await fetch(url);
-    const user = await exercisesData.json();
-    workoutDaysData(user);
+    const response = await fetch(url);
+    const exercises = await response.json();
+    SetExercisesDay(exercises)
   };
 
-  const workoutDaysData = (user) => {
-    const userData = user;
-    const workouts = userData.workouts;
-    SetExercisesDay(workouts);
-  };
 
   useEffect(() => {
     if (!id) return console.log("carregando...");
-    const url = "http://localhost:3000/users/" + id;
+    const url = "http://localhost:3000/users/workouts/" + id;
     requestExercises(url);
   }, [id]);
 

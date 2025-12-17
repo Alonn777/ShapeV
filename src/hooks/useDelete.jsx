@@ -5,8 +5,7 @@ export const UseDelete = () => {
         method: "DELETE",
         headers: {
           "content-type": "application/json",
-        },
-        body: JSON.stringify(exercise),
+        }
       });
     } catch {
       console.error("Error: Ocorreu erro na sua atualização");
