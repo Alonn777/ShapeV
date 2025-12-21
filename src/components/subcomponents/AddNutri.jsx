@@ -5,12 +5,13 @@ import debounce from "lodash.debounce";
 import { X } from "lucide-react";
 import { data, useParams } from "react-router-dom";
 
-const AddNutri = ({ BackDash, FoodInfos, SnackSection, SetDiet}) => {
+const AddNutri = ({ BackDash, FoodInfos, SnackSection, SetDiet, Snackid}) => {
   const { id } = useParams();
-  const { httpConfig } = UsePost(
-    `http://localhost:3000/users/${id}/diets/${SnackSection}/SnackDiary`
+  const { requestPost } = UsePost(
+    `http://localhost:3000/users/diets/snack/${SnackSection}`
   );
 
+  
   const [Food, SetFood] = useState([]);
   const [SearchValue, SetSearchValue] = useState("");
   const [SelectOriginal, SetOriginalSelected] = useState(null);
@@ -81,8 +82,8 @@ const AddNutri = ({ BackDash, FoodInfos, SnackSection, SetDiet}) => {
   };
   const addNutrient = (event) => {
     event.preventDefault();
-    httpConfig(SelectFood, 'POST')
-    getDiet()
+    requestPost(SelectFood)
+    // getDiet()
     setTimeout(()=> BackDash(false), 400)
   };
 

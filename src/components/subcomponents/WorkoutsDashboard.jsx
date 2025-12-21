@@ -31,14 +31,15 @@ const WorkoutsDashboard = () => {
       SetExercise(ExerciseServer);
     }
     if (Workout) {
-      SetWorkout(Workout);
+      const WorkoutCurrent = Workout.find((item)=> item.id == id)
+      SetWorkout(WorkoutCurrent)
     }
   }, [ExerciseServer, Workout]);
-
   // ESTADOS DA APLICAÇÃO
   const [WorkoutPrev, SetWorkout] = useState({});
   const [exercises, SetExercise] = useState([]);
   const [completedExercises, setCompletedExercises] = useState([]);
+  console.log(WorkoutPrev)
   // Botão de voltar
   const Back = () => {
     navigate("/home/workouts");
@@ -82,7 +83,7 @@ const WorkoutsDashboard = () => {
     );
   };
   // Manipulação do dia dia do treino
-  const UpdateWorkoutDayEX = (e, WorkoutID) => {
+  const UpdateWorkoutDayEX = (e) => {
     e.preventDefault();
     const WorkoutPatch = {
       workout: WorkoutPrev.workout,
@@ -90,11 +91,11 @@ const WorkoutsDashboard = () => {
       trainningCreate: WorkoutPrev.trainningCreate,
     };
     
-    // UpdateWorkout(
-    //   `http://localhost:3000/users/${userid}/workouts/${WorkoutID}`,
-    //   WorkoutPatch
-    // );
-    UpdateState();
+     UpdateWorkout(
+       `http://localhost:3000/users/workouts/${id}`,
+       WorkoutPatch
+     );
+   requestWorkout(`http://localhost:3000/users/workouts/${userid}`);
   };
   const EditWorkoutDay = () => {
     const WorkoutSave = {

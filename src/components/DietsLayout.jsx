@@ -4,25 +4,19 @@ import SnackDiary from "./subcomponents/SnackDiary.jsx";
 import SearchNutri from "./subcomponents/SearchNutri.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { Search, Calendar, Plus, ArrowLeft, Utensils } from "lucide-react";
-import { UseGet } from "../hooks/useGet";
+import { UseGetDiet } from "../hooks/useGetDiet.jsx";
 import { useEffect, useState } from "react";
 
 const DietsLayout = () => {
   // Request dos dados da dieta
   const navigate = useNavigate();
   const { id } = useParams();
-  const { DietServer, GetFood, FoodServer } = UseGet(
-    `http://localhost:3000/users/${id}/diets`
-  );
+  
+  // Validação do id antes de fazer requisições
 
-  useEffect(() => {
-    if (DietServer) {
-      SetDietData(DietServer);
-    }
-  }, [DietServer]);
+  const { HidrateData, SnackDiaryData, GetFood, FoodServer } = UseGetDiet(null, id);
 
   // States para controlar a aplicação
-  const [DietData, SetDietData] = useState({});
   const [SearchDiet, SetSearchDiet] = useState(false);
 
   // configurando o dia da semana
@@ -94,20 +88,24 @@ const DietsLayout = () => {
         </section>
 
         <section className="hidatration-container">
-          {DietData ? (
-            <WaterManage HidrateItem={DietData} />
+           {HidrateData ? (
+            <WaterManage HidrateItem={HidrateData} />
           ) : (
             <p>Carregando os dados...</p>
-          )}
+          )} 
         </section>
 
         <section className="snack-container">
           <header className="title">
-              <Utensils color="#f5f5f5" />
-          
+            <Utensils color="#f5f5f5" />
+
             <h3>Diário de refeições</h3>
           </header>
-          <SnackDiary SnackDiet={DietData} />
+          {SnackDiaryData && SnackDiaryData.length > 0 ? (
+            <SnackDiary SnackDiet={SnackDiaryData} />
+          ) : (
+            <p>Carregando...</p>
+          )}
         </section>
         <div className="fast-cardap"></div>
       </div>

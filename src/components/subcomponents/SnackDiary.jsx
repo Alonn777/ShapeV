@@ -13,6 +13,7 @@ const SnackDiary = ({ SnackDiet }) => {
   const [ViewNutrient, SetViewNutrient] = useState(false);
   const [kcalSnack, SetKcalSnack] = useState(0);
   const [SnackSectionID, SetSnackSection] = useState(null);
+  
 
   useEffect(() => {
     if (FoodServer) {
@@ -21,9 +22,19 @@ const SnackDiary = ({ SnackDiet }) => {
   }, [FoodServer]);
   useEffect(() => {
     if (SnackDiet) {
-      SetDiet(SnackDiet.SnackDiary);
+      SetDiet(SnackDiet);
     }
   }, [SnackDiet]);
+
+  // const GetList = async (id) => {
+  //   const response = await fetch(
+  //     `http://localhost:3000/users/diets/snack/list/${id}`
+  //   );
+  //   const data = await  response.json();
+  //   SetSnackList(data);
+  //   SetSnackId(id)
+  // };
+  
 
   const ExpandCard = (id, expandBoolean) => {
     if (expandBoolean === false) {
@@ -82,40 +93,44 @@ const SnackDiary = ({ SnackDiet }) => {
             {/* Local dos alimentos */}
             {snackitem.expand ? (
               <div>
-                {snackitem.SnackList.map((item) => (
-                  <div className="snack-nutrients" key={item.id}>
-                    <div className="nutrient-box">
-                      <div className="nutrient-card">
-                        <div className="name-nutrient">
-                          <h4>{item.description}</h4>
-                          <p>100g</p>
-                        </div>
-
-                        <div className="info-box">
-                          <div className="info-nutrient">
-                            <p className="kcal-nutri">
-                              {Number(item.energy_kcal || 0).toFixed(0)}kcal
-                            </p>
-                            <p className="macro-info">
-                              Proteina: {Number(item.protein_g || 0).toFixed(1)} |
-                              Gordura: {Number(item.carbohydrate_g  || 0).toFixed(1)} |
-                              Carboidrato: {Number(item.lipid_g || 0).toFixed(1)}
-                            </p>
+                {snackitem.Snack_List.length > 0 &&
+                  snackitem.Snack_List.map((item) => (
+                    <div className="snack-nutrients" key={item.id}>
+                      <div className="nutrient-box">
+                        <div className="nutrient-card">
+                          <div className="name-nutrient">
+                            <h4>{item.description}</h4>
+                            <p>100g</p>
                           </div>
 
-                          <div className="action-buttons">
-                            <button type="button">
-                              <Pencil color="#fff" />
-                            </button>
-                            <button type="button">
-                              <Trash color="#f71818ff" />
-                            </button>
+                          <div className="info-box">
+                            <div className="info-nutrient">
+                              <p className="kcal-nutri">
+                                {Number(item.energy_kcal || 0).toFixed(0)}kcal
+                              </p>
+                              <p className="macro-info">
+                                Proteina:{" "}
+                                {Number(item.protein_g || 0).toFixed(1)} |
+                                Gordura:{" "}
+                                {Number(item.carbohydrate_g || 0).toFixed(1)} |
+                                Carboidrato:{" "}
+                                {Number(item.lipid_g || 0).toFixed(1)}
+                              </p>
+                            </div>
+
+                            <div className="action-buttons">
+                              <button type="button">
+                                <Pencil color="#fff" />
+                              </button>
+                              <button type="button">
+                                <Trash color="#f71818ff" />
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
 
                 <button
                   type="button"
@@ -139,6 +154,7 @@ const SnackDiary = ({ SnackDiet }) => {
                   FoodInfos={Food}
                   SnackSection={SnackSectionID}
                   SetDiet={SetDiet}
+                 
                 />
                 <div className="shadow-search" onClick={invisibleCard}></div>
               </div>

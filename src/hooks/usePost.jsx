@@ -23,10 +23,23 @@ export const UsePost = (url) => {
       if (method === "POST") {
         const data = await fetch(...fetchOptions);
         const res = await data.json();
-        
       }
     };
     httpRequest();
   }, [url, config, method]);
-  return {httpConfig };
+
+  const requestPost = async (data) => {
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  return { requestPost, httpConfig };
 };

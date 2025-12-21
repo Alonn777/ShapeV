@@ -1,11 +1,15 @@
+import "../css/MainDashboard.css";
+import { UseGetDiet } from "../hooks/useGetDiet";
 import { useNavigate } from "react-router-dom";
 import { Dumbbell, Apple } from "lucide-react";
 import { SessionStorage } from "../hooks/SessionStorage";
-import "../css/MainDashboard.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 const MainDashboard = () => {
   const navigate = useNavigate();
   const { data: id, getStorageUser } = SessionStorage();
+  
+  const dietUrl = id ? `http://localhost:3000/users/diets/${id}` : null;
+  const { DietServer } = UseGetDiet(dietUrl, null);
 
   useEffect(() => {
     getStorageUser();
@@ -15,8 +19,17 @@ const MainDashboard = () => {
     navigate("/home/workouts");
   };
   const HandleDiet = () => {
-    navigate(`/home/diets/${id}`);
+    // Usa o id do usuário diretamente, garantindo que nunca seja undefined
+    if (!id) {
+      console.log("Aguardando ID do usuário...");
+      return;
+    }
+    
+    // Se DietServer.id existir, usa ele, senão usa o id do usuário
+    const dietId = DietServer?.id || id;
+    navigate(`/home/diets/${dietId}`);
   };
+  console.log
   return (
     <div className="main-dashboard">
       <div className="title-main">
