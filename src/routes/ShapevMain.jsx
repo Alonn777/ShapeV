@@ -1,6 +1,6 @@
 
-import HeaderMain from '../components/HeaderMain'
-import TrainneLayout from '../components/TrainneLayout'
+import HeaderMain from './HeaderMain.jsx'
+import TrainneLayout from './TrainneLayout'
 import { ArrowLeft } from 'lucide-react'
 import { Outlet } from 'react-router-dom'
 const ShapevMain = () => {

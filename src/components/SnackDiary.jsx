@@ -1,19 +1,22 @@
-import AddNutri from "./AddNutri";
-import { UseGet } from "../../hooks/useGet";
-
+import AddNutri from "./AddNutri.jsx";
+import { UseGet } from "../hooks/useGet";
+import { UseDelete } from "../hooks/useDelete.jsx";
 import { Coffee, Utensils, Apple } from "lucide-react";
-import { ChevronDown, ChevronUp, Pencil, Trash, Plus } from "lucide-react";
+import { useParams } from "react-router-dom";
+import { ChevronDown, ChevronUp, Trash, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const SnackDiary = ({ SnackDiet }) => {
   const { GetFood, FoodServer } = UseGet();
+  const { Delete } = UseDelete();
+  const { id } = useParams();
 
   const [Food, SetFood] = useState([]);
   const [DietList, SetDiet] = useState([]);
   const [ViewNutrient, SetViewNutrient] = useState(false);
   const [kcalSnack, SetKcalSnack] = useState(0);
+  const [SnackList, SetSnackList] = useState();
   const [SnackSectionID, SetSnackSection] = useState(null);
-  
 
   useEffect(() => {
     if (FoodServer) {
@@ -26,15 +29,10 @@ const SnackDiary = ({ SnackDiet }) => {
     }
   }, [SnackDiet]);
 
-  // const GetList = async (id) => {
-  //   const response = await fetch(
-  //     `http://localhost:3000/users/diets/snack/list/${id}`
-  //   );
-  //   const data = await  response.json();
-  //   SetSnackList(data);
-  //   SetSnackId(id)
-  // };
-  
+  // useEffect(()=>{
+  //   const allSnacks = DietList.map((item)=> item.Snack_List)
+  //   SetSnackList(allSnacks)
+  // }, [DietList])
 
   const ExpandCard = (id, expandBoolean) => {
     if (expandBoolean === false) {
@@ -43,15 +41,51 @@ const SnackDiary = ({ SnackDiet }) => {
           prev.id === id ? { ...prev, ["expand"]: true } : { ...prev }
         )
       );
+      updateExpand(id, { expand: true });
     } else {
       SetDiet((PrevDiet) =>
         PrevDiet.map((prev) =>
           prev.id === id ? { ...prev, ["expand"]: false } : { ...prev }
         )
       );
+      updateExpand(id, { expand: false });
+    }
+  };
+  // funções para requisições
+  const updateExpand = async (id, body) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/users/diets/snack/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        }
+      );
+    } catch (err) {
+      console.error(err);
     }
   };
 
+  const GetDiet = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/users/diets/snack/${id}`
+      );
+      const data = await response.json();
+      SetDiet(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const deleteFood = (id) => {
+    Delete(`http://localhost:3000/users/diets/snack/food/${id}`);
+    GetDiet();
+  };
+  // Funcionalidade pra adicionar o alimento
   const ViewCardAdd = (SectionID) => {
     if (ViewNutrient === false) {
       SetViewNutrient(true);
@@ -83,10 +117,17 @@ const SnackDiary = ({ SnackDiet }) => {
               </div>
               <div className="kcal-info">
                 <div className="kcal">
-                  <p> {kcalSnack} Kcal</p>
+                  <p>
+                    
+                    {snackitem.Snack_List.reduce(
+                      (acc, item) =>
+                        acc + Number(item.energy_kcal.toFixed(0) || 0),
+                      0
+                    )} Kcal
+                  </p>
                   {snackitem.expand ? <ChevronDown /> : <ChevronUp />}
                 </div>
-                <p>3 Nutrientes</p>
+                <p>{snackitem.Snack_List.length} Nutrientes</p>
               </div>
             </div>
 
@@ -119,10 +160,10 @@ const SnackDiary = ({ SnackDiet }) => {
                             </div>
 
                             <div className="action-buttons">
-                              <button type="button">
-                                <Pencil color="#fff" />
-                              </button>
-                              <button type="button">
+                              <button
+                                type="button"
+                                onClick={() => deleteFood(item.id)}
+                              >
                                 <Trash color="#f71818ff" />
                               </button>
                             </div>
@@ -154,7 +195,6 @@ const SnackDiary = ({ SnackDiet }) => {
                   FoodInfos={Food}
                   SnackSection={SnackSectionID}
                   SetDiet={SetDiet}
-                 
                 />
                 <div className="shadow-search" onClick={invisibleCard}></div>
               </div>

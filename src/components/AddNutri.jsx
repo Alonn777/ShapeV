@@ -1,17 +1,16 @@
 import { useEffect, useState, useCallback } from "react";
-import { UsePost } from "../../hooks/usePost";
-import { UseGet } from "../../hooks/useGet";
+import { UsePost } from "../hooks/usePost";
+import { UseGet } from "../hooks/useGet";
 import debounce from "lodash.debounce";
 import { X } from "lucide-react";
 import { data, useParams } from "react-router-dom";
 
-const AddNutri = ({ BackDash, FoodInfos, SnackSection, SetDiet, Snackid}) => {
+const AddNutri = ({ BackDash, FoodInfos, SnackSection, SetDiet, Snackid }) => {
   const { id } = useParams();
   const { requestPost } = UsePost(
     `http://localhost:3000/users/diets/snack/${SnackSection}`
   );
 
-  
   const [Food, SetFood] = useState([]);
   const [SearchValue, SetSearchValue] = useState("");
   const [SelectOriginal, SetOriginalSelected] = useState(null);
@@ -30,12 +29,18 @@ const AddNutri = ({ BackDash, FoodInfos, SnackSection, SetDiet, Snackid}) => {
       SetFood(SearchFoodServer);
     }
   }, [SearchFoodServer]);
-// funcionalidades de requisição 
-  const getDiet = async ()=>{
-    const requestDiet = await fetch(`http://localhost:3000/users/${id}/diets`)
-    const dietJson = await requestDiet.json()
-    SetDiet(dietJson.SnackDiary)
-  }
+  // funcionalidades de requisição
+  const getDiet = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/users/diets/snack/${id}`
+      );
+      const data = await response.json();
+      SetDiet(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const DebounceSearch = useCallback(
     debounce((NextValue) => SearchFood(NextValue), 1000),
     [SearchFood]
@@ -80,11 +85,11 @@ const AddNutri = ({ BackDash, FoodInfos, SnackSection, SetDiet, Snackid}) => {
       );
     });
   };
-  const addNutrient = (event) => {
+  const addNutrient = async (event) => {
     event.preventDefault();
-    requestPost(SelectFood)
-    // getDiet()
-    setTimeout(()=> BackDash(false), 400)
+    await requestPost(SelectFood);
+    await getDiet();
+    await BackDash(false)
   };
 
   return (

@@ -1,25 +1,25 @@
 import { GlassWater, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { UsePost } from "../../hooks/usePost.jsx";
-import { UsePut } from "../../hooks/usePut.jsx";
+import { UsePost } from "../hooks/usePost.jsx";
+import { UsePut } from "../hooks/usePut.jsx";
 
 const WaterManage = ({ HidrateItem }) => {
   // utilizando hooks seção
   const { id } = useParams();
   const DietID = HidrateItem.id;
   const { httpConfig } = UsePost(
-    `http://localhost:3000/users/${id}/diets/${DietID}/hidration`
+    `http://localhost:3000/users/diets/hidrate/${id}`
   );
   const { UpdatePut } = UsePut();
 
   const [Diet, SetDiet] = useState({});
   const [cups, SetCups] = useState([]);
   const [CupDrunk, SetCupDrunk] = useState(0);
-  const [percentual, SetPercentual] = useState();
+  const [percentual, SetPercentual] = useState(0);
 
   useEffect(() => {
-    SetCups(HidrateItem.hidration);
+    SetCups(HidrateItem)
   }, [HidrateItem]);
 
   useEffect(() => {
@@ -35,12 +35,11 @@ const WaterManage = ({ HidrateItem }) => {
       SetPercentual(PercentualFormated)
   }, [CupDrunk]);
 
-
   // Funções de requsição
   const UpdateState = async () => {
-    const data = await fetch(`http://localhost:3000/users/${id}/diets`);
-    const dataJSON = await data.json();
-    SetCups(dataJSON.hidration)
+    const response = await fetch(`http://localhost:3000/users/diets/hidrate/${id}`);
+    const data = await response.json();
+    SetCups(data)
   };
 
   const AddCup = () => {
@@ -54,16 +53,17 @@ const WaterManage = ({ HidrateItem }) => {
     const DrunkTrue = { drunk: true };
     const DrunkFalse = { drunk: false };
 
+    
     if (CurrentCup === false) {
       UpdatePut(
-        `http://localhost:3000/users/${id}/diets/${DietID}/hidration/${CupId}`,
+        `http://localhost:3000/users/diets/hidrate/cup/${CupId}`,
         DrunkTrue
       );
       UpdateState();
     }
     if (CurrentCup === true) {
       UpdatePut(
-        `http://localhost:3000/users/${id}/diets/${DietID}/hidration/${CupId}`,
+        `http://localhost:3000/users/diets/hidrate/cup/${CupId}`,
         DrunkFalse
       );
       UpdateState();

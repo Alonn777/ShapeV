@@ -1,11 +1,11 @@
 import { ArrowLeft, Pencil, Save, Plus, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { UsePost } from "../../hooks/usePost.jsx";
-import { UseGet } from "../../hooks/useGet.jsx";
-import { UsePut } from "../../hooks/usePut.jsx";
-import { UseDelete } from "../../hooks/useDelete.jsx";
-import "../../css/WorkoutsDashboard.css";
+import { UsePost } from "../hooks/usePost.jsx";
+import { UseGet } from "../hooks/useGet.jsx";
+import { UsePut } from "../hooks/usePut.jsx";
+import { UseDelete } from "../hooks/useDelete.jsx";
+import "../css/WorkoutsDashboard.css";
 
 const WorkoutsDashboard = () => {
   // definição dos identificadores/URL
@@ -19,7 +19,7 @@ const WorkoutsDashboard = () => {
   const { httpConfig } = UsePost(url);
   const { Exercise: ExerciseServer, requestWorkout, Workout } = UseGet(url);
   const { UpdatePut, UpdateWorkout } = UsePut();
-  const { DeleteExercise } = UseDelete();
+  const { Delete } = UseDelete();
 
   // Salvando dados vindo do servidor
   useEffect(() => {
@@ -135,7 +135,7 @@ const WorkoutsDashboard = () => {
 
   const deleteExercise = async (ExID) => {
     const ExerciseItem = exercises.find((ex) => ex.id === ExID);
-    await DeleteExercise(
+    await Delete(
       `http://localhost:3000/users/workouts/exercise/${ExID}`
     );
     UpdateState();

@@ -5,10 +5,10 @@ import App from "./App.jsx";
 import UserLogin from "./routes/UserLogin.jsx";
 import "./index.css";
 import ShapevMain from "./routes/ShapevMain.jsx";
-import MainDashboard from "./components/MainDashboard.jsx";
-import TrainneLayout from "./components/TrainneLayout.jsx";
-import DietsLayout from "./components/DietsLayout.jsx";
-import WorkoutsDashboard from "./components/subcomponents/WorkoutsDashboard.jsx";
+import MainDashboard from "./routes/MainDashboard.jsx";
+import TrainneLayout from "./routes/TrainneLayout.jsx";
+import DietsLayout from "./routes/DietsLayout.jsx";
+import WorkoutsDashboard from "./components/WorkoutsDashboard.jsx";
 const router = createBrowserRouter([
   {
     path: "/",

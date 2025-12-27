@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { UseGet } from "../../hooks/useGet";
+import { UseGet } from "../hooks/useGet";
 import debounce from "lodash.debounce";
 import { X } from "lucide-react";
 

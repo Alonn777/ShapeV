@@ -1,7 +1,7 @@
 import "../css/DietsLayout.css";
-import WaterManage from "./subcomponents/WaterManage";
-import SnackDiary from "./subcomponents/SnackDiary.jsx";
-import SearchNutri from "./subcomponents/SearchNutri.jsx";
+import WaterManage from "../components/WaterManage.jsx";
+import SnackDiary from "../components/SnackDiary.jsx";
+import SearchNutri from "../components/SearchNutri.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { Search, Calendar, Plus, ArrowLeft, Utensils } from "lucide-react";
 import { UseGetDiet } from "../hooks/useGetDiet.jsx";
@@ -38,6 +38,7 @@ const DietsLayout = () => {
   const ModalClick = () => {
     SetSearchDiet(false);
   };
+
   return (
     <main className="Diet-Layout">
       <button type="button" className="home-back" onClick={BackHome}>
@@ -96,11 +97,11 @@ const DietsLayout = () => {
         </section>
 
         <section className="snack-container">
-          <header className="title">
+          <div className="title">
             <Utensils color="#f5f5f5" />
 
             <h3>Diário de refeições</h3>
-          </header>
+          </div>
           {SnackDiaryData && SnackDiaryData.length > 0 ? (
             <SnackDiary SnackDiet={SnackDiaryData} />
           ) : (

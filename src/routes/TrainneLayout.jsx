@@ -16,6 +16,8 @@ const TrainneLayout = () => {
 
   const [exercisesDay, SetExercisesDay] = useState([]);
   const [SelectDay, SetSelectDay] = useState(null);
+  const date = new Date()
+  
   //  REQUISIÇÃO DE EXERCICIOS
   const requestExercises = async (url) => {
     const response = await fetch(url);
@@ -54,7 +56,7 @@ const TrainneLayout = () => {
           </div>
           <div className="content-week">
             <p>Esta Semana</p>
-            <h4>1/6</h4>
+            <h4>{date.getDay()}/7</h4>
           </div>
         </div>
         <div className="progress-corporal">
@@ -79,10 +81,10 @@ const TrainneLayout = () => {
 
       <div className="workouts-main">
         <section className="workout-week">
-          <header className="header-workout">
+          <div className="header-workout">
             <Calendar size={30} color="#2da0ffff" />
             <h2>Rotina Semanal</h2>
-          </header>
+          </div>
           <div className="wokout-box">
             <div className="workout-days">
               {exercisesDay.map((item) => (
@@ -114,10 +116,10 @@ const TrainneLayout = () => {
           </div>
         </section>
         <section className="box-progress-corporal">
-          <header className="corporal-header">
+          <div className="corporal-header">
             <TrendingUp size={30} color="#2da0ffff" />
             <h2>Evolução da massa corporal</h2>
-          </header>
+          </div>
         </section>
       </div>
     </main>
