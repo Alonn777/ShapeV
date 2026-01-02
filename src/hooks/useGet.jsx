@@ -1,58 +1,59 @@
-import { useEffect, useState } from "react";
+import { useEffect, useEffectEvent } from "react";
+import { useState } from "react";
 
-export const UseGet = (url, id) => {
-  const [Exercise, SetExercise] = useState([]);
-  const [Workout, SetWorkout] = useState();
-  const [DietServer, SetDietServer] = useState({});
+export const UseGet = (id) => {
   const [FoodServer, SetFood] = useState([]);
   const [SearchFoodServer, SetFoodServer] = useState([]);
+  const [DietCredential, SetDietCredential] = useState({});
+  const [BodyDataCredential, SetBodyDataCredential] = useState({});
 
   useEffect(() => {
-    const requestData = async () => {
-      const response = await fetch(url);
-      const data = await response.json();
-      SetDietServer(data);
-      SetExercise(data);
-    };
-    requestData();
-  }, [url]);
+    if (id) {
+      const requestCredential = async () => {
+        const [DietCredential, BodyDataCredential] = await Promise.all([
+          fetch(`http://localhost:3000/users/diets/${id}`).then((res) =>
+            res.json()
+          ),
+          fetch(`http://localhost:3000/users/bodydata/${id}`).then((res) =>
+            res.json()
+          ),
+        ]);
+        SetDietCredential(DietCredential);
+        SetBodyDataCredential(BodyDataCredential);
+        console.log(BodyDataCredential)
+      };
+      requestCredential();
+    }
+  }, [id]);
 
-  // requsição nas dietas
   const GetFood = async (UrlTaco) => {
-    const data = await fetch(UrlTaco);
-    const dataJSON = await data.json();
-    SetFood(dataJSON);
+    try {
+      const data = await fetch(UrlTaco);
+      const dataJSON = await data.json();
+      SetFood(dataJSON);
+    } catch (error) {
+      console.error("Erro ao buscar alimentos:", error);
+    }
   };
 
   const SearchFood = async (FoodValue) => {
-    const data = await fetch(
-      `http://localhost:3000/taco/search?macronutri=${FoodValue}`
-    );
-    const dataJSON = await data.json();
-    SetFoodServer(dataJSON);
+    try {
+      const data = await fetch(
+        `http://localhost:3000/taco/search?macronutri=${FoodValue}`
+      );
+      const dataJSON = await data.json();
+      SetFoodServer(dataJSON);
+    } catch (error) {
+      console.error("Erro ao buscar alimentos:", error);
+    }
   };
 
-  // funções para requsição de exercicios
-  const requestWorkout = async (url) => {
-    const response = await fetch(url);
-    const data = await response.json();
-    SetWorkout(data);
-  };
-  // função para atualizar o estado
-  const UpdateState = async (UrlState) => {
-    const data = await fetch(UrlState);
-    const dataJSON = await data.json();
-    SetDietServer(dataJSON);
-  };
   return {
-    Exercise,
-    Workout,
-    requestWorkout,
-    UpdateState,
-    DietServer,
     GetFood,
     FoodServer,
     SearchFood,
     SearchFoodServer,
+    DietCredential,
+    BodyDataCredential,
   };
 };

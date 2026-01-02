@@ -1,10 +1,7 @@
 import { ArrowLeft, Pencil, Save, Plus, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { UsePost } from "../hooks/usePost.jsx";
-import { UseGet } from "../hooks/useGet.jsx";
-import { UsePut } from "../hooks/usePut.jsx";
-import { UseDelete } from "../hooks/useDelete.jsx";
+import { UseWorkouts } from "../hooks/useWorkouts.jsx";
 import "../css/WorkoutsDashboard.css";
 
 const WorkoutsDashboard = () => {
@@ -12,40 +9,47 @@ const WorkoutsDashboard = () => {
   const { id } = useParams();
   const location = useLocation();
   const { userid } = location.state;
-  const url = `http://localhost:3000/users/workouts/exercise/${id}`;
+  const exerciseUrl = `http://localhost:3000/users/workouts/exercise/${id}`;
   const navigate = useNavigate();
 
   // Hooks de requisição
-  const { httpConfig } = UsePost(url);
-  const { Exercise: ExerciseServer, requestWorkout, Workout } = UseGet(url);
-  const { UpdatePut, UpdateWorkout } = UsePut();
-  const { Delete } = UseDelete();
+  const {
+    Exercise: ExerciseServer,
+    Workout: WorkoutList,
+    requestWorkout,
+    updateExercise,
+    updateWorkout,
+    createExercise,
+    deleteExercise,
+    refreshExercises,
+  } = UseWorkouts(exerciseUrl, userid);
 
   // Salvando dados vindo do servidor
   useEffect(() => {
     requestWorkout(`http://localhost:3000/users/workouts/${userid}`);
-  }, []);
+  }, [userid]);
 
   useEffect(() => {
     if (ExerciseServer) {
       SetExercise(ExerciseServer);
     }
-    if (Workout) {
-      const WorkoutCurrent = Workout.find((item)=> item.id == id)
-      SetWorkout(WorkoutCurrent)
+    if (WorkoutList) {
+      const WorkoutCurrent = WorkoutList.find((item) => item.id == id);
+      SetWorkout(WorkoutCurrent || {});
     }
-  }, [ExerciseServer, Workout]);
+  }, [ExerciseServer, WorkoutList, id]);
+
   // ESTADOS DA APLICAÇÃO
   const [WorkoutPrev, SetWorkout] = useState({});
   const [exercises, SetExercise] = useState([]);
   const [completedExercises, setCompletedExercises] = useState([]);
-  console.log(WorkoutPrev)
+  console.log(WorkoutPrev);
   // Botão de voltar
   const Back = () => {
     navigate("/home/workouts");
   };
   // função para criar novo exercicio
-  const createExercise = async () => {
+  const handleCreateExercise = async () => {
     const exerciseCard = {
       name: "Novo Exercício",
       series: 3,
@@ -53,14 +57,8 @@ const WorkoutsDashboard = () => {
       weight: "0kg",
       time: "60s",
     };
-    httpConfig(exerciseCard, "POST");
-    UpdateState();
-  };
-
-  const UpdateState = async () => {
-    const response = await fetch(url);
-    const data = await response.json();
-    SetExercise(data);
+    await createExercise(exerciseUrl, exerciseCard);
+    refreshExercises();
   };
   // Funções de controle de estado
   const HandleChange = (id, name, value) => {
@@ -83,31 +81,32 @@ const WorkoutsDashboard = () => {
     );
   };
   // Manipulação do dia dia do treino
-  const UpdateWorkoutDayEX = (e) => {
+  const UpdateWorkoutDayEX = async (e) => {
     e.preventDefault();
     const WorkoutPatch = {
       workout: WorkoutPrev.workout,
       save: true,
       trainningCreate: WorkoutPrev.trainningCreate,
     };
-    
-     UpdateWorkout(
-       `http://localhost:3000/users/workouts/${id}`,
-       WorkoutPatch
-     );
-   requestWorkout(`http://localhost:3000/users/workouts/${userid}`);
+
+    await updateWorkout(
+      `http://localhost:3000/users/workouts/${id}`,
+      WorkoutPatch
+    );
+     requestWorkout(`http://localhost:3000/users/workouts/${userid}`);
+
   };
-  const EditWorkoutDay = () => {
+  const EditWorkoutDay = async () => {
     const WorkoutSave = {
       workout: WorkoutPrev.workout,
       save: false,
       trainningCreate: WorkoutPrev.trainningCreate,
     };
-    UpdateWorkout(
-      `http://localhost:3000/users/${userid}/workouts/${WorkoutPrev.id}`,
+    await updateWorkout(
+      `http://localhost:3000/users/workouts/${id}`,
       WorkoutSave
     );
-    UpdateState();
+   requestWorkout(`http://localhost:3000/users/workouts/${userid}`);
   };
 
   // Manipulação dos dados de exercicio
@@ -115,44 +114,42 @@ const WorkoutsDashboard = () => {
     e.preventDefault();
     const ExerciseItem = exercises.find((ex) => ex.id === ExID);
     ExerciseItem.save = true;
-    
-    await UpdatePut(
-       `http://localhost:3000/users/workouts/exercise/${ExID}`,
-       ExerciseItem
-     );
-    UpdateState();
+
+    await updateExercise(
+      `http://localhost:3000/users/workouts/exercise/${ExID}`,
+      ExerciseItem
+    );
+    refreshExercises();
   };
 
   const EditExercise = async (ExID) => {
     const ExerciseItem = exercises.find((ex) => ex.id === ExID);
     ExerciseItem.save = false;
-    await UpdatePut(
+    await updateExercise(
       `http://localhost:3000/users/workouts/exercise/${ExID}`,
       ExerciseItem
     );
-    UpdateState();
+    refreshExercises();
   };
 
-  const deleteExercise = async (ExID) => {
-    const ExerciseItem = exercises.find((ex) => ex.id === ExID);
-    await Delete(
+  const handleDeleteExercise = async (ExID) => {
+    await deleteExercise(
       `http://localhost:3000/users/workouts/exercise/${ExID}`
     );
-    UpdateState();
+    refreshExercises();
   };
-  // Salvando todas as informações referente ao gerenciamento de exercicio
-  const AllSave = () => {
-    navigate("/home/workouts");
+
+  const AllSave = async () => {
     const AllWorkoutSave = {
       workout: WorkoutPrev.workout,
       save: WorkoutPrev.save,
       trainningCreate: true,
     };
-    console.log(AllWorkoutSave);
-    UpdateWorkout(
+    await updateWorkout(
       `http://localhost:3000/users/${userid}/workouts/${WorkoutPrev.id}`,
       AllWorkoutSave
     );
+    navigate("/home/workouts");
   };
 
   // Função para alternar o estado de conclusão do exercício
@@ -232,7 +229,7 @@ const WorkoutsDashboard = () => {
                           <button
                             type="button"
                             className="delete-btn"
-                            onClick={() => deleteExercise(exercise.id)}
+                            onClick={() => handleDeleteExercise(exercise.id)}
                           >
                             <Trash color="#fd0000ff" />
                           </button>
@@ -285,7 +282,7 @@ const WorkoutsDashboard = () => {
                           <button
                             type="button"
                             className="delete-btn"
-                            onClick={() => deleteExercise(exercise.id)}
+                            onClick={() => handleDeleteExercise(exercise.id)}
                           >
                             <Trash color="#fd0000ff" />
                           </button>
@@ -358,7 +355,11 @@ const WorkoutsDashboard = () => {
             <p>Ainda não existe exercicios aqui!</p>
           )}
         </div>
-        <button type="button" className="add-exercise" onClick={createExercise}>
+        <button
+          type="button"
+          className="add-exercise"
+          onClick={handleCreateExercise}
+        >
           <Plus size={30} />
           <span>Adcionar exercicío</span>
         </button>

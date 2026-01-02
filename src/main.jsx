@@ -8,6 +8,7 @@ import ShapevMain from "./routes/ShapevMain.jsx";
 import MainDashboard from "./routes/MainDashboard.jsx";
 import TrainneLayout from "./routes/TrainneLayout.jsx";
 import DietsLayout from "./routes/DietsLayout.jsx";
+import BodyData from "./routes/BodyData.jsx";
 import WorkoutsDashboard from "./components/WorkoutsDashboard.jsx";
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: "/home/diets/:id",
         element: <DietsLayout />,
+      },
+      {
+        path: "/home/bodydata/:id",
+        element: <BodyData/>
       },
       {
         path: "/home/workouts/exercise/:id",

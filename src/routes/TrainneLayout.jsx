@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Calendar, ArrowLeft } from "lucide-react";
 import { TrendingUp } from "lucide-react";
 import { Clock10 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { SessionStorage } from "../hooks/SessionStorage";
+import { UseWorkouts } from "../hooks/useWorkouts";
 import "../css/TrainneLayout.css";
 
 const TrainneLayout = () => {
@@ -14,23 +15,10 @@ const TrainneLayout = () => {
     getStorageUser();
   }, []);
 
-  const [exercisesDay, SetExercisesDay] = useState([]);
-  const [SelectDay, SetSelectDay] = useState(null);
-  const date = new Date()
+  const date = new Date();
   
-  //  REQUISIÇÃO DE EXERCICIOS
-  const requestExercises = async (url) => {
-    const response = await fetch(url);
-    const exercises = await response.json();
-    SetExercisesDay(exercises)
-  };
-
-
-  useEffect(() => {
-    if (!id) return console.log("carregando...");
-    const url = "http://localhost:3000/users/workouts/" + id;
-    requestExercises(url);
-  }, [id]);
+  
+  const { WorkoutsList } = UseWorkouts(null, id);
 
 
   // 
@@ -87,7 +75,7 @@ const TrainneLayout = () => {
           </div>
           <div className="wokout-box">
             <div className="workout-days">
-              {exercisesDay.map((item) => (
+              {WorkoutsList && WorkoutsList.length > 0 ? WorkoutsList.map((item) => (
                 <div className="workout" key={item.id}>
                   <div className="day-description">
                     <h4>{item.day}</h4>
@@ -111,7 +99,7 @@ const TrainneLayout = () => {
                     )}
                   </div>
                 </div>
-              ))}
+              )) : <p>Carregando treinos...</p>}
             </div>
           </div>
         </section>

@@ -1,16 +1,16 @@
 import "../css/MainDashboard.css";
 import { UseGetDiet } from "../hooks/useGetDiet";
+import { UseGet } from "../hooks/useGet";
 import { useNavigate } from "react-router-dom";
-import { Dumbbell, Apple } from "lucide-react";
+import { Dumbbell, Apple, Activity } from "lucide-react";
 import { SessionStorage } from "../hooks/SessionStorage";
 import { useEffect, useState } from "react";
 const MainDashboard = () => {
   const navigate = useNavigate();
   const { data: id, getStorageUser } = SessionStorage();
   
-  const dietUrl = id ? `http://localhost:3000/users/diets/${id}` : null;
-  const { DietServer } = UseGetDiet(dietUrl, null);
-
+  const {DietCredential, BodyDataCredential} = UseGet(id)
+  
   useEffect(() => {
     getStorageUser();
   }, []);
@@ -19,17 +19,22 @@ const MainDashboard = () => {
     navigate("/home/workouts");
   };
   const HandleDiet = () => {
-    // Usa o id do usuário diretamente, garantindo que nunca seja undefined
-    if (!id) {
+    if (!DietCredential.id) {
       console.log("Aguardando ID do usuário...");
       return;
     }
+
     
-    // Se DietServer.id existir, usa ele, senão usa o id do usuário
-    const dietId = DietServer?.id || id;
-    navigate(`/home/diets/${dietId}`);
+    navigate(`/home/diets/${DietCredential.id}`);
   };
-  console.log
+
+  const handleBodyData = ()=>{
+    if(!BodyDataCredential.id){
+        console.log("Aguardando ID do usuário...");
+      return;
+    }
+    navigate(`/home/bodydata/${BodyDataCredential.id}`)
+  }
   return (
     <div className="main-dashboard">
       <div className="title-main">
@@ -48,6 +53,13 @@ const MainDashboard = () => {
           <Apple />
           <h4>Dieta</h4>
           <p>Controle sua alimentação e sua hidratação diaria</p>
+          <span>Acessar</span>
+        </div>
+        <div className="card-section" onClick={handleBodyData}>
+          <Activity />
+          <h4>Dados Corporais</h4>
+          <p>Monitore sua evolução fisíca</p>
+
           <span>Acessar</span>
         </div>
       </div>

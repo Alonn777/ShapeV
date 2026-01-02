@@ -40,7 +40,7 @@ const DietsLayout = () => {
   };
 
   return (
-    <main className="Diet-Layout">
+    <div className="Diet-Layout">
       <button type="button" className="home-back" onClick={BackHome}>
         <ArrowLeft /> <span>Voltar para home</span>
       </button>
@@ -110,7 +110,7 @@ const DietsLayout = () => {
         </section>
         <div className="fast-cardap"></div>
       </div>
-    </main>
+    </div>
   );
 };
 
