@@ -1,0 +1,172 @@
+.bodydata-layout {
+    padding: 0 2rem;
+}
+
+.bodydata-layout .header-bodydata {
+    margin-bottom: 2rem;
+}
+
+.header-bodydata h2 {
+    font-size: 1.8rem;
+}
+
+.header-bodydata p {
+    color: #dddd;
+}
+
+.main-bodydata {
+    margin-top: 2rem;
+}
+
+.imc-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 2rem;
+}
+
+.imc-container .info-box {
+    background-color: hsl(226, 44%, 11%);
+    border: 2px solid #1f2937;
+    padding: 2rem;
+    width: 100%;
+    min-height: 25vh;
+    border-radius: 10px;
+
+}
+
+.info-box .weight,
+.height {
+    display: flex;
+    justify-content: space-between;
+}
+
+.info-box .subtitle {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.info-box .weight p,
+.height p {
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.info-box .imc-info {
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.info-box .meta-info {
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    color: #dddd;
+}
+
+.height-form,
+.weight-form {
+    display: flex;
+    justify-content: space-between;
+}
+
+.height-form input,
+.weight-form input {
+    width: 80%;
+    background-color: #070813;
+    padding: 0.5rem 1rem;
+    outline: none;
+    border-radius: 8px;
+    border: 1px solid #1f2937;
+    color: #fff;
+}
+
+.weight button,
+.height button,
+.weight-form button,
+.height-form button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+
+
+}
+
+
+.weight button:hover,
+.height button:hover,
+.weight-form button:hover,
+.height-form button:hover {
+    background-color: #1467db;
+    transition: 0.2s ease-in;
+}
+
+.meta-box {
+    margin-top: 2rem;
+    background-color: hsl(226, 44%, 11%);
+    border: 2px solid #1f2937;
+    width: 100%;
+    padding: 1.5rem 2rem;
+    border-radius: 15px;
+}
+
+.meta-box .subtitle {
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+}
+
+.meta-box .meta-info {
+    display: flex;
+    gap: 2rem;
+
+}
+
+.meta-box .meta-info h3 {
+    font-size: 1.4rem;
+}
+
+.meta-box .meta-info button {
+    background: none;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.meta-box .meta-info button:hover {
+    background-color: #1467db;
+    transition: 0.2s ease-in;
+}
+
+.meta-box form {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.meta-box form input {
+    width: 50%;
+    background-color: #070813;
+    padding: 0.5rem 1rem;
+    outline: none;
+    border-radius: 8px;
+    border: 1px solid #1f2937;
+    color: #fff;
+}
+
+.meta-box form button {
+    background: none;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.meta-box form button:hover {
+    background-color: #1467db;
+    transition: 0.2s ease-in;
+}

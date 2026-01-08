@@ -16,12 +16,10 @@ const TrainneLayout = () => {
   }, []);
 
   const date = new Date();
-  
-  
+
   const { WorkoutsList } = UseWorkouts(null, id);
 
-
-  // 
+  //
   const handleExercise = (itemDay) => {
     if (!id) return console.log("aguardando o id");
     navigate(`/home/workouts/exercise/${itemDay.id}`, {
@@ -33,7 +31,7 @@ const TrainneLayout = () => {
   };
 
   return (
-    <main className="dashboard-trainnig">
+    <div className="dashboard-trainnig">
       <button type="button" className="home-back" onClick={BackHome}>
         <ArrowLeft /> <span>Voltar para home</span>
       </button>
@@ -75,31 +73,35 @@ const TrainneLayout = () => {
           </div>
           <div className="wokout-box">
             <div className="workout-days">
-              {WorkoutsList && WorkoutsList.length > 0 ? WorkoutsList.map((item) => (
-                <div className="workout" key={item.id}>
-                  <div className="day-description">
-                    <h4>{item.day}</h4>
-                    <p></p>
+              {WorkoutsList && WorkoutsList.length > 0 ? (
+                WorkoutsList.map((item) => (
+                  <div className="workout" key={item.id}>
+                    <div className="day-description">
+                      <h4>{item.day}</h4>
+                      <p></p>
+                    </div>
+                    <div className="start-trainning">
+                      {item.trainningCreate ? (
+                        <button
+                          className="btn-start-trainning"
+                          onClick={() => handleExercise(item)}
+                        >
+                          Iniciar
+                        </button>
+                      ) : (
+                        <button
+                          className="btn-exercise"
+                          onClick={() => handleExercise(item)}
+                        >
+                          Criar
+                        </button>
+                      )}
+                    </div>
                   </div>
-                  <div className="start-trainning">
-                    {item.trainningCreate ? (
-                      <button
-                        className="btn-start-trainning"
-                        onClick={() => handleExercise(item)}
-                      >
-                        Iniciar
-                      </button>
-                    ) : (
-                      <button
-                        className="btn-exercise"
-                        onClick={() => handleExercise(item)}
-                      >
-                        Criar
-                      </button>
-                    )}
-                  </div>
-                </div>
-              )) : <p>Carregando treinos...</p>}
+                ))
+              ) : (
+                <p>Carregando treinos...</p>
+              )}
             </div>
           </div>
         </section>
@@ -110,7 +112,7 @@ const TrainneLayout = () => {
           </div>
         </section>
       </div>
-    </main>
+    </div>
   );
 };
 

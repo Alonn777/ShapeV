@@ -1,14 +1,15 @@
 import { useEffect, useEffectEvent } from "react";
 import { useState } from "react";
 
-export const UseGet = (id) => {
+export const UseGet = (id, url) => {
   const [FoodServer, SetFood] = useState([]);
   const [SearchFoodServer, SetFoodServer] = useState([]);
   const [DietCredential, SetDietCredential] = useState({});
   const [BodyDataCredential, SetBodyDataCredential] = useState({});
+  const [data, SetData] = useState();
 
   useEffect(() => {
-    if (id) {
+    if (id || id != null) {
       const requestCredential = async () => {
         const [DietCredential, BodyDataCredential] = await Promise.all([
           fetch(`http://localhost:3000/users/diets/${id}`).then((res) =>
@@ -20,12 +21,31 @@ export const UseGet = (id) => {
         ]);
         SetDietCredential(DietCredential);
         SetBodyDataCredential(BodyDataCredential);
-        console.log(BodyDataCredential)
+        console.log(BodyDataCredential);
       };
       requestCredential();
     }
+    if (id === null) {
+      console.log("O id é nulo!, requisição invalidad");
+    }
   }, [id]);
 
+  // useEffect(() => {
+  //   if (url) {
+  //     const requestData = async () => {
+  //       try {
+  //         const response = await fetch(url);
+  //         const data = await response.json();
+  //         SetData(data);
+  //       } catch (error) {
+  //         console.error({ Error: "Algum erro na sua requisição" }, error);
+  //       }
+  //     };
+  //     requestData();
+  //   }
+  // }, [url]);
+
+  // Funcionalidades para requisição do alimento (tirar deste hook depois)
   const GetFood = async (UrlTaco) => {
     try {
       const data = await fetch(UrlTaco);
@@ -54,6 +74,7 @@ export const UseGet = (id) => {
     SearchFood,
     SearchFoodServer,
     DietCredential,
+    data,
     BodyDataCredential,
   };
 };
