@@ -57,6 +57,83 @@
     font-weight: bold;
 }
 
+.info-box .p-info {
+    font-size: 0.9rem;
+    font-size: 600;
+}
+
+
+/* Abaixo do peso */
+.imc-info.medium {
+    color: #facc15;
+    /* amarelo */
+}
+
+/* Peso normal */
+.imc-info.good {
+    color: #22c55e;
+    /* verde */
+}
+
+/* Sobrepeso */
+.imc-info.low {
+    color: #fb923c;
+    /* laranja */
+}
+
+/* Obesidade grau I */
+.imc-info.high {
+    color: #ef4444;
+    /* vermelho */
+}
+
+/* Obesidade grau II */
+.imc-info.ultra-high {
+    color: #dc2626;
+    /* vermelho escuro */
+}
+
+/* Obesidade grau III */
+.imc-info.super-high {
+    color: #7f1d1d;
+    /* vinho escuro */
+}
+
+.imc-info.medium {
+    color: #facc15;
+    /* amarelo */
+}
+
+/* Peso normal */
+.p-info.good {
+    color: #22c55e;
+    /* verde */
+}
+
+/* Sobrepeso */
+.p-info.low {
+    color: #fb923c;
+    /* laranja */
+}
+
+/* Obesidade grau I */
+.p-info.high {
+    color: #ef4444;
+    /* vermelho */
+}
+
+/* Obesidade grau II */
+.p-info.ultra-high {
+    color: #dc2626;
+    /* vermelho escuro */
+}
+
+/* Obesidade grau III */
+.p-info.super-high {
+    color: #7f1d1d;
+    /* vinho escuro */
+}
+
 .info-box .meta-info {
     font-size: 0.9rem;
     margin-top: 0.5rem;
@@ -123,6 +200,11 @@
 
 }
 
+.meta-info p {
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
 .meta-box .meta-info h3 {
     font-size: 1.4rem;
 }
@@ -169,4 +251,105 @@
 .meta-box form button:hover {
     background-color: #1467db;
     transition: 0.2s ease-in;
+}
+
+.metrica-container {
+    padding-top: 4rem;
+}
+
+.metrica-box {
+    background: linear-gradient(180deg, #0b1220 0%, #070d18 100%);
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.header-metrica {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.header-metrica .title h3 {
+    font-size: 1.6em;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.header-metrica .title p {
+    font-size: 1rem;
+    color: #94a3b8;
+}
+
+.btn-metrica {
+    display: flex;
+    align-items: center;
+    background: #17386d;
+    border: none;
+    border-radius: 12px;
+    padding: 0.6rem 1.2rem;
+    color: #e5e7eb;
+    font-size: 0.9rem;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-metrica:hover {
+    background-color: #005ad8;
+    transition: ease-in 0.2s;
+}
+
+.metricas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.metrica-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.metrica-box label,
+.input-box label {
+    font-size: 0.875rem;
+    color: #cbd5f5;
+}
+
+.metrica-field {
+    background: #020617;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+}
+
+.metrica-field p {
+    font-size: 0.9375rem;
+    color: #e5e7eb;
+}
+
+.input-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-box input {
+    background: #020617;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    font-size: 0.9375rem;
+    color: #e5e7eb;
+    outline: none;
+}
+
+.input-box input:focus {
+    border-color: #3b82f6;
 }
