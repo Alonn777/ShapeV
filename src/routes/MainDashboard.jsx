@@ -1,22 +1,27 @@
 import "../css/MainDashboard.css";
+import { BodyDataContext } from "../context/BodyDataContext";
 import { UseGetDiet } from "../hooks/useGetDiet";
 import { UseGet } from "../hooks/useGet";
 import { useNavigate } from "react-router-dom";
 import { Dumbbell, Apple, Activity } from "lucide-react";
 import { SessionStorage } from "../hooks/SessionStorage";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+
 const MainDashboard = () => {
   const navigate = useNavigate();
   const { data: id, getStorageUser } = SessionStorage();
-  
-  const {DietCredential, BodyDataCredential} = UseGet(id)
-  
+  const { DietCredential, BodyDataCredential } = UseGet(id);
+  const { SetBodyDataID } = useContext(BodyDataContext);
+
   useEffect(() => {
     getStorageUser();
   }, []);
 
   const HandleExercise = () => {
-    navigate("/home/workouts");
+    if (!BodyDataCredential.id)
+      return "[ERROR]: O ID do gráfico corporal não existe";
+
+    navigate(`/home/workouts/${BodyDataCredential.id}`);
   };
   const HandleDiet = () => {
     if (!DietCredential.id) {
@@ -24,17 +29,16 @@ const MainDashboard = () => {
       return;
     }
 
-    
     navigate(`/home/diets/${DietCredential.id}`);
   };
 
-  const handleBodyData = ()=>{
-    if(!BodyDataCredential.id){
-        console.log("Aguardando ID do usuário...");
+  const handleBodyData = () => {
+    if (!BodyDataCredential.id) {
+      console.log("Aguardando ID do usuário...");
       return;
     }
-    navigate(`/home/bodydata/${BodyDataCredential.id}`)
-  }
+    navigate(`/home/bodydata/${BodyDataCredential.id}`);
+  };
   return (
     <div className="main-dashboard">
       <div className="title-main">
@@ -44,23 +48,29 @@ const MainDashboard = () => {
 
       <div className="action-card">
         <div className="card-section" onClick={HandleExercise}>
-          <Dumbbell />
+          <div className="icon-dumbbell">
+            <Dumbbell size={100} />
+          </div>
           <h4>Treino</h4>
           <p>Gerencie sua rotina de exercícios e acompanhe seu progresso</p>
-          <span>Acessar</span>
+          <p className="enter">Acessar</p>
         </div>
         <div className="card-section" onClick={HandleDiet}>
-          <Apple />
+          <div className="icon-apple">
+            <Apple size={100} />
+          </div>
           <h4>Dieta</h4>
           <p>Controle sua alimentação e sua hidratação diaria</p>
-          <span>Acessar</span>
+          <p className="enter">Acessar</p>
         </div>
         <div className="card-section" onClick={handleBodyData}>
-          <Activity />
+          <div className="icon-body">
+            <Activity size={100} />
+          </div>
           <h4>Dados Corporais</h4>
           <p>Monitore sua evolução fisíca</p>
 
-          <span>Acessar</span>
+          <p className="enter">Acessar</p>
         </div>
       </div>
     </div>

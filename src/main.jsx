@@ -1,6 +1,7 @@
 import { Children, StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, Route, RouterProvider } from "react-router-dom";
+import { BodyDataContextProvider } from "./context/BodyDataContext.jsx";
 import App from "./App.jsx";
 import UserLogin from "./routes/UserLogin.jsx";
 import "./index.css";
@@ -28,7 +29,7 @@ const router = createBrowserRouter([
         element: <MainDashboard />,
       },
       {
-        path: "/home/workouts",
+        path: "/home/workouts/:bodydataID",
         element: <TrainneLayout />,
       },
       {
@@ -37,7 +38,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/home/bodydata/:id",
-        element: <BodyData/>
+        element: <BodyData />,
       },
       {
         path: "/home/workouts/exercise/:id",
@@ -48,6 +49,8 @@ const router = createBrowserRouter([
 ]);
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <BodyDataContextProvider>
+      <RouterProvider router={router} />
+    </BodyDataContextProvider>
   </StrictMode>
 );

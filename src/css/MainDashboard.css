@@ -3,7 +3,7 @@
     grid-template-rows: auto 1fr;
     gap: 2.5rem;
     width: 100%;
-    padding: 1rem 1rem;
+    padding: 2rem 1.2rem;
 }
 
 .title-main {
@@ -13,13 +13,13 @@
 
 .title-main h2 {
     margin-bottom: 0.5rem;
-    font-size: 1.8rem;
+    font-size: 2.2rem;
 }
 
 .main-dashboard .action-card {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
+    gap: 1rem;
 
 }
 
@@ -27,5 +27,70 @@
     background-color: hsl(226, 44%, 11%);
     padding: 1.5rem;
     cursor: pointer;
+    width: 100%;
+    height: 35vh;
+    border-radius: 10px;
+    border: 1px solid #1e293b;
+    opacity: 0.9;
 
+}
+
+.card-section:hover {
+    opacity: 1;
+    border: 1px solid #0f6bff;
+    box-shadow: 1px 1px 1px 1px #0f6bff6e;
+    transition: 0.2s ease-in;
+}
+
+.card-section .icon-dumbbell {
+    margin-bottom: 6px;
+    background-color: #38BDF8;
+    width: 60px;
+    height: 60px;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+
+}
+
+.card-section .icon-apple {
+    margin-bottom: 6px;
+    background-color: #22C55E;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    padding: 1rem;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.card-section .icon-body {
+    margin-bottom: 6px;
+    background-color: #A855F7;
+    width: 60px;
+    padding: 1rem;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+
+}
+.card-section h4{
+    font-size: 1.2rem;
+    margin-top: 10px;
+    font-weight: 600;
+    
+}
+.card-section p{
+    font-size: 0.9rem;
+}
+.card-section .enter{
+   margin-top: 8px;
+    color: #0f6bff;
+    font-size: 1rem;
+    font-weight: 600;
 }

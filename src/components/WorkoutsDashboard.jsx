@@ -8,11 +8,12 @@ const WorkoutsDashboard = () => {
   // definição dos identificadores/URL
   const { id } = useParams();
   const location = useLocation();
-  const { userid } = location.state;
+  const { userid, bodydataID } = location.state;
   const exerciseUrl = `http://localhost:3000/users/workouts/exercise/${id}`;
   const navigate = useNavigate();
 
   // Hooks de requisição
+
   const {
     Exercise: ExerciseServer,
     Workout: WorkoutList,
@@ -46,7 +47,7 @@ const WorkoutsDashboard = () => {
   console.log(WorkoutPrev);
   // Botão de voltar
   const Back = () => {
-    navigate("/home/workouts");
+    navigate(`/home/workouts/${bodydataID}`);
   };
   // função para criar novo exercicio
   const handleCreateExercise = async () => {

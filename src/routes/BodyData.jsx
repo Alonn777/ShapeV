@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Pencil, Plus, ArrowLeft, Save } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../css/BodyData.css";
 import { UseGet } from "../hooks/useGet.jsx";
 import { useBodyData } from "../hooks/useBodyData.jsx";
+
+import GraphBodyData from "../components/GraphBodyData.jsx";
 
 const BodyData = () => {
   const navigate = useNavigate();
@@ -12,13 +14,21 @@ const BodyData = () => {
     BodyData,
     BodyMeta,
     createMetrica,
+    BodyHistoricMetric,
+    refreshBodyHistoric,
     refreshData,
     refreshMeta,
     createMeta,
+    loading,
+    savingMetrica,
+    savingMeta,
+    refreshing,
   } = useBodyData(id);
   // estados da aplicação
   const [Metricas, SetMetricas] = useState({});
   const [ActualMeta, SetActualMeta] = useState(null);
+  const [DataGraph, SetDataGraph] = useState([]);
+
   useEffect(() => {
     if (BodyData) {
       SetMetricas(BodyData[0]);
@@ -27,7 +37,11 @@ const BodyData = () => {
     if (BodyMeta) {
       SetActualMeta(BodyMeta[0]);
     }
-  }, [BodyData]);
+    if (BodyHistoricMetric) {
+      SetDataGraph(BodyHistoricMetric);
+    }
+  }, [BodyData, BodyMeta, BodyHistoricMetric]);
+
   const [weighSave, SetWeightSave] = useState(true);
   const [heightSave, SetHeightSave] = useState(true);
   const [metaSave, SetMetaSave] = useState(true);
@@ -88,7 +102,6 @@ const BodyData = () => {
       });
   };
 
-  console.log(ActualMeta);
   // onchange
   const handleChange = (field, e) => {
     SetMetricas((prev) => ({
@@ -108,6 +121,7 @@ const BodyData = () => {
     e.preventDefault();
     await createMetrica(Metricas);
     await refreshData();
+    await refreshBodyHistoric();
     SetWeightSave(true);
   };
 
@@ -131,6 +145,32 @@ const BodyData = () => {
     await refreshMeta();
     SetMetaSave(true);
   };
+
+  if (loading) {
+    return (
+      <div className="bodydata-layout">
+        <div className="header-bodydata">
+          <button type="button" className="home-back" onClick={BackHome}>
+            <ArrowLeft /> <span>Voltar para home</span>
+          </button>
+          <h2>Dados Corporais</h2>
+          <p>Monitore sua evolução física</p>
+        </div>
+        <div
+          className="main-bodydata"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: "400px",
+          }}
+        >
+          <p>Carregando dados...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bodydata-layout">
       <div className="header-bodydata">
@@ -167,13 +207,22 @@ const BodyData = () => {
                     step="0.01"
                     required
                     onChange={(e) => handleChange("weight", e)}
+                    disabled={savingMetrica || refreshing}
                   />
-                  <button type="submit">
-                    <Save color="#ffffffff" />
+                  <button type="submit" disabled={savingMetrica || refreshing}>
+                    {savingMetrica || refreshing ? (
+                      <span>Salvando...</span>
+                    ) : (
+                      <Save color="#ffffffff" />
+                    )}
                   </button>
                 </form>
               )}
-              <p className="meta-info">Meta: 72kg</p>
+              {ActualMeta === null ? (
+                <p>0 KG</p>
+              ) : (
+                <p className="meta-info"> Meta: {ActualMeta.weight_meta} KG</p>
+              )}
             </div>
 
             <div className="info-box">
@@ -221,13 +270,22 @@ const BodyData = () => {
                     required
                     min={0.05}
                     step="0.01"
+                    disabled={savingMetrica || refreshing}
                   />
-                  <button type="submit">
-                    <Save color="#ffffffff" />
+                  <button type="submit" disabled={savingMetrica || refreshing}>
+                    {savingMetrica || refreshing ? (
+                      <span>Salvando...</span>
+                    ) : (
+                      <Save color="#ffffffff" />
+                    )}
                   </button>
                 </form>
               )}
-              <p className="meta-info">Meta: 72kg</p>
+              {ActualMeta === null ? (
+                <p className="meta-info">0 KG</p>
+              ) : (
+                <p className="meta-info"> Meta: {ActualMeta.weight_meta} KG</p>
+              )}
             </div>
           </div>
 
@@ -235,14 +293,29 @@ const BodyData = () => {
             <p className="subtitle">Meta de peso</p>
             {metaSave ? (
               <div className="meta-info">
-                {ActualMeta === null ? (
-                  <p>0 KG</p>
-                ) : (
-                  <p>{ActualMeta.weight_meta} KG</p>
-                )}
-                <button type="button" onClick={() => SetMetaSave(false)}>
-                  <Pencil color="#ffff" />
-                </button>
+                <div className="meta-content">
+                  {ActualMeta === null ? (
+                    <p>0 KG</p>
+                  ) : (
+                    <p>{ActualMeta.weight_meta} KG</p>
+                  )}
+                  <button type="button" onClick={() => SetMetaSave(false)}>
+                    <Pencil color="#ffff" />
+                  </button>
+                </div>
+                <div className="meta-falta">
+                  <p>Faltam</p>
+                  {ActualMeta && Metricas ? (
+                    <p className="meta-kg">
+                      {Math.abs(
+                        Metricas.weight - ActualMeta.weight_meta,
+                      ).toFixed(2)}{" "}
+                      KG
+                    </p>
+                  ) : (
+                    <p className="meta-kg">0 KG</p>
+                  )}
+                </div>
               </div>
             ) : (
               <form onSubmit={(e) => MetaSubmit(e)}>
@@ -253,17 +326,25 @@ const BodyData = () => {
                   onChange={(e) => handleChangeMeta(e)}
                   min={0.05}
                   step="0.01"
+                  required
+                  disabled={savingMeta || refreshing}
                 />
-                <button type="submit">
-                  <Save color="#ffff" />
+                <button type="submit" disabled={savingMeta || refreshing}>
+                  {savingMeta || refreshing ? (
+                    <span>Salvando...</span>
+                  ) : (
+                    <Save color="#ffff" />
+                  )}
                 </button>
               </form>
             )}
           </div>
         </div>
 
+        {/* Gráfico dos dados corporais */}
+        <GraphBodyData graphData={DataGraph} />
+        {/* LOCAL DE MÉTRICAS DO USUÁRIO */}
         <div className="metrica-container"></div>
-
         {MetricaSave ? (
           <div className="metrica-box">
             <div className="header-metrica">
@@ -341,11 +422,19 @@ const BodyData = () => {
                 <h3>Medidas Corporais</h3>
                 <p>Circunferências em centímetros</p>
               </div>
-              <button className="btn-metrica" type="submit">
+              <button
+                className="btn-metrica"
+                type="submit"
+                disabled={savingMetrica || refreshing}
+              >
                 <span>
-                  <Save />
+                  {savingMetrica || refreshing ? (
+                    <span>Salvando...</span>
+                  ) : (
+                    <Save />
+                  )}
                 </span>
-                Salvar
+                {savingMetrica || refreshing ? "" : "Salvar"}
               </button>
             </div>
 
@@ -359,6 +448,7 @@ const BodyData = () => {
                   onChange={(e) => handleChange("chest", e)}
                   min={0.05}
                   step="0.01"
+                  disabled={savingMetrica || refreshing}
                 />
               </div>
 
@@ -371,6 +461,7 @@ const BodyData = () => {
                   onChange={(e) => handleChange("waist", e)}
                   min={0.05}
                   step="0.01"
+                  disabled={savingMetrica || refreshing}
                 />
               </div>
               <div className="input-box">
@@ -382,6 +473,7 @@ const BodyData = () => {
                   onChange={(e) => handleChange("hip", e)}
                   min={0.05}
                   step="0.01"
+                  disabled={savingMetrica || refreshing}
                 />
               </div>
               <div className="input-box">
@@ -393,6 +485,7 @@ const BodyData = () => {
                   onChange={(e) => handleChange("biceps", e)}
                   min={0.05}
                   step="0.01"
+                  disabled={savingMetrica || refreshing}
                 />
               </div>
               <div className="input-box">
@@ -404,6 +497,7 @@ const BodyData = () => {
                   onChange={(e) => handleChange("thigh", e)}
                   min={0.05}
                   step="0.01"
+                  disabled={savingMetrica || refreshing}
                 />
               </div>
             </div>

@@ -3,48 +3,123 @@ import {
   getMetricas,
   postMetrica,
   getBodyMeta,
-  postMeta
+  GetHistoricMetric,
+  postMeta,
 } from "../services/BodyDataService.js";
 
 export const useBodyData = (id) => {
   const [BodyData, SetBodyData] = useState(null);
   const [BodyMeta, SetBodyMeta] = useState(null);
-
+  const [BodyHistoricMetric, SetBodyHistoric] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [savingMetrica, setSavingMetrica] = useState(false);
+  const [savingMeta, setSavingMeta] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   useEffect(() => {
     if (id) {
       const requestBodyMetric = async () => {
-        const response = await getMetricas(id);
-        SetBodyData(response);
+        try {
+          setLoading(true);
+          const response = await getMetricas(id);
+          SetBodyData(response);
+        } catch (error) {
+          console.error("Erro ao buscar métricas:", error);
+        } finally {
+          setLoading(false);
+        }
       };
       const requestMeta = async () => {
-        const response = await getBodyMeta(id);
-        SetBodyMeta(response);
+        try {
+          const response = await getBodyMeta(id);
+          SetBodyMeta(response);
+        } catch (error) {
+          console.error("Erro ao buscar meta:", error);
+        }
+      };
+
+      const requestBodyHistoric = async () => {
+        try {
+          const response = await GetHistoricMetric(id);
+          SetBodyHistoric(response)
+        } catch (error) {
+          console.error("Erro ao buscar meta:", error);
+        }
       };
       requestBodyMetric();
       requestMeta();
+      requestBodyHistoric();
     }
   }, [id]);
+
   const createMetrica = async (data) => {
-    const response = await postMetrica(id, data);
-    
+    try {
+      setSavingMetrica(true);
+      const response = await postMetrica(id, data);
+      return response;
+    } catch (error) {
+      console.error("Erro ao criar métrica:", error);
+    } finally {
+      setSavingMetrica(false);
+    }
   };
-  const createMeta = async(data)=>{
-    const response = await postMeta(id, data)
-  }
+
+  const createMeta = async (data) => {
+    try {
+      setSavingMeta(true);
+      const response = await postMeta(id, data);
+      return response;
+    } catch (error) {
+      console.error("Erro ao criar meta:", error);
+    } finally {
+      setSavingMeta(false);
+    }
+  };
+
   const refreshData = async () => {
-    const response = await getMetricas(id);
-    SetBodyData(response);
+    try {
+      setRefreshing(true);
+      const response = await getMetricas(id);
+      SetBodyData(response);
+    } catch (error) {
+      console.error("Erro ao atualizar dados:", error);
+    } finally {
+      setRefreshing(false);
+    }
   };
-  const refreshMeta = async ()=>{
+
+  const refreshMeta = async () => {
+    try {
+      setRefreshing(true);
       const response = await getBodyMeta(id);
       SetBodyMeta(response);
-  }
+    } catch (error) {
+      console.error("Erro ao atualizar meta:", error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  const refreshBodyHistoric = async () => {
+    try {
+      const response = await GetHistoricMetric(id);
+      SetBodyHistoric(response);
+    } catch {
+      console.error("Erro ao atualizar meta:", error);
+    }
+  };
+
   return {
     BodyData,
     BodyMeta,
+    BodyHistoricMetric,
     createMetrica,
     refreshData,
+    refreshBodyHistoric,
     refreshMeta,
-    createMeta
+    createMeta,
+    loading,
+    savingMetrica,
+    savingMeta,
+    refreshing,
   };
 };

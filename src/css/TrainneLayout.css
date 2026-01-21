@@ -23,7 +23,7 @@
     display: flex;
     gap: 2rem;
     margin-top: 2rem;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     padding: 1.5rem 2rem;
 }
@@ -41,7 +41,12 @@
     border: 1px solid #1f2937;
     border-radius: 10px;
 }
-
+.week-day .subtitle,
+.time-week-trainning .subtitle,
+.progress-corporal .subtitle{
+    font-size: 1.2rem;
+    font-weight: 600;
+}
 .calendar-icon {
     background: hsla(213, 93%, 58%, 0.2);
     padding: 1rem;
@@ -54,6 +59,12 @@
     padding: 1rem;
     border-radius: 15px;
     max-height: 65px;
+}
+.meta-kg{
+    margin-top: 0.2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #29bbff;
 }
 
 .time-icon {
@@ -127,4 +138,25 @@
     top: 0;
     left: 0;
     background-color: #070813 ;
+}
+
+.body-progress{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.weight-now{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fafafa;
+}
+.weight-now .weight-info{
+    color: #29bbff;
+}
+.weight-now .meta-info{
+    color: #0ae641;
 }

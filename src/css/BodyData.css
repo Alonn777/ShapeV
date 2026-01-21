@@ -196,10 +196,14 @@
 
 .meta-box .meta-info {
     display: flex;
-    gap: 2rem;
+    justify-content: space-between;
+  
 
 }
-
+.meta-content{
+    display: flex;
+      gap: 2rem;
+}
 .meta-info p {
     font-size: 1.4rem;
     font-weight: bold;
@@ -251,6 +255,10 @@
 .meta-box form button:hover {
     background-color: #1467db;
     transition: 0.2s ease-in;
+}
+
+.graph{
+    margin-top: 3rem;
 }
 
 .metrica-container {
@@ -352,4 +360,13 @@
 
 .input-box input:focus {
     border-color: #3b82f6;
+}
+
+.meta-falta p {
+    color: #c4c4c4;
+    font-size: 0.9rem;
+}
+.meta-falta .meta-kg{
+    color: #2781ff;
+    font-size: 1.4rem;
 }
