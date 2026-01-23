@@ -64,7 +64,7 @@ const WorkoutsDashboard = () => {
   // Funções de controle de estado
   const HandleChange = (id, name, value) => {
     SetExercise((PrevExercise) =>
-      PrevExercise.map((ex) => (ex.id === id ? { ...ex, [name]: value } : ex))
+      PrevExercise.map((ex) => (ex.id === id ? { ...ex, [name]: value } : ex)),
     );
   };
 
@@ -78,10 +78,10 @@ const WorkoutsDashboard = () => {
     setCompletedExercises((prev) =>
       prev.includes(exerciseId)
         ? prev.filter((id) => id !== exerciseId)
-        : [...prev, exerciseId]
+        : [...prev, exerciseId],
     );
   };
-  // Manipulação do dia dia do treino
+  // Manipulação do dia do treino
   const UpdateWorkoutDayEX = async (e) => {
     e.preventDefault();
     const WorkoutPatch = {
@@ -90,12 +90,8 @@ const WorkoutsDashboard = () => {
       trainningCreate: WorkoutPrev.trainningCreate,
     };
 
-    await updateWorkout(
-      `http://localhost:3000/users/workouts/${id}`,
-      WorkoutPatch
-    );
-     requestWorkout(`http://localhost:3000/users/workouts/${userid}`);
-
+    await updateWorkout(id, WorkoutPatch);
+    requestWorkout(`http://localhost:3000/users/workouts/${userid}`);
   };
   const EditWorkoutDay = async () => {
     const WorkoutSave = {
@@ -103,11 +99,8 @@ const WorkoutsDashboard = () => {
       save: false,
       trainningCreate: WorkoutPrev.trainningCreate,
     };
-    await updateWorkout(
-      `http://localhost:3000/users/workouts/${id}`,
-      WorkoutSave
-    );
-   requestWorkout(`http://localhost:3000/users/workouts/${userid}`);
+    await updateWorkout(id, WorkoutSave);
+    requestWorkout(`http://localhost:3000/users/workouts/${userid}`);
   };
 
   // Manipulação dos dados de exercicio
@@ -118,7 +111,7 @@ const WorkoutsDashboard = () => {
 
     await updateExercise(
       `http://localhost:3000/users/workouts/exercise/${ExID}`,
-      ExerciseItem
+      ExerciseItem,
     );
     refreshExercises();
   };
@@ -128,14 +121,14 @@ const WorkoutsDashboard = () => {
     ExerciseItem.save = false;
     await updateExercise(
       `http://localhost:3000/users/workouts/exercise/${ExID}`,
-      ExerciseItem
+      ExerciseItem,
     );
     refreshExercises();
   };
 
   const handleDeleteExercise = async (ExID) => {
     await deleteExercise(
-      `http://localhost:3000/users/workouts/exercise/${ExID}`
+      `http://localhost:3000/users/workouts/exercise/${ExID}`,
     );
     refreshExercises();
   };
@@ -148,7 +141,7 @@ const WorkoutsDashboard = () => {
     };
     await updateWorkout(
       `http://localhost:3000/users/${userid}/workouts/${WorkoutPrev.id}`,
-      AllWorkoutSave
+      AllWorkoutSave,
     );
     navigate("/home/workouts");
   };
@@ -301,7 +294,7 @@ const WorkoutsDashboard = () => {
                               HandleChange(
                                 exercise.id,
                                 "series",
-                                e.target.value
+                                e.target.value,
                               )
                             }
                           />
@@ -329,7 +322,7 @@ const WorkoutsDashboard = () => {
                               HandleChange(
                                 exercise.id,
                                 "weight",
-                                e.target.value
+                                e.target.value,
                               )
                             }
                           />

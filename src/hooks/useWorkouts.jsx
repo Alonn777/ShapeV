@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import {UpdateWorkoutService} from '../services/WorkoutService.js'
 
 export const UseWorkouts = (exerciseUrl = null, userId = null) => {
   const [Exercise, SetExercise] = useState([]);
@@ -66,16 +67,17 @@ export const UseWorkouts = (exerciseUrl = null, userId = null) => {
   };
 
   // Função para atualizar workout (PATCH)
-  const updateWorkout = async (url, workoutData) => {
+  const updateWorkout = async (id, workoutData) => {
     try {
-      const response = await fetch(url, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(workoutData),
-      });
-      return response;
+      const response = await UpdateWorkoutService(id, workoutData)
+      // const response = await fetch(url, {
+      //   method: "PATCH",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(workoutData),
+      // });
+      // return response;
     } catch (error) {
       console.error("Erro ao atualizar workout:", error);
     }

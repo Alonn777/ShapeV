@@ -1,8 +1,15 @@
 import GraphBodyData from "../components/GraphBodyData.jsx";
-import { BodyDataContext } from "../context/BodyDataContext.jsx";
 import { useBodyData } from "../hooks/useBodyData.jsx";
 import { useEffect, useContext, useState } from "react";
-import { Calendar, ArrowLeft, TrendingUp, Clock10 } from "lucide-react";
+import {
+  Calendar,
+  ArrowLeft,
+  TrendingUp,
+  Clock10,
+  EllipsisVertical,
+  Play,
+  Moon,
+} from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { SessionStorage } from "../hooks/SessionStorage";
 import { UseWorkouts } from "../hooks/useWorkouts";
@@ -14,15 +21,20 @@ const TrainneLayout = () => {
   const navigate = useNavigate();
   const date = new Date();
   const { bodydataID } = useParams();
-  // Requisições
+  // Requisições e estado de re-renderização
   const { data: id, getStorageUser } = SessionStorage();
   const { WorkoutsList } = UseWorkouts(null, id);
   const { BodyData, BodyMeta, BodyHistoricMetric } = useBodyData(bodydataID);
+  const [WorkoutRender, SetWorkoutRender] = useState([]);
+  const [StateTeste, SetState] = useState(false);
 
-  // States
   useEffect(() => {
     getStorageUser();
   }, []);
+
+  useEffect(() => {
+    SetWorkoutRender(WorkoutsList);
+  }, [WorkoutsList]);
 
   const handleExercise = (itemDay) => {
     if (!id) return;
@@ -34,6 +46,21 @@ const TrainneLayout = () => {
     navigate("/home");
   };
 
+  const showRest = (index) => {
+    SetWorkoutRender((prev) =>
+      prev.map((item, i) => {
+        if (i === index) {
+          return {
+            ...item,
+            state_render_default: !item.state_render_default,
+          };
+        }
+        return item;
+      }),
+    );
+  };
+
+  console.log(WorkoutRender);
   return (
     <div className="dashboard-trainnig">
       <button type="button" className="home-back" onClick={BackHome}>
@@ -46,7 +73,7 @@ const TrainneLayout = () => {
           </div>
           <div className="content-week">
             <p className="subtitle">Faltam</p>
-            <p>{date.getDay()}/7</p>
+            <p>{date.getDay()}/6</p>
           </div>
         </div>
         <div className="progress-corporal">
@@ -72,7 +99,7 @@ const TrainneLayout = () => {
             <Clock10 size={30} color="#ffa90aff" />
           </div>
           <div className="time-content">
-            <p className="subtitle">Faltam</p>
+            <p className="subtitle">Tempo de treino</p>
             <p>4h 30m</p>
           </div>
         </div>
@@ -84,40 +111,111 @@ const TrainneLayout = () => {
             <Calendar size={30} color="#2da0ffff" />
             <h2>Rotina Semanal</h2>
           </div>
-          <div className="wokout-box">
+
+          <div className="workout-box">
             <div className="workout-days">
-              {WorkoutsList && WorkoutsList.length > 0 ? (
-                WorkoutsList.map((item) => (
-                  <div className="workout" key={item.id}>
-                    <div className="day-description">
-                      <h4>{item.day}</h4>
-                      <p></p>
-                    </div>
-                    <div className="start-trainning">
-                      {item.trainningCreate ? (
-                        <button
-                          className="btn-start-trainning"
-                          onClick={() => handleExercise(item)}
-                        >
-                          Iniciar
-                        </button>
-                      ) : (
-                        <button
-                          className="btn-exercise"
-                          onClick={() => handleExercise(item)}
-                        >
-                          Criar
-                        </button>
+              {WorkoutRender && WorkoutRender.length > 0 ? (
+                WorkoutRender.map((item, index) => {
+                  const isRestDay = item.state_render_default;
+
+                  if (item.dayOff === true) {
+                    return (
+                      <div className="workout-box" key={item.id}>
+                        <div className="workout rest">
+                          <div className="day-description">
+                            <div className="icon">
+                              <Moon color="#ffb005"/>
+                            </div>
+                            <div className="description">
+                              <h4>{item.day}</h4>
+                              <p>Descanso</p>
+                            </div>
+                          </div>
+
+                          <div className="start-trainning">
+                            <button className="button-blocked">-</button>
+
+                            <button
+                              onClick={() => showRest(index)}
+                              className="btn-ellipsis"
+                            >
+                              <EllipsisVertical color="#fff" />
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Botão para marcar como descanso*/}
+                        {isRestDay && (
+                          <div className="rest-day-action">
+                            <button className="btn-rest">
+                              Remover descanso
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }
+                  return (
+                    <div className="workout-box" key={item.id}>
+                      <div className="workout">
+                        <div className="day-description">
+                          <div className="icon">
+                            <Play color="#2bc3ff"/>
+                          </div>
+                          <div className="description">
+                            <h4>{item.day}</h4>
+                            {item.workout ? (
+                              <p>{item.workout}</p>
+                            ) : (
+                              <p>Treino indefinido</p>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="start-trainning">
+                          {item.trainningCreate ? (
+                            <button
+                              className="btn-start-trainning"
+                              onClick={() => handleExercise(item)}
+                            >
+                              Iniciar
+                            </button>
+                          ) : (
+                            <button
+                              className="btn-exercise"
+                              onClick={() => handleExercise(item)}
+                            >
+                              Criar
+                            </button>
+                          )}
+
+                          <button
+                            onClick={() => showRest(index)}
+                            className="btn-ellipsis"
+                          >
+                            <EllipsisVertical color="#fff" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Botão para marcar como descanso*/}
+                      {isRestDay && (
+                        <div className="rest-day-action">
+                          <button className="btn-rest">
+                            Marcar como descanso
+                          </button>
+                        </div>
                       )}
                     </div>
-                  </div>
-                ))
+                  );
+                })
               ) : (
                 <p>Carregando treinos...</p>
               )}
             </div>
           </div>
         </section>
+
         <section className="box-progress-corporal">
           <div className="corporal-header">
             <TrendingUp size={30} color="#2da0ffff" />
