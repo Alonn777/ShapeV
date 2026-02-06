@@ -189,18 +189,18 @@
     padding: 2rem 0;
 }
 
-.form-addNutri .amount-nutri {
+.form-addNutri .box-nutri {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.amount-nutri label {
+.box-nutri label {
     font-size: 0.9rem;
     font-weight: bold;
 }
 
-.amount-nutri input[type="number"] {
+.box-nutri input[type="number"] {
     max-width: 100%;
     background-color: #070813;
     padding: 0.6rem 1rem;
@@ -211,13 +211,13 @@
     margin-bottom: 1rem;
 }
 
-.amount-nutri input[type="number"]:hover {
+.box-nutri input[type="number"]:hover {
     transition: 0.2s ease-in;
     outline: 1px solid #1166c7;
 
 }
 
-.amount-kcal {
+.nutri-info {
     font-size: 0.9rem;
     margin-bottom: 0.5rem;
     color: #ddd;

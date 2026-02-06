@@ -22,8 +22,6 @@ const GraphBodyData = ({ graphData }) => {
     };
     FormatGraphData(graphData);
   }, [graphData]);
-  console.log(ChartData);
-
   if (!graphData) {
     return (
       <div>

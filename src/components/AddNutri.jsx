@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { UsePost } from "../hooks/usePost";
 import { UseGet } from "../hooks/useGet";
 import debounce from "lodash.debounce";
@@ -8,7 +8,7 @@ import { data, useParams } from "react-router-dom";
 const AddNutri = ({ BackDash, FoodInfos, SnackSection, SetDiet, Snackid }) => {
   const { id } = useParams();
   const { requestPost } = UsePost(
-    `http://localhost:3000/users/diets/snack/${SnackSection}`
+    `http://localhost:3000/users/diets/snack/${SnackSection}`,
   );
 
   const [Food, SetFood] = useState([]);
@@ -16,9 +16,10 @@ const AddNutri = ({ BackDash, FoodInfos, SnackSection, SetDiet, Snackid }) => {
   const [SelectOriginal, SetOriginalSelected] = useState(null);
   const [SelectFood, SetSelectedFood] = useState(null);
   const [Multiplcate, SetMultiplicate] = useState(1);
+  const [GramasTotal, SetGramasTotal] = useState(100);
   const { SearchFoodServer, SearchFood } = UseGet();
 
-  // Manipulando os dados
+  // 1 - Organizando requisições
   useEffect(() => {
     if (FoodInfos) {
       SetFood(FoodInfos);
@@ -29,11 +30,12 @@ const AddNutri = ({ BackDash, FoodInfos, SnackSection, SetDiet, Snackid }) => {
       SetFood(SearchFoodServer);
     }
   }, [SearchFoodServer]);
-  // funcionalidades de requisição
+
+  // 2 - Pesquisa de alimento
   const getDiet = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/users/diets/snack/${id}`
+        `http://localhost:3000/users/diets/snack/${id}`,
       );
       const data = await response.json();
       SetDiet(data);
@@ -43,53 +45,61 @@ const AddNutri = ({ BackDash, FoodInfos, SnackSection, SetDiet, Snackid }) => {
   };
   const DebounceSearch = useCallback(
     debounce((NextValue) => SearchFood(NextValue), 1000),
-    [SearchFood]
+    [SearchFood],
   );
+
   const HandleChange = (value) => {
     const NextValue = value;
     SetSearchValue(NextValue);
     DebounceSearch(NextValue);
   };
 
-  //   Funcionalidades de exibição
+  // 3 - Funcionalidades de exibição
   const ExitButton = () => {
     BackDash(false);
   };
 
   const toggleCard = (item) => {
     SetOriginalSelected((prevSelected) =>
-      prevSelected === item ? null : item
+      prevSelected === item ? null : item,
     );
     SetSelectedFood((prevSelected) => (prevSelected === item ? null : item));
     SetMultiplicate(1);
   };
-  const handleChange = (n) => {
-    if (n === "") {
-      SetMultiplicate("");
-      return;
-    }
 
-    const number = Number(n);
+  // 3.1 - Duplicando valor com a quantidade de porções comidas
 
-    if (number < 1 || isNaN(number)) return;
-    SetMultiplicate(number);
-    SetSelectedFood(() => {
-      return Object.fromEntries(
-        Object.entries(SelectOriginal).map(([key, value]) => {
-          if (key === "id") {
+  console.log(SelectFood);
+  useEffect(() => {
+    const resultadoGramas = () => {
+      if (!SelectOriginal) return;
+      const factorNumber = Number(GramasTotal) / 100;
+      SetSelectedFood(() => {
+        return Object.fromEntries(
+          Object.entries(SelectOriginal).map(([key, value]) => {
+            if (key === "id" || key === "description" || key === "category") {
+              return [key, value];
+            }
+            if (key === "portion_g") {
+              return [key, Number(GramasTotal)];
+            }
+            if (typeof value === "number" && !isNaN(value)) {
+              return [key, parseFloat((value * factorNumber).toFixed(4))];
+            }
+
             return [key, value];
-          }
+          }),
+        );
+      });
+    };
+    resultadoGramas();
+  }, [GramasTotal, SelectOriginal]);
 
-          return [key, typeof value === "number" ? value * number : value];
-        })
-      );
-    });
-  };
   const addNutrient = async (event) => {
     event.preventDefault();
     await requestPost(SelectFood);
     await getDiet();
-    await BackDash(false)
+    await BackDash(false);
   };
 
   return (
@@ -142,21 +152,21 @@ const AddNutri = ({ BackDash, FoodInfos, SnackSection, SetDiet, Snackid }) => {
       </div>
       {SelectOriginal ? (
         <form className="form-addNutri" onSubmit={(e) => addNutrient(e)}>
-          <div className="amount-nutri">
-            <label htmlFor="amount">Quantidade:</label>
+          <div className="box-nutri">
+            <label htmlFor="gramas">Quantidade de Gramas:</label>
             <input
               type="number"
-              placeholder="1"
-              name="amount"
-              value={Multiplcate}
-              onChange={(e) => handleChange(e.target.value)}
-              min={1}
-              required
+              placeholder="EX: 50.5"
+              min={0.05}
+              step="0.01"
+              value={GramasTotal}
+              onChange={(e) => SetGramasTotal(e.target.value)}
             />
           </div>
-          <p className="amount-kcal">
+          <p className="nutri-info">
             Total: {SelectFood.energy_kcal.toFixed(0)}kcal
           </p>
+          <p className="nutri-info">Alimento: {SelectFood.description}</p>
           <button type="submit">Confirmar</button>
         </form>
       ) : (

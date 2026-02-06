@@ -9,42 +9,35 @@ const WorkoutsDashboard = () => {
   const { id } = useParams();
   const location = useLocation();
   const { userid, bodydataID } = location.state;
-  const exerciseUrl = `http://localhost:3000/users/workouts/exercise/${id}`;
   const navigate = useNavigate();
 
   // Hooks de requisição
 
   const {
     Exercise: ExerciseServer,
-    Workout: WorkoutList,
-    requestWorkout,
+    WorkoutsList,
+    refreshWorkouts,
     updateExercise,
     updateWorkout,
     createExercise,
     deleteExercise,
     refreshExercises,
-  } = UseWorkouts(exerciseUrl, userid);
-
-  // Salvando dados vindo do servidor
-  useEffect(() => {
-    requestWorkout(`http://localhost:3000/users/workouts/${userid}`);
-  }, [userid]);
+  } = UseWorkouts(id, userid);
 
   useEffect(() => {
     if (ExerciseServer) {
       SetExercise(ExerciseServer);
     }
-    if (WorkoutList) {
-      const WorkoutCurrent = WorkoutList.find((item) => item.id == id);
+    if (WorkoutsList) {
+      const WorkoutCurrent = WorkoutsList.find((item) => item.id == id);
       SetWorkout(WorkoutCurrent || {});
     }
-  }, [ExerciseServer, WorkoutList, id]);
+  }, [ExerciseServer, WorkoutsList, id]);
 
   // ESTADOS DA APLICAÇÃO
   const [WorkoutPrev, SetWorkout] = useState({});
   const [exercises, SetExercise] = useState([]);
   const [completedExercises, setCompletedExercises] = useState([]);
-  console.log(WorkoutPrev);
   // Botão de voltar
   const Back = () => {
     navigate(`/home/workouts/${bodydataID}`);
@@ -58,7 +51,7 @@ const WorkoutsDashboard = () => {
       weight: "0kg",
       time: "60s",
     };
-    await createExercise(exerciseUrl, exerciseCard);
+    await createExercise(id, exerciseCard);
     refreshExercises();
   };
   // Funções de controle de estado
@@ -91,7 +84,7 @@ const WorkoutsDashboard = () => {
     };
 
     await updateWorkout(id, WorkoutPatch);
-    requestWorkout(`http://localhost:3000/users/workouts/${userid}`);
+    refreshWorkouts(userid);
   };
   const EditWorkoutDay = async () => {
     const WorkoutSave = {
@@ -100,7 +93,7 @@ const WorkoutsDashboard = () => {
       trainningCreate: WorkoutPrev.trainningCreate,
     };
     await updateWorkout(id, WorkoutSave);
-    requestWorkout(`http://localhost:3000/users/workouts/${userid}`);
+    refreshWorkouts(userid);
   };
 
   // Manipulação dos dados de exercicio
@@ -108,28 +101,20 @@ const WorkoutsDashboard = () => {
     e.preventDefault();
     const ExerciseItem = exercises.find((ex) => ex.id === ExID);
     ExerciseItem.save = true;
-
-    await updateExercise(
-      `http://localhost:3000/users/workouts/exercise/${ExID}`,
-      ExerciseItem,
-    );
+    await updateExercise(ExID, ExerciseItem);
     refreshExercises();
   };
 
   const EditExercise = async (ExID) => {
     const ExerciseItem = exercises.find((ex) => ex.id === ExID);
     ExerciseItem.save = false;
-    await updateExercise(
-      `http://localhost:3000/users/workouts/exercise/${ExID}`,
-      ExerciseItem,
-    );
+
+    await updateExercise(ExID, ExerciseItem);
     refreshExercises();
   };
 
   const handleDeleteExercise = async (ExID) => {
-    await deleteExercise(
-      `http://localhost:3000/users/workouts/exercise/${ExID}`,
-    );
+    await deleteExercise(ExID)
     refreshExercises();
   };
 

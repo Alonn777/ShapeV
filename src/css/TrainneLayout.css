@@ -15,7 +15,8 @@
 }
 
 .home-back:hover {
-    background-color: #1581fd;
+    background-color: #071e38;
+    outline: 1px solid #1166c7;
 }
 
 .box-insight-trainning {
@@ -109,11 +110,13 @@
     border-radius: 8px;
     margin-top: 20px;
 }
-.day-description{
-   display: flex;
-   align-items: center;
-   gap: 10px;
+
+.day-description {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
+
 .workout .day-description h4 {
     font-weight: 600;
     font-size: 1.2rem;
@@ -124,13 +127,36 @@
     color: #dddddd;
     margin-top: 0.1rem;
 }
-.workout.rest{
+
+.workout.rest {
     background-color: #141f3b;
 }
-.start-trainning{
+
+.start-trainning {
     display: flex;
     gap: 10px;
 }
+
+.btn-rest {
+    position: relative;
+    left: 270px;
+    top: -12px;
+    width: 15vw;
+    padding: 0.6rem 1rem;
+    background-color: #020611;
+    color: #fff;
+    cursor: pointer;
+    opacity: 0.9;
+    font-weight: 600;
+    border-radius: 7px;
+    border: 1px solid #dddd;
+}
+
+.btn-rest:hover {
+    transition: 0.2s ease-in;
+    opacity: 1;
+}
+
 .btn-exercise,
 .btn-start-trainning {
     padding: 0.6rem 1.3rem;
@@ -148,7 +174,8 @@
 .btn-exercise:hover,
 .btn-start-trainning:hover {
     transition: 0.3s ease-in;
-    background-color: #093cc9;
+    background-color: #071e38;
+    outline: 1px solid #1166c7;
 }
 
 .button-blocked {
@@ -161,7 +188,8 @@
     border-radius: 20px;
     cursor: pointer;
 }
-.btn-ellipsis{
+
+.btn-ellipsis {
     background: none;
     border: none;
     cursor: pointer;
@@ -200,4 +228,152 @@
 
 .weight-now .meta-info {
     color: #0ae641;
+}
+
+/* ========== Responsivo (desktop first, max-width) ========== */
+
+/* Tablets e notebooks menores */
+@media (max-width: 1024px) {
+    .box-insight-trainning {
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .week-day,
+    .time-week-trainning,
+    .progress-corporal {
+        width: calc(50% - 0.5rem);
+        min-width: 200px;
+        padding: 1.25rem;
+    }
+
+    .workouts-main {
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem;
+    }
+
+    .workout-week,
+    .box-progress-corporal {
+        width: 100%;
+        max-width: 100%;
+        margin-left: 0;
+        margin-bottom: 1rem;
+        min-height: auto;
+        padding: 1.25rem;
+    }
+
+    .btn-rest {
+        left: 0;
+        width: 100%;
+        max-width: 200px;
+    }
+}
+
+/* Tablets em portrait e celulares grandes */
+@media (max-width: 768px) {
+    .home-back {
+        margin: 1rem 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .box-insight-trainning {
+        flex-direction: column;
+        margin-top: 1rem;
+        padding: 0.75rem;
+    }
+
+    .week-day,
+    .time-week-trainning,
+    .progress-corporal {
+        width: 100%;
+        max-width: 100%;
+        padding: 1rem;
+    }
+
+    .workouts-main {
+        padding: 0.75rem;
+    }
+
+    .workout-week,
+    .box-progress-corporal {
+        padding: 1rem;
+    }
+
+    .workout {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 1rem;
+    }
+
+    .start-trainning {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .btn-rest {
+        position: static;
+        margin-top: 0.5rem;
+        width: 100%;
+        max-width: none;
+    }
+
+    .rest-day-action {
+        margin-top: 0.5rem;
+    }
+
+    .body-progress {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .weight-now {
+        font-size: 1rem;
+    }
+}
+
+/* Celulares */
+@media (max-width: 480px) {
+    .home-back span {
+        display: none;
+    }
+
+    .home-back {
+        padding: 0.5rem;
+    }
+
+    .week-day .content-week p,
+    .contente-progress p,
+    .time-content p {
+        font-size: 0.9rem;
+    }
+
+    .header-workout,
+    .corporal-header {
+        flex-wrap: wrap;
+    }
+
+    .header-workout h2,
+    .corporal-header h2 {
+        font-size: 1.1rem;
+    }
+
+    .workout .day-description h4 {
+        font-size: 1rem;
+    }
+
+    .btn-exercise,
+    .btn-start-trainning {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .calendar-icon,
+    .progress-icon,
+    .time-icon {
+        padding: 0.75rem;
+    }
 }

@@ -1,9 +1,19 @@
 import { useEffect, useState } from "react";
+import {
+  getHydration,
+  getSnackDiary,
+  getTacoFoods,
+  patchSnackExpand,
+  deleteSnackFood,
+  searchTacoFoods,
+  postHydrationCup,
+  putHydrationCup,
+} from "../services/DietDataService.js";
 
 export const UseGetDiet = (url, userId = null) => {
   const [DietServer, SetDietServer] = useState({});
   const [SnackDiaryData, SetSnackDiary] = useState(null);
-  const [HidrateData, SetHidrateData] = useState(null)
+  const [HidrateData, SetHidrateData] = useState(null);
   const [FoodServer, SetFood] = useState([]);
   const [SearchFoodServer, SetFoodServer] = useState([]);
 
@@ -25,10 +35,7 @@ export const UseGetDiet = (url, userId = null) => {
     if (!userId) return;
     const requestSnack = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3000/users/diets/snack/${userId}`
-        );
-        const data = await response.json();
+        const data = await getSnackDiary(userId);
         SetSnackDiary(data);
       } catch (error) {
         console.error("Erro ao buscar snacks:", error);
@@ -36,34 +43,64 @@ export const UseGetDiet = (url, userId = null) => {
     };
     requestSnack();
 
-     const requestHidrate = async () => {
+    const requestHidrate = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3000/users/diets/hidrate/${userId}`
-        );
-        const data = await response.json();
-        SetHidrateData(data)
+        const data = await getHydration(userId);
+        SetHidrateData(data);
       } catch (error) {
         console.error("Erro ao buscar copos:", error);
       }
     };
-    requestHidrate()
+    requestHidrate();
   }, [userId]);
 
-  
   // requsição nas dietas
-  const GetFood = async (UrlTaco) => {
-    const data = await fetch(UrlTaco);
-    const dataJSON = await data.json();
-    SetFood(dataJSON);
+  const GetFood = async () => {
+    try {
+      const response = await getTacoFoods();
+      SetFood(response);
+    } catch (error) {
+      console.error("Erro ao buscar alimentos:", error);
+    }
   };
 
   const SearchFood = async (FoodValue) => {
-    const data = await fetch(
-      `http://localhost:3000/taco/search?macronutri=${FoodValue}`
-    );
-    const dataJSON = await data.json();
-    SetFoodServer(dataJSON);
+    try {
+      const response = await searchTacoFoods(FoodValue);
+      SetFoodServer(response);
+    } catch (error) {
+      console.error("Erro ao buscar alimentos:", error);
+    }
+  };
+
+  // Ações específicas do SnackDiary (mantidas no hook, usando o service)
+  const UpdateSnackExpand = async (snackId, body) => {
+    return patchSnackExpand(snackId, body);
+  };
+
+  const RefreshSnackDiary = async (UserId) => {
+    const data = await getSnackDiary(UserId);
+    SetSnackDiary(data);
+    return data;
+  };
+
+  const DeleteSnackFood = async (foodId) => {
+    return deleteSnackFood(foodId);
+  };
+
+  // Ações específicas do WaterManage (mantidas no hook, usando o service)
+  const RefreshHydration = async (UserId) => {
+    const data = await getHydration(UserId);
+    SetHidrateData(data);
+    return data
+  };
+
+  const CreateHydrationCup = async (UserId, cupData) => {
+    return postHydrationCup(UserId, cupData);
+  };
+
+  const UpdateHydrationCup = async (cupId, cupPatch) => {
+    return putHydrationCup(cupId, cupPatch);
   };
 
   return {
@@ -74,5 +111,11 @@ export const UseGetDiet = (url, userId = null) => {
     FoodServer,
     SearchFood,
     SearchFoodServer,
+    UpdateSnackExpand,
+    RefreshSnackDiary,
+    DeleteSnackFood,
+    RefreshHydration,
+    CreateHydrationCup,
+    UpdateHydrationCup,
   };
 };

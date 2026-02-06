@@ -2,6 +2,7 @@ import "../css/DietsLayout.css";
 import WaterManage from "../components/WaterManage.jsx";
 import SnackDiary from "../components/SnackDiary.jsx";
 import SearchNutri from "../components/SearchNutri.jsx";
+import ResumoNutricional from "../components/ResumoNutricional.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { Search, Calendar, Plus, ArrowLeft, Utensils } from "lucide-react";
 import { UseGetDiet } from "../hooks/useGetDiet.jsx";
@@ -11,10 +12,13 @@ const DietsLayout = () => {
   // Request dos dados da dieta
   const navigate = useNavigate();
   const { id } = useParams();
-  
+
   // Validação do id antes de fazer requisições
 
-  const { HidrateData, SnackDiaryData, GetFood, FoodServer } = UseGetDiet(null, id);
+  const { HidrateData, SnackDiaryData, GetFood, FoodServer } = UseGetDiet(
+    null,
+    id,
+  );
 
   // States para controlar a aplicação
   const [SearchDiet, SetSearchDiet] = useState(false);
@@ -85,15 +89,19 @@ const DietsLayout = () => {
       )}
       <div className="main-diet">
         <section className="nutrition-container">
-          <h3>Resumo Nutricional</h3>
+          {SnackDiaryData && SnackDiaryData.length > 0 ? (
+            <ResumoNutricional SnackDiet={SnackDiaryData} />
+          ) : (
+            <p>Carregando...</p>
+          )}
         </section>
 
         <section className="hidatration-container">
-           {HidrateData ? (
+          {HidrateData ? (
             <WaterManage HidrateItem={HidrateData} />
           ) : (
             <p>Carregando os dados...</p>
-          )} 
+          )}
         </section>
 
         <section className="snack-container">

@@ -1,17 +1,17 @@
 import { useState } from "react";
 
 export const SessionStorage = () => {
-  const [data, SetData] = useState();
+  const [data, SetData] = useState(null);
 
   const storageUser = (user) => {
-    localStorage.setItem("user", JSON.stringify(user));
+    sessionStorage.setItem("user", JSON.stringify(user));
   };
   const getStorageUser = ()=>{
-    const data = JSON.parse(localStorage.getItem("user"))
+    const data = JSON.parse(sessionStorage.getItem("user"))
     SetData(data)
   }
   const deleteStorage = ()=>{
-     localStorage.removeItem("users")
+     sessionStorage.removeItem("user")
   }
  return {data, storageUser, getStorageUser, deleteStorage}
 };

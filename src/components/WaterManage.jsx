@@ -1,17 +1,14 @@
 import { GlassWater, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { UsePost } from "../hooks/usePost.jsx";
-import { UsePut } from "../hooks/usePut.jsx";
+import { UseGetDiet } from "../hooks/useGetDiet.jsx";
 
 const WaterManage = ({ HidrateItem }) => {
   // utilizando hooks seção
   const { id } = useParams();
   const DietID = HidrateItem.id;
-  const { httpConfig } = UsePost(
-    `http://localhost:3000/users/diets/hidrate/${id}`
-  );
-  const { UpdatePut } = UsePut();
+  const { RefreshHydration, CreateHydrationCup, UpdateHydrationCup } =
+    UseGetDiet(null, null);
 
   const [Diet, SetDiet] = useState({});
   const [cups, SetCups] = useState([]);
@@ -37,17 +34,16 @@ const WaterManage = ({ HidrateItem }) => {
 
   // Funções de requsição
   const UpdateState = async () => {
-    const response = await fetch(`http://localhost:3000/users/diets/hidrate/${id}`);
-    const data = await response.json();
-    SetCups(data)
+    const data = await RefreshHydration(id);
+    SetCups(data);
   };
 
-  const AddCup = () => {
+  const AddCup = async () => {
     const cup = { drunk: false };
-    httpConfig(cup, "POST");
-    UpdateState();
+    await CreateHydrationCup(id, cup);
+    await UpdateState();
   };
-  const updateCup = (Cup) => {
+  const updateCup = async (Cup) => {
     const CupId = Cup.id;
     const CurrentCup = Cup.drunk;
     const DrunkTrue = { drunk: true };
@@ -55,18 +51,12 @@ const WaterManage = ({ HidrateItem }) => {
 
     
     if (CurrentCup === false) {
-      UpdatePut(
-        `http://localhost:3000/users/diets/hidrate/cup/${CupId}`,
-        DrunkTrue
-      );
-      UpdateState();
+      await UpdateHydrationCup(CupId, DrunkTrue);
+      await UpdateState();
     }
     if (CurrentCup === true) {
-      UpdatePut(
-        `http://localhost:3000/users/diets/hidrate/cup/${CupId}`,
-        DrunkFalse
-      );
-      UpdateState();
+      await UpdateHydrationCup(CupId, DrunkFalse);
+      await UpdateState();
     }
   };
   return (

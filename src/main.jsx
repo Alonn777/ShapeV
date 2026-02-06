@@ -11,6 +11,8 @@ import TrainneLayout from "./routes/TrainneLayout.jsx";
 import DietsLayout from "./routes/DietsLayout.jsx";
 import BodyData from "./routes/BodyData.jsx";
 import WorkoutsDashboard from "./components/WorkoutsDashboard.jsx";
+import Admin from "./routes/Admin.jsx";
+import Config from "./routes/Config.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -20,6 +22,12 @@ const router = createBrowserRouter([
     path: "/login",
     element: <UserLogin />,
   },
+
+  {
+    path: "/admin",
+    element: <Admin />,
+  },
+  { path: "config", element: <Config /> },
   {
     path: "/home",
     element: <ShapevMain />,
@@ -52,5 +60,5 @@ createRoot(document.getElementById("root")).render(
     <BodyDataContextProvider>
       <RouterProvider router={router} />
     </BodyDataContextProvider>
-  </StrictMode>
+  </StrictMode>,
 );

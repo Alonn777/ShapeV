@@ -9,6 +9,7 @@ import {
   EllipsisVertical,
   Play,
   Moon,
+  Flag,
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { SessionStorage } from "../hooks/SessionStorage";
@@ -22,14 +23,20 @@ const TrainneLayout = () => {
   const date = new Date();
   const { bodydataID } = useParams();
   // Requisições e estado de re-renderização
-  const { data: id, getStorageUser } = SessionStorage();
-  const { WorkoutsList } = UseWorkouts(null, id);
+  const { data, getStorageUser, deleteStorage } = SessionStorage();
+  const id = data?.id
+  const { WorkoutsList, updateWorkout, refreshWorkouts } = UseWorkouts(
+    null,
+    id,
+  );
+  
   const { BodyData, BodyMeta, BodyHistoricMetric } = useBodyData(bodydataID);
   const [WorkoutRender, SetWorkoutRender] = useState([]);
-  const [StateTeste, SetState] = useState(false);
+  
 
   useEffect(() => {
     getStorageUser();
+  
   }, []);
 
   useEffect(() => {
@@ -59,8 +66,21 @@ const TrainneLayout = () => {
       }),
     );
   };
+  const DayOffTrue = async (item) => {
+    const dayOff = {
+      dayOff: true,
+    };
+    await updateWorkout(item.id, dayOff);
+    refreshWorkouts(id);
+  };
+  const dayOffFalse = async (item) => {
+    const dayOff = {
+      dayOff: false,
+    };
+    await updateWorkout(item.id, dayOff);
+    refreshWorkouts(id);
+  };
 
-  console.log(WorkoutRender);
   return (
     <div className="dashboard-trainnig">
       <button type="button" className="home-back" onClick={BackHome}>
@@ -124,7 +144,7 @@ const TrainneLayout = () => {
                         <div className="workout rest">
                           <div className="day-description">
                             <div className="icon">
-                              <Moon color="#ffb005"/>
+                              <Moon color="#ffb005" />
                             </div>
                             <div className="description">
                               <h4>{item.day}</h4>
@@ -147,7 +167,10 @@ const TrainneLayout = () => {
                         {/* Botão para marcar como descanso*/}
                         {isRestDay && (
                           <div className="rest-day-action">
-                            <button className="btn-rest">
+                            <button
+                              className="btn-rest"
+                              onClick={() => dayOffFalse(item)}
+                            >
                               Remover descanso
                             </button>
                           </div>
@@ -160,7 +183,7 @@ const TrainneLayout = () => {
                       <div className="workout">
                         <div className="day-description">
                           <div className="icon">
-                            <Play color="#2bc3ff"/>
+                            <Play color="#2bc3ff" />
                           </div>
                           <div className="description">
                             <h4>{item.day}</h4>
@@ -190,7 +213,7 @@ const TrainneLayout = () => {
                           )}
 
                           <button
-                            onClick={() => showRest(index)}
+                            onClick={() => showRest(index, item)}
                             className="btn-ellipsis"
                           >
                             <EllipsisVertical color="#fff" />
@@ -201,7 +224,10 @@ const TrainneLayout = () => {
                       {/* Botão para marcar como descanso*/}
                       {isRestDay && (
                         <div className="rest-day-action">
-                          <button className="btn-rest">
+                          <button
+                            className="btn-rest"
+                            onClick={() => DayOffTrue(item)}
+                          >
                             Marcar como descanso
                           </button>
                         </div>

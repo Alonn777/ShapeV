@@ -9,7 +9,7 @@ export const UseGet = (id, url) => {
   const [data, SetData] = useState();
 
   useEffect(() => {
-    if (id || id != null) {
+    if (id) {
       const requestCredential = async () => {
         const [DietCredential, BodyDataCredential] = await Promise.all([
           fetch(`http://localhost:3000/users/diets/${id}`).then((res) =>

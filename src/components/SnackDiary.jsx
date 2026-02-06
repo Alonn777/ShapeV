@@ -1,15 +1,19 @@
 import AddNutri from "./AddNutri.jsx";
-import { UseGet } from "../hooks/useGet";
-import { UseDelete } from "../hooks/useDelete.jsx";
+import { UseGetDiet } from "../hooks/useGetDiet.jsx";
 import { Coffee, Utensils, Apple } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { ChevronDown, ChevronUp, Trash, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const SnackDiary = ({ SnackDiet }) => {
-  const { GetFood, FoodServer } = UseGet();
-  const { Delete } = UseDelete();
   const { id } = useParams();
+  const {
+    GetFood,
+    FoodServer,
+    UpdateSnackExpand,
+    RefreshSnackDiary,
+    DeleteSnackFood,
+  } = UseGetDiet(null, null);
 
   const [Food, SetFood] = useState([]);
   const [DietList, SetDiet] = useState([]);
@@ -17,6 +21,7 @@ const SnackDiary = ({ SnackDiet }) => {
   const [kcalSnack, SetKcalSnack] = useState(0);
   const [SnackList, SetSnackList] = useState();
   const [SnackSectionID, SetSnackSection] = useState(null);
+  const [Teste, SetTeste] = useState([]);
 
   useEffect(() => {
     if (FoodServer) {
@@ -38,15 +43,15 @@ const SnackDiary = ({ SnackDiet }) => {
     if (expandBoolean === false) {
       SetDiet((PrevDiet) =>
         PrevDiet.map((prev) =>
-          prev.id === id ? { ...prev, ["expand"]: true } : { ...prev }
-        )
+          prev.id === id ? { ...prev, ["expand"]: true } : { ...prev },
+        ),
       );
       updateExpand(id, { expand: true });
     } else {
       SetDiet((PrevDiet) =>
         PrevDiet.map((prev) =>
-          prev.id === id ? { ...prev, ["expand"]: false } : { ...prev }
-        )
+          prev.id === id ? { ...prev, ["expand"]: false } : { ...prev },
+        ),
       );
       updateExpand(id, { expand: false });
     }
@@ -54,16 +59,7 @@ const SnackDiary = ({ SnackDiet }) => {
   // funções para requisições
   const updateExpand = async (id, body) => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/users/diets/snack/${id}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(body),
-        }
-      );
+      await UpdateSnackExpand(id, body);
     } catch (err) {
       console.error(err);
     }
@@ -71,19 +67,16 @@ const SnackDiary = ({ SnackDiet }) => {
 
   const GetDiet = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/users/diets/snack/${id}`
-      );
-      const data = await response.json();
+      const data = await RefreshSnackDiary(id);
       SetDiet(data);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const deleteFood = (id) => {
-    Delete(`http://localhost:3000/users/diets/snack/food/${id}`);
-    GetDiet();
+  const deleteFood = async (foodId) => {
+    await DeleteSnackFood(foodId);
+    await GetDiet();
   };
   // Funcionalidade pra adicionar o alimento
   const ViewCardAdd = (SectionID) => {
@@ -98,6 +91,8 @@ const SnackDiary = ({ SnackDiet }) => {
       SetViewNutrient(false);
     }
   };
+  
+
   return (
     <div className="snack-box">
       {DietList &&
@@ -118,12 +113,12 @@ const SnackDiary = ({ SnackDiet }) => {
               <div className="kcal-info">
                 <div className="kcal">
                   <p>
-                    
                     {snackitem.Snack_List.reduce(
                       (acc, item) =>
                         acc + Number(item.energy_kcal.toFixed(0) || 0),
-                      0
-                    )} Kcal
+                      0,
+                    )}{" "}
+                    Kcal
                   </p>
                   {snackitem.expand ? <ChevronDown /> : <ChevronUp />}
                 </div>
@@ -152,9 +147,9 @@ const SnackDiary = ({ SnackDiet }) => {
                               <p className="macro-info">
                                 Proteina:{" "}
                                 {Number(item.protein_g || 0).toFixed(1)} |
-                                Gordura:{" "}
-                                {Number(item.carbohydrate_g || 0).toFixed(1)} |
                                 Carboidrato:{" "}
+                                {Number(item.carbohydrate_g || 0).toFixed(1)} |
+                                Gordura:{" "}
                                 {Number(item.lipid_g || 0).toFixed(1)}
                               </p>
                             </div>
