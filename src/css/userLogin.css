@@ -20,13 +20,16 @@
 .box-login form .form-control {
     display: flex;
     flex-direction: column;
-    margin-top: 0.5rem;
+    margin-top: 0.9rem;
 }
 
 .box-login form .form-control label {
     margin-bottom: 5px;
-    font-weight: bold;
+    font-weight: 500;
+    color: #dddddd;
+    font-size: 0.94rem;
 }
+
 
 .box-login form input[type="text"],
 input[type="email"],
@@ -68,14 +71,14 @@ input[type="password"]::placeholder {
     transition: 0.2s ease-in;
     opacity: 1;
 }
-#box-create-account{
+.box-create-account{
     margin-top: 1rem;
     text-align: center;
 }
-#box-create-account p{
+.box-create-account p{
     font-size: 12px;
 }
-#box-create-account #button-account{
+.box-create-account .button-account{
     margin-top: 1rem;
     background-color: #09eeb5;
     padding: 0.6rem 1rem;
@@ -85,7 +88,7 @@ input[type="password"]::placeholder {
     cursor: pointer;
     opacity: 0.9;
 }
-#box-create-account #button-account:hover{
+.box-create-account .button-account:hover{
     transition: 0.2s ease-in;
     opacity: 1;
 }

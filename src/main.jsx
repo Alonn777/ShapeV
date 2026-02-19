@@ -13,44 +13,50 @@ import BodyData from "./routes/BodyData.jsx";
 import WorkoutsDashboard from "./components/WorkoutsDashboard.jsx";
 import Admin from "./routes/Admin.jsx";
 import Config from "./routes/Config.jsx";
+import LandingPage from "./routes/LandingPage.jsx";
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <App />,
-  },
-  {
-    path: "/login",
-    element: <UserLogin />,
-  },
-
-  {
-    path: "/admin",
-    element: <Admin />,
-  },
-  { path: "config", element: <Config /> },
-  {
-    path: "/home",
-    element: <ShapevMain />,
+    element: <App/>,
     children: [
       {
+        path: "/",
+        element: <LandingPage/>,
+      },
+      {
+        path: "/login",
+        element: <UserLogin />,
+      },
+
+      { path: "/config", element: <Config /> },
+      {
+        path: "/admin",
+        element: <Admin />,
+      },
+      {
         path: "/home",
-        element: <MainDashboard />,
-      },
-      {
-        path: "/home/workouts/:bodydataID",
-        element: <TrainneLayout />,
-      },
-      {
-        path: "/home/diets/:id",
-        element: <DietsLayout />,
-      },
-      {
-        path: "/home/bodydata/:id",
-        element: <BodyData />,
-      },
-      {
-        path: "/home/workouts/exercise/:id",
-        element: <WorkoutsDashboard />,
+        element: <ShapevMain />,
+        children: [
+          {
+            path: "/home",
+            element: <MainDashboard />,
+          },
+          {
+            path: "/home/workouts/:bodydataID",
+            element: <TrainneLayout />,
+          },
+          {
+            path: "/home/diets/:id",
+            element: <DietsLayout />,
+          },
+          {
+            path: "/home/bodydata/:id",
+            element: <BodyData />,
+          },
+          {
+            path: "/home/workouts/exercise/:id",
+            element: <WorkoutsDashboard />,
+          },
+        ],
       },
     ],
   },

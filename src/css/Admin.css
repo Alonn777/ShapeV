@@ -1,0 +1,209 @@
+/* ===== ADMIN LAYOUT ===== */
+.admin {
+    min-height: 100vh;
+    background: radial-gradient(1200px 600px at top, #0b1220, #020617);
+    color: #fff;
+}
+
+.admin-container {
+    padding: 2rem;
+}
+
+/* ===== HEADER ADMIN ===== */
+.header-admin {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+}
+
+.header-admin .title-box .title {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.header-admin h1 {
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.header-admin p {
+    color: #94a3b8;
+    margin-top: 0.3rem;
+}
+
+.home-back {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #0b1220;
+    border: 1px solid #1e293b;
+    padding: 0.6rem 1.2rem;
+    border-radius: 12px;
+    color: #e5e7eb;
+    cursor: pointer;
+}
+
+.home-back:hover {
+    background-color: #17386d;
+    transition: 0.2s ease-in;
+}
+
+/* ===== INFO CARDS ===== */
+.info-app-admin {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.info-adm {
+    background: linear-gradient(180deg, #0b1220 0%, #070d18 100%);
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    padding: 1.5rem;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+}
+
+.info-text p:first-child {
+    color: #94a3b8;
+    font-size: 0.95rem;
+}
+
+.info-text .total {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-top: 0.3rem;
+}
+
+/* ===== MANAGER USER ===== */
+.manager-user {
+    background: linear-gradient(180deg, #0b1220 0%, #070d18 100%);
+    border: 1px solid #1e293b;
+    border-radius: 18px;
+    padding: 2rem;
+}
+
+.header-manager-user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.header-manager-user .title {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.header-manager-user h2 {
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+
+.header-manager-user button {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: #17386d;
+    border: none;
+    border-radius: 12px;
+    padding: 0.6rem 1.2rem;
+    color: #e5e7eb;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.header-manager-user button:hover {
+    background-color: #005ad8;
+    transition: 0.2s ease-in;
+}
+
+/* ===== SEARCH ===== */
+.search-user {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.search-user input,
+.search-user select {
+    background: #020617;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 0.6rem 1rem;
+    color: #fff;
+    outline: none;
+}
+
+.search-user input {
+    flex: 1;
+}
+
+.search-user input:focus,
+.search-user select:focus {
+    border-color: #3b82f6;
+}
+
+/* ===== TABLE ===== */
+.table-user {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid #1e293b;
+}
+
+.table-user .row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 0.5fr;
+    padding: 1rem 1.2rem;
+    align-items: center;
+}
+
+.table-user .row:first-child {
+    background-color: #020617;
+    font-weight: 600;
+    color: #94a3b8;
+}
+
+.table-user .row:not(:first-child) {
+    background-color: #070d18;
+    border-top: 1px solid #1e293b;
+}
+
+.table-user .collumn p {
+    font-size: 0.9rem;
+}
+
+.table-user .collumn .name {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.table-user .collumn .plan {
+    background: #17386d;
+    color: #60a5fa;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    width: fit-content;
+    font-size: 0.8rem;
+}
+
+/* ===== ACTIONS ===== */
+.table-user button {
+    background: none;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #cbd5f5;
+}
+
+.table-user button:hover {
+    background-color: #1467db;
+    transition: 0.2s ease-in;
+}

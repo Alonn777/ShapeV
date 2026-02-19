@@ -1,9 +1,12 @@
+import "../css/userLogin.css";
 import { SessionStorage } from "../hooks/SessionStorage.jsx";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../css/userLogin.css";
+import { useUsers } from "../hooks/useUsers.jsx";
 
 const UserLogin = () => {
+  const { postUser, postLogin } = useUsers();
+
   const navigate = useNavigate();
   const { storageUser } = SessionStorage();
   const [islogin, SetLogin] = useState(true);
@@ -12,6 +15,7 @@ const UserLogin = () => {
   const [nameCadaster, SetNameCadaster] = useState("");
   const [emailCadaster, SetEmailCadaster] = useState("");
   const [passowrdCadaster, SetPasswordCadaster] = useState("");
+  const [passwordConfirmation, SetPassowrdConfirmation] = useState("");
 
   // CADASTRO DE USUÁRIO
   const buttonNewUser = (e) => {
@@ -24,22 +28,17 @@ const UserLogin = () => {
       name: nameCadaster,
       email: emailCadaster,
       password: passowrdCadaster,
+      passwordConfirmation: passwordConfirmation,
     };
     SetNameCadaster("");
     SetEmailCadaster("");
     SetPasswordCadaster("");
-
-    createDataUser(user);
+    SetPassowrdConfirmation("");
     SetLogin(true);
+    createDataUser(user);
   };
   const createDataUser = async (user) => {
-    const PostData = await fetch("http://localhost:3000/users/register", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(user),
-    });
+    const request = postUser("/users/register", user);
   };
 
   // BOTÃO PARA LOGAR
@@ -51,25 +50,19 @@ const UserLogin = () => {
   //  REQUISIÇÃO NO SERVIDOR
   const loginUser = async () => {
     try {
-      const response = await fetch("http://localhost:3000/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: emailLogin, password: passwordLogin }),
+      const response = await postLogin("/users/login", {
+        email: emailLogin,
+        password: passwordLogin,
       });
-      const user = await response.json();
-    
-      if (response.ok) {
+
+      if (response) {
         navigate("/home");
-        storageUser({id: user[0].id, role: user[0].role})
-        
-        
+        storageUser({ id: user[0].id, role: user[0].role });
       } else {
         console.log("Sua senha ou email está incorreta tente novamente");
       }
-    } catch {
-      console.log("erro na requisição");
+    } catch(error) {
+      console.log("erro na requisição", error);
     }
   };
 
@@ -102,9 +95,9 @@ const UserLogin = () => {
           <button type="submit" className="button-form">
             Entrar
           </button>
-          <div id="box-create-account">
+          <div className="box-create-account">
             <p>Não tem uma conta ?, cadastre-se agora!</p>
-            <button onClick={buttonNewUser} id="button-account">
+            <button onClick={buttonNewUser} className="button-account">
               Criar conta
             </button>
           </div>
@@ -133,12 +126,22 @@ const UserLogin = () => {
             />
           </div>
           <div className="form-control">
-            <label htmlFor="email">Senha:</label>
+            <label htmlFor="password">Senha:</label>
             <input
               type="password"
               placeholder="Sua Senha.."
               value={passowrdCadaster}
               onChange={(e) => SetPasswordCadaster(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-control">
+            <label htmlFor="password">Confirmação de senha:</label>
+            <input
+              type="password"
+              placeholder="Sua Senha.."
+              value={passwordConfirmation}
+              onChange={(e) => SetPassowrdConfirmation(e.target.value)}
               required
             />
           </div>
