@@ -1,17 +1,21 @@
 import { ArrowLeft, Pencil, Save, Plus, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { SessionStorage } from "../hooks/SessionStorage.jsx";
 import { UseWorkouts } from "../hooks/useWorkouts.jsx";
 import "../css/WorkoutsDashboard.css";
 
 const WorkoutsDashboard = () => {
-  // definição dos identificadores/URL
   const { id } = useParams();
   const location = useLocation();
   const { userid, bodydataID } = location.state;
   const navigate = useNavigate();
+  const { data, getStorageUser } = SessionStorage();
+  const token = data?.token;
 
-  // Hooks de requisição
+  useEffect(() => {
+    getStorageUser();
+  }, []);
 
   const {
     Exercise: ExerciseServer,
@@ -22,7 +26,7 @@ const WorkoutsDashboard = () => {
     createExercise,
     deleteExercise,
     refreshExercises,
-  } = UseWorkouts(id, userid);
+  } = UseWorkouts(id, userid, token);
 
   useEffect(() => {
     if (ExerciseServer) {
@@ -51,8 +55,8 @@ const WorkoutsDashboard = () => {
       weight: "0kg",
       time: "60s",
     };
-    await createExercise(id, exerciseCard);
-    refreshExercises();
+    await createExercise(id, exerciseCard, token);
+    refreshExercises(token);
   };
   // Funções de controle de estado
   const HandleChange = (id, name, value) => {
@@ -83,8 +87,8 @@ const WorkoutsDashboard = () => {
       trainningCreate: WorkoutPrev.trainningCreate,
     };
 
-    await updateWorkout(id, WorkoutPatch);
-    refreshWorkouts(userid);
+    await updateWorkout(id, WorkoutPatch, token);
+    refreshWorkouts(userid, token);
   };
   const EditWorkoutDay = async () => {
     const WorkoutSave = {
@@ -92,8 +96,8 @@ const WorkoutsDashboard = () => {
       save: false,
       trainningCreate: WorkoutPrev.trainningCreate,
     };
-    await updateWorkout(id, WorkoutSave);
-    refreshWorkouts(userid);
+    await updateWorkout(id, WorkoutSave, token);
+    refreshWorkouts(userid, token);
   };
 
   // Manipulação dos dados de exercicio
@@ -101,21 +105,20 @@ const WorkoutsDashboard = () => {
     e.preventDefault();
     const ExerciseItem = exercises.find((ex) => ex.id === ExID);
     ExerciseItem.save = true;
-    await updateExercise(ExID, ExerciseItem);
-    refreshExercises();
+    await updateExercise(ExID, ExerciseItem, token);
+    refreshExercises(token);
   };
 
   const EditExercise = async (ExID) => {
     const ExerciseItem = exercises.find((ex) => ex.id === ExID);
     ExerciseItem.save = false;
-
-    await updateExercise(ExID, ExerciseItem);
-    refreshExercises();
+    await updateExercise(ExID, ExerciseItem, token);
+    refreshExercises(token);
   };
 
   const handleDeleteExercise = async (ExID) => {
-    await deleteExercise(ExID)
-    refreshExercises();
+    await deleteExercise(ExID, token);
+    refreshExercises(token);
   };
 
   const AllSave = async () => {
@@ -124,10 +127,7 @@ const WorkoutsDashboard = () => {
       save: WorkoutPrev.save,
       trainningCreate: true,
     };
-    await updateWorkout(
-      `http://localhost:3000/users/${userid}/workouts/${WorkoutPrev.id}`,
-      AllWorkoutSave,
-    );
+    await updateWorkout(WorkoutPrev.id, AllWorkoutSave, token);
     navigate("/home/workouts");
   };
 

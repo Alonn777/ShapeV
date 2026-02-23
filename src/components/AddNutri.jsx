@@ -1,15 +1,14 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { UsePost } from "../hooks/usePost";
 import { UseGet } from "../hooks/useGet";
+import { UseGetDiet } from "../hooks/useGetDiet";
 import debounce from "lodash.debounce";
 import { X } from "lucide-react";
 import { data, useParams } from "react-router-dom";
 
-const AddNutri = ({ BackDash, FoodInfos, SnackSection, SetDiet, Snackid }) => {
+const AddNutri = ({ BackDash, FoodInfos, SnackSection, SetDiet, token }) => {
   const { id } = useParams();
-  const { requestPost } = UsePost(
-    `http://localhost:3000/users/diets/snack/${SnackSection}`,
-  );
+  const { CreateSnackFood, RefreshSnackDiary, SearchFood, SearchFoodServer  } = UseGetDiet();
 
   const [Food, SetFood] = useState([]);
   const [SearchValue, SetSearchValue] = useState("");
@@ -17,7 +16,7 @@ const AddNutri = ({ BackDash, FoodInfos, SnackSection, SetDiet, Snackid }) => {
   const [SelectFood, SetSelectedFood] = useState(null);
   const [Multiplcate, SetMultiplicate] = useState(1);
   const [GramasTotal, SetGramasTotal] = useState(100);
-  const { SearchFoodServer, SearchFood } = UseGet();
+  // const { SearchFoodServer, SearchFood } = UseGet();
 
   // 1 - Organizando requisições
   useEffect(() => {
@@ -25,6 +24,7 @@ const AddNutri = ({ BackDash, FoodInfos, SnackSection, SetDiet, Snackid }) => {
       SetFood(FoodInfos);
     }
   }, [FoodInfos]);
+
   useEffect(() => {
     if (SearchFoodServer) {
       SetFood(SearchFoodServer);
@@ -34,17 +34,14 @@ const AddNutri = ({ BackDash, FoodInfos, SnackSection, SetDiet, Snackid }) => {
   // 2 - Pesquisa de alimento
   const getDiet = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/users/diets/snack/${id}`,
-      );
-      const data = await response.json();
-      SetDiet(data);
+      const response = await RefreshSnackDiary(id, token);
+      SetDiet(response);
     } catch (error) {
       console.error(error);
     }
   };
   const DebounceSearch = useCallback(
-    debounce((NextValue) => SearchFood(NextValue), 1000),
+    debounce((NextValue) => SearchFood(NextValue, token), 1000),
     [SearchFood],
   );
 
@@ -68,8 +65,6 @@ const AddNutri = ({ BackDash, FoodInfos, SnackSection, SetDiet, Snackid }) => {
   };
 
   // 3.1 - Duplicando valor com a quantidade de porções comidas
-
-  console.log(SelectFood);
   useEffect(() => {
     const resultadoGramas = () => {
       if (!SelectOriginal) return;
@@ -97,7 +92,7 @@ const AddNutri = ({ BackDash, FoodInfos, SnackSection, SetDiet, Snackid }) => {
 
   const addNutrient = async (event) => {
     event.preventDefault();
-    await requestPost(SelectFood);
+    await CreateSnackFood(SnackSection, SelectFood, token);
     await getDiet();
     await BackDash(false);
   };

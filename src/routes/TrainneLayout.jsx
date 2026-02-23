@@ -24,13 +24,15 @@ const TrainneLayout = () => {
   const { bodydataID } = useParams();
   // Requisições e estado de re-renderização
   const { data, getStorageUser, deleteStorage } = SessionStorage();
-  const id = data?.id
+  const id = data?.user.id;
+  const token = data?.token;
   const { WorkoutsList, updateWorkout, refreshWorkouts } = UseWorkouts(
     null,
     id,
+    token,
   );
   
-  const { BodyData, BodyMeta, BodyHistoricMetric } = useBodyData(bodydataID);
+  const { BodyData, BodyMeta, BodyHistoricMetric } = useBodyData(bodydataID, token);
   const [WorkoutRender, SetWorkoutRender] = useState([]);
   
 
@@ -70,15 +72,15 @@ const TrainneLayout = () => {
     const dayOff = {
       dayOff: true,
     };
-    await updateWorkout(item.id, dayOff);
-    refreshWorkouts(id);
+    await updateWorkout(item.id, dayOff, token);
+    refreshWorkouts(id, token);
   };
   const dayOffFalse = async (item) => {
     const dayOff = {
       dayOff: false,
     };
-    await updateWorkout(item.id, dayOff);
-    refreshWorkouts(id);
+    await updateWorkout(item.id, dayOff, token);
+    refreshWorkouts(id, token);
   };
 
   return (

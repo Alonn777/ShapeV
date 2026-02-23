@@ -10,8 +10,9 @@ import { useEffect, useState, useContext } from "react";
 const MainDashboard = () => {
   const navigate = useNavigate();
   const { data, getStorageUser } = SessionStorage();
-  const id = data?.id
-  const { DietCredential, BodyDataCredential } = UseGet(id);
+  const id = data?.user.id;
+  const token = data?.token;
+  const { DietCredential, BodyDataCredential } = UseGet(id, token);
   const { SetBodyDataID } = useContext(BodyDataContext);
   useEffect(() => {
     getStorageUser();

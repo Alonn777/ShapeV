@@ -7,7 +7,7 @@ import {
   postMeta,
 } from "../services/BodyDataService.js";
 
-export const useBodyData = (id) => {
+export const useBodyData = (id, token) => {
   const [BodyData, SetBodyData] = useState(null);
   const [BodyMeta, SetBodyMeta] = useState(null);
   const [BodyHistoricMetric, SetBodyHistoric] = useState(null);
@@ -20,7 +20,7 @@ export const useBodyData = (id) => {
       const requestBodyMetric = async () => {
         try {
           setLoading(true);
-          const response = await getMetricas(id);
+          const response = await getMetricas(id, token);
           SetBodyData(response);
         } catch (error) {
           console.error("Erro ao buscar métricas:", error);
@@ -30,7 +30,7 @@ export const useBodyData = (id) => {
       };
       const requestMeta = async () => {
         try {
-          const response = await getBodyMeta(id);
+          const response = await getBodyMeta(id, token);
           SetBodyMeta(response);
         } catch (error) {
           console.error("Erro ao buscar meta:", error);
@@ -39,7 +39,7 @@ export const useBodyData = (id) => {
 
       const requestBodyHistoric = async () => {
         try {
-          const response = await GetHistoricMetric(id);
+          const response = await GetHistoricMetric(id, token);
           SetBodyHistoric(response)
         } catch (error) {
           console.error("Erro ao buscar meta:", error);
@@ -49,12 +49,12 @@ export const useBodyData = (id) => {
       requestMeta();
       requestBodyHistoric();
     }
-  }, [id]);
+  }, [id, token]);
 
-  const createMetrica = async (data) => {
+  const createMetrica = async (data, tokenIn) => {
     try {
       setSavingMetrica(true);
-      const response = await postMetrica(id, data);
+      const response = await postMetrica(id, data, tokenIn);
       return response;
     } catch (error) {
       console.error("Erro ao criar métrica:", error);
@@ -63,10 +63,10 @@ export const useBodyData = (id) => {
     }
   };
 
-  const createMeta = async (data) => {
+  const createMeta = async (data, tokenIn) => {
     try {
       setSavingMeta(true);
-      const response = await postMeta(id, data);
+      const response = await postMeta(id, data, tokenIn);
       return response;
     } catch (error) {
       console.error("Erro ao criar meta:", error);
@@ -75,10 +75,10 @@ export const useBodyData = (id) => {
     }
   };
 
-  const refreshData = async () => {
+  const refreshData = async (tokenIn) => {
     try {
       setRefreshing(true);
-      const response = await getMetricas(id);
+      const response = await getMetricas(id, tokenIn);
       SetBodyData(response);
     } catch (error) {
       console.error("Erro ao atualizar dados:", error);
@@ -87,10 +87,10 @@ export const useBodyData = (id) => {
     }
   };
 
-  const refreshMeta = async () => {
+  const refreshMeta = async (tokenIn) => {
     try {
       setRefreshing(true);
-      const response = await getBodyMeta(id);
+      const response = await getBodyMeta(id, tokenIn);
       SetBodyMeta(response);
     } catch (error) {
       console.error("Erro ao atualizar meta:", error);
@@ -99,9 +99,9 @@ export const useBodyData = (id) => {
     }
   };
 
-  const refreshBodyHistoric = async () => {
+  const refreshBodyHistoric = async (tokenIn) => {
     try {
-      const response = await GetHistoricMetric(id);
+      const response = await GetHistoricMetric(id, tokenIn);
       SetBodyHistoric(response);
     } catch {
       console.error("Erro ao atualizar meta:", error);

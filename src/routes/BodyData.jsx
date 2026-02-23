@@ -1,15 +1,21 @@
-import { useEffect, useState, useContext } from "react";
-import { Pencil, Plus, ArrowLeft, Save } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Pencil, ArrowLeft, Save } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../css/BodyData.css";
-import { UseGet } from "../hooks/useGet.jsx";
+import { SessionStorage } from "../hooks/SessionStorage.jsx";
 import { useBodyData } from "../hooks/useBodyData.jsx";
-
 import GraphBodyData from "../components/GraphBodyData.jsx";
 
 const BodyData = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const { data, getStorageUser } = SessionStorage();
+  const token = data?.token;
+
+  useEffect(() => {
+    getStorageUser();
+  }, []);
+
   const {
     BodyData,
     BodyMeta,
@@ -23,7 +29,7 @@ const BodyData = () => {
     savingMetrica,
     savingMeta,
     refreshing,
-  } = useBodyData(id);
+  } = useBodyData(id, token);
   // estados da aplicação
   const [Metricas, SetMetricas] = useState({});
   const [ActualMeta, SetActualMeta] = useState(null);
@@ -119,30 +125,30 @@ const BodyData = () => {
   // Submit métricas
   const WeightSubmit = async (e) => {
     e.preventDefault();
-    await createMetrica(Metricas);
-    await refreshData();
-    await refreshBodyHistoric();
+    await createMetrica(Metricas, token);
+    await refreshData(token);
+    await refreshBodyHistoric(token);
     SetWeightSave(true);
   };
 
   const HeightSubmit = async (e) => {
     e.preventDefault();
-    await createMetrica(Metricas);
-    await refreshData();
+    await createMetrica(Metricas, token);
+    await refreshData(token);
     SetHeightSave(true);
   };
   const MetricaSubmit = async (e) => {
     e.preventDefault();
-    await createMetrica(Metricas);
-    await refreshData();
+    await createMetrica(Metricas, token);
+    await refreshData(token);
     SetMetricaSave(true);
   };
 
   // Meta corporal
   const MetaSubmit = async (e) => {
     e.preventDefault();
-    await createMeta(ActualMeta);
-    await refreshMeta();
+    await createMeta(ActualMeta, token);
+    await refreshMeta(token);
     SetMetaSave(true);
   };
 

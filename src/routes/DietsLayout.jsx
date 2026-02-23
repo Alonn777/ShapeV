@@ -5,6 +5,7 @@ import SearchNutri from "../components/SearchNutri.jsx";
 import ResumoNutricional from "../components/ResumoNutricional.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { Search, Calendar, Plus, ArrowLeft, Utensils } from "lucide-react";
+import { SessionStorage } from "../hooks/SessionStorage.jsx";
 import { UseGetDiet } from "../hooks/useGetDiet.jsx";
 import { useEffect, useState } from "react";
 
@@ -12,12 +13,19 @@ const DietsLayout = () => {
   // Request dos dados da dieta
   const navigate = useNavigate();
   const { id } = useParams();
+  const { data, getStorageUser } = SessionStorage();
+  const token = data?.token;
+
+  useEffect(() => {
+    getStorageUser();
+  }, []);
 
   // Validação do id antes de fazer requisições
 
   const { HidrateData, SnackDiaryData, GetFood, FoodServer } = UseGetDiet(
     null,
     id,
+    token,
   );
 
   // States para controlar a aplicação
@@ -37,7 +45,7 @@ const DietsLayout = () => {
 
   const ChangeSearchDiet = () => {
     SetSearchDiet(true);
-    GetFood("http://localhost:3000/taco");
+    GetFood(token);
   };
   const ModalClick = () => {
     SetSearchDiet(false);
@@ -98,7 +106,7 @@ const DietsLayout = () => {
 
         <section className="hidatration-container">
           {HidrateData ? (
-            <WaterManage HidrateItem={HidrateData} />
+            <WaterManage HidrateItem={HidrateData} token={token}/>
           ) : (
             <p>Carregando os dados...</p>
           )}
@@ -111,7 +119,7 @@ const DietsLayout = () => {
             <h3>Diário de refeições</h3>
           </div>
           {SnackDiaryData && SnackDiaryData.length > 0 ? (
-            <SnackDiary SnackDiet={SnackDiaryData} />
+            <SnackDiary SnackDiet={SnackDiaryData} token={token} />
           ) : (
             <p>Carregando...</p>
           )}

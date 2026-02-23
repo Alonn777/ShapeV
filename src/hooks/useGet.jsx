@@ -1,7 +1,7 @@
 import { useEffect, useEffectEvent } from "react";
 import { useState } from "react";
 
-export const UseGet = (id, url) => {
+export const UseGet = (id, token) => {
   const [FoodServer, SetFood] = useState([]);
   const [SearchFoodServer, SetFoodServer] = useState([]);
   const [DietCredential, SetDietCredential] = useState({});
@@ -12,16 +12,19 @@ export const UseGet = (id, url) => {
     if (id) {
       const requestCredential = async () => {
         const [DietCredential, BodyDataCredential] = await Promise.all([
-          fetch(`http://localhost:3000/users/diets/${id}`).then((res) =>
-            res.json()
-          ),
-          fetch(`http://localhost:3000/users/bodydata/${id}`).then((res) =>
-            res.json()
-          ),
+          fetch(`http://localhost:3000/users/diets/${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }).then((res) => res.json()),
+          fetch(`http://localhost:3000/users/bodydata/${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }).then((res) => res.json()),
         ]);
         SetDietCredential(DietCredential);
         SetBodyDataCredential(BodyDataCredential);
-        console.log(BodyDataCredential);
       };
       requestCredential();
     }
@@ -59,7 +62,7 @@ export const UseGet = (id, url) => {
   const SearchFood = async (FoodValue) => {
     try {
       const data = await fetch(
-        `http://localhost:3000/taco/search?macronutri=${FoodValue}`
+        `http://localhost:3000/taco/search?macronutri=${FoodValue}`,
       );
       const dataJSON = await data.json();
       SetFoodServer(dataJSON);

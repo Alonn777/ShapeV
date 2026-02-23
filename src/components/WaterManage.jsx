@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { UseGetDiet } from "../hooks/useGetDiet.jsx";
 
-const WaterManage = ({ HidrateItem }) => {
+const WaterManage = ({ HidrateItem, token }) => {
   // utilizando hooks seção
   const { id } = useParams();
   const DietID = HidrateItem.id;
@@ -33,15 +33,15 @@ const WaterManage = ({ HidrateItem }) => {
   }, [CupDrunk]);
 
   // Funções de requsição
-  const UpdateState = async () => {
-    const data = await RefreshHydration(id);
+  const UpdateState = async (token) => {
+    const data = await RefreshHydration(id, token);
     SetCups(data);
   };
 
   const AddCup = async () => {
     const cup = { drunk: false };
-    await CreateHydrationCup(id, cup);
-    await UpdateState();
+    await CreateHydrationCup(id, cup, token);
+    await UpdateState(token);
   };
   const updateCup = async (Cup) => {
     const CupId = Cup.id;
@@ -51,12 +51,12 @@ const WaterManage = ({ HidrateItem }) => {
 
     
     if (CurrentCup === false) {
-      await UpdateHydrationCup(CupId, DrunkTrue);
-      await UpdateState();
+      await UpdateHydrationCup(CupId, DrunkTrue, token);
+      await UpdateState(token);
     }
     if (CurrentCup === true) {
-      await UpdateHydrationCup(CupId, DrunkFalse);
-      await UpdateState();
+      await UpdateHydrationCup(CupId, DrunkFalse, token);
+      await UpdateState(token);
     }
   };
   return (

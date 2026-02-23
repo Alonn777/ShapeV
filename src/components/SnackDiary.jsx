@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { ChevronDown, ChevronUp, Trash, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const SnackDiary = ({ SnackDiet }) => {
+const SnackDiary = ({ SnackDiet, token }) => {
   const { id } = useParams();
   const {
     GetFood,
@@ -21,7 +21,6 @@ const SnackDiary = ({ SnackDiet }) => {
   const [kcalSnack, SetKcalSnack] = useState(0);
   const [SnackList, SetSnackList] = useState();
   const [SnackSectionID, SetSnackSection] = useState(null);
-  const [Teste, SetTeste] = useState([]);
 
   useEffect(() => {
     if (FoodServer) {
@@ -34,10 +33,6 @@ const SnackDiary = ({ SnackDiet }) => {
     }
   }, [SnackDiet]);
 
-  // useEffect(()=>{
-  //   const allSnacks = DietList.map((item)=> item.Snack_List)
-  //   SetSnackList(allSnacks)
-  // }, [DietList])
 
   const ExpandCard = (id, expandBoolean) => {
     if (expandBoolean === false) {
@@ -59,7 +54,7 @@ const SnackDiary = ({ SnackDiet }) => {
   // funções para requisições
   const updateExpand = async (id, body) => {
     try {
-      await UpdateSnackExpand(id, body);
+      await UpdateSnackExpand(id, body, token);
     } catch (err) {
       console.error(err);
     }
@@ -67,7 +62,7 @@ const SnackDiary = ({ SnackDiet }) => {
 
   const GetDiet = async () => {
     try {
-      const data = await RefreshSnackDiary(id);
+      const data = await RefreshSnackDiary(id, token);
       SetDiet(data);
     } catch (error) {
       console.error(error);
@@ -75,14 +70,14 @@ const SnackDiary = ({ SnackDiet }) => {
   };
 
   const deleteFood = async (foodId) => {
-    await DeleteSnackFood(foodId);
+    await DeleteSnackFood(foodId, token);
     await GetDiet();
   };
   // Funcionalidade pra adicionar o alimento
   const ViewCardAdd = (SectionID) => {
     if (ViewNutrient === false) {
       SetViewNutrient(true);
-      GetFood("http://localhost:3000/taco");
+      GetFood(token);
       SetSnackSection(SectionID);
     }
   };
@@ -190,6 +185,7 @@ const SnackDiary = ({ SnackDiet }) => {
                   FoodInfos={Food}
                   SnackSection={SnackSectionID}
                   SetDiet={SetDiet}
+                  token={token}
                 />
                 <div className="shadow-search" onClick={invisibleCard}></div>
               </div>

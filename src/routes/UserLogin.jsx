@@ -57,7 +57,7 @@ const UserLogin = () => {
 
       if (response) {
         navigate("/home");
-        storageUser({ id: user[0].id, role: user[0].role });
+        storageUser(response);
       } else {
         console.log("Sua senha ou email está incorreta tente novamente");
       }
