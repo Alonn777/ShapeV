@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Loader from "./Loader.jsx";
 import {
   LineChart,
   Line,
@@ -25,7 +26,7 @@ const GraphBodyData = ({ graphData }) => {
   if (!graphData) {
     return (
       <div>
-        <p>Carregando...</p>
+        <Loader />
       </div>
     );
   }

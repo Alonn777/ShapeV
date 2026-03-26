@@ -5,6 +5,7 @@ import "../css/BodyData.css";
 import { SessionStorage } from "../hooks/SessionStorage.jsx";
 import { useBodyData } from "../hooks/useBodyData.jsx";
 import GraphBodyData from "../components/GraphBodyData.jsx";
+import Loader from "../components/Loader.jsx";
 
 const BodyData = () => {
   const navigate = useNavigate();
@@ -171,7 +172,7 @@ const BodyData = () => {
             minHeight: "400px",
           }}
         >
-          <p>Carregando dados...</p>
+          <Loader />
         </div>
       </div>
     );
@@ -217,7 +218,7 @@ const BodyData = () => {
                   />
                   <button type="submit" disabled={savingMetrica || refreshing}>
                     {savingMetrica || refreshing ? (
-                      <span>Salvando...</span>
+                      <Loader />
                     ) : (
                       <Save color="#ffffffff" />
                     )}
@@ -280,7 +281,7 @@ const BodyData = () => {
                   />
                   <button type="submit" disabled={savingMetrica || refreshing}>
                     {savingMetrica || refreshing ? (
-                      <span>Salvando...</span>
+                      <Loader />
                     ) : (
                       <Save color="#ffffffff" />
                     )}
@@ -337,7 +338,7 @@ const BodyData = () => {
                 />
                 <button type="submit" disabled={savingMeta || refreshing}>
                   {savingMeta || refreshing ? (
-                    <span>Salvando...</span>
+                    <Loader />
                   ) : (
                     <Save color="#ffff" />
                   )}
@@ -435,7 +436,7 @@ const BodyData = () => {
               >
                 <span>
                   {savingMetrica || refreshing ? (
-                    <span>Salvando...</span>
+                    <Loader />
                   ) : (
                     <Save />
                   )}

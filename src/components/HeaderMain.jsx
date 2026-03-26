@@ -7,7 +7,7 @@ import "../css/HeaderMain.css";
 const HeaderMain = () => {
   const { getStorageUser, data } = SessionStorage();
   const [AppInfos, SetAppInfos] = useState(false);
-  const userRole = data?.role;
+  const userRole = data?.user.role;
 
   useEffect(() => {
     getStorageUser();

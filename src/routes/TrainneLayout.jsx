@@ -16,6 +16,7 @@ import { SessionStorage } from "../hooks/SessionStorage";
 import { UseWorkouts } from "../hooks/useWorkouts";
 import "../css/TrainneLayout.css";
 import "../components/GraphBodyData.jsx";
+import Loader from "../components/Loader.jsx";
 
 const TrainneLayout = () => {
   // Configuração para determinadas funcionalidades
@@ -31,14 +32,15 @@ const TrainneLayout = () => {
     id,
     token,
   );
-  
-  const { BodyData, BodyMeta, BodyHistoricMetric } = useBodyData(bodydataID, token);
+
+  const { BodyData, BodyMeta, BodyHistoricMetric } = useBodyData(
+    bodydataID,
+    token,
+  );
   const [WorkoutRender, SetWorkoutRender] = useState([]);
-  
 
   useEffect(() => {
     getStorageUser();
-  
   }, []);
 
   useEffect(() => {
@@ -155,6 +157,8 @@ const TrainneLayout = () => {
                           </div>
 
                           <div className="start-trainning">
+                          <p className="time-info">{item.time}</p>
+
                             <button className="button-blocked">-</button>
 
                             <button
@@ -198,6 +202,8 @@ const TrainneLayout = () => {
                         </div>
 
                         <div className="start-trainning">
+                            <p className="time-info">{item.time}</p>
+                         
                           {item.trainningCreate ? (
                             <button
                               className="btn-start-trainning"
@@ -213,7 +219,6 @@ const TrainneLayout = () => {
                               Criar
                             </button>
                           )}
-
                           <button
                             onClick={() => showRest(index, item)}
                             className="btn-ellipsis"
@@ -238,7 +243,7 @@ const TrainneLayout = () => {
                   );
                 })
               ) : (
-                <p>Carregando treinos...</p>
+                <Loader />
               )}
             </div>
           </div>

@@ -1,5 +1,4 @@
 import "../css/MainDashboard.css";
-import { BodyDataContext } from "../context/BodyDataContext";
 import { UseGetDiet } from "../hooks/useGetDiet";
 import { UseGet } from "../hooks/useGet";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +12,6 @@ const MainDashboard = () => {
   const id = data?.user.id;
   const token = data?.token;
   const { DietCredential, BodyDataCredential } = UseGet(id, token);
-  const { SetBodyDataID } = useContext(BodyDataContext);
   useEffect(() => {
     getStorageUser();
   }, []);

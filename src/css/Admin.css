@@ -1,4 +1,3 @@
-/* ===== ADMIN LAYOUT ===== */
 .admin {
     min-height: 100vh;
     background: radial-gradient(1200px 600px at top, #0b1220, #020617);
@@ -9,7 +8,6 @@
     padding: 2rem;
 }
 
-/* ===== HEADER ADMIN ===== */
 .header-admin {
     display: flex;
     justify-content: space-between;
@@ -79,7 +77,6 @@
     margin-top: 0.3rem;
 }
 
-/* ===== MANAGER USER ===== */
 .manager-user {
     background: linear-gradient(180deg, #0b1220 0%, #070d18 100%);
     border: 1px solid #1e293b;
@@ -123,7 +120,6 @@
     transition: 0.2s ease-in;
 }
 
-/* ===== SEARCH ===== */
 .search-user {
     display: flex;
     gap: 1rem;
@@ -149,7 +145,6 @@
     border-color: #3b82f6;
 }
 
-/* ===== TABLE ===== */
 .table-user {
     border-radius: 14px;
     overflow: hidden;
@@ -207,3 +202,161 @@
     background-color: #1467db;
     transition: 0.2s ease-in;
 }
+
+.container-updates{
+
+    background-color: #0b1220;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 70%;
+    padding: 1rem 1rem;
+    border-radius: 10px;
+}
+.container-updates button{
+    padding: 0.9rem 1rem;
+    width: 100px;
+    height: 50px;
+    text-align: center;
+    font-size: 0.9rem;
+    background-color: #17386d;
+}
+
+
+/* ===== REGISTER MODAL ===== */
+.admin-interaction {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 4;
+    width: 100%;
+    height: 100%;
+
+}
+
+.shadow-interaction {
+    position: fixed;
+    background: radial-gradient(circle, rgba(3, 3, 3, 0.322) 0%, #00000088 100%);
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    top: 0;
+    left: 0;
+}
+
+.user-interaction {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    max-width: 70%;
+    height: 100%;
+    background: linear-gradient(180deg, #0b1220 0%, #070d18 100%);
+    border: 1px solid #1e293b;
+    border-radius: 1.125rem;
+    padding: 2rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.user-interaction h2 {
+    color: #fff;
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.user-interaction > p {
+    color: #94a3b8;
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+}
+
+.user-interaction form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.user-interaction .form-control {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.user-interaction  .form-control p {
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0;
+}
+.user-interaction  .form-control input {
+    width: 100%;
+    background: #020617;
+    border: 1px solid #1e293b;
+    border-radius: 0.75rem;
+    padding: 0.6rem 1rem;
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+}
+
+.user-interaction  .form-control input::placeholder {
+    color: #64748b;
+}
+
+.user-interaction  .form-control input:focus {
+    border-color: #3b82f6;
+}
+
+.user-interaction .form-control select {
+    cursor: pointer;
+    appearance: auto;
+}
+
+.user-interaction  button[type="submit"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.8rem 1.2rem;
+    background: #17386d;
+    border: none;
+    border-radius: 0.75rem;
+    color: #e5e7eb;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.user-interaction  button[type="submit"]:hover {
+    background: #005ad8;
+    transition: 0.2s ease-in;
+}
+
+.form-option{
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+.select-control p{
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+}
+.form-option select, .form-control select{
+    background-color: #020617;
+    color: #fff;
+    padding: 0.6rem 1.2rem;
+    border-radius: 10px;
+    cursor: pointer;
+    
+}
+

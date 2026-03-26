@@ -1,11 +1,22 @@
 import { ArrowLeft, Pencil, Save, Plus, Trash } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { SessionStorage } from "../hooks/SessionStorage.jsx";
 import { UseWorkouts } from "../hooks/useWorkouts.jsx";
+import Timer from "../components/Timer.jsx";
+import { TimerContext } from "../context/TimerContext.jsx";
 import "../css/WorkoutsDashboard.css";
 
 const WorkoutsDashboard = () => {
+  const {
+    TimerValueContext,
+    SetTimerValueContext,
+    paused,
+    SetPause,
+    finishedTimer,
+    SetFinnished,
+  } = useContext(TimerContext);
+
   const { id } = useParams();
   const location = useLocation();
   const { userid, bodydataID } = location.state;
@@ -37,6 +48,9 @@ const WorkoutsDashboard = () => {
       SetWorkout(WorkoutCurrent || {});
     }
   }, [ExerciseServer, WorkoutsList, id]);
+  useEffect(() => {
+    SetFinnished(false);
+  }, []);
 
   // ESTADOS DA APLICAÇÃO
   const [WorkoutPrev, SetWorkout] = useState({});
@@ -52,8 +66,8 @@ const WorkoutsDashboard = () => {
       name: "Novo Exercício",
       series: 3,
       reps: 12,
-      weight: "0kg",
-      time: "60s",
+      weight: 0,
+      time: 60,
     };
     await createExercise(id, exerciseCard, token);
     refreshExercises(token);
@@ -121,15 +135,19 @@ const WorkoutsDashboard = () => {
     refreshExercises(token);
   };
 
-  const AllSave = async () => {
-    const AllWorkoutSave = {
-      workout: WorkoutPrev.workout,
-      save: WorkoutPrev.save,
-      trainningCreate: true,
-    };
-    await updateWorkout(WorkoutPrev.id, AllWorkoutSave, token);
-    navigate("/home/workouts");
+  // Botões timer
+  const HandleFinnish = async () => {
+    const timer = {time: TimerValueContext}
+    await updateWorkout(id, timer, token); 
+    SetPause(false);
+    SetFinnished(true);
   };
+  const backTimerDash =  ()=>{
+ 
+    navigate(`/home/workouts/${bodydataID}`);
+    SetFinnished(false)
+  }
+  console.log(WorkoutPrev)
 
   // Função para alternar o estado de conclusão do exercício
   return (
@@ -171,6 +189,8 @@ const WorkoutsDashboard = () => {
           )}
         </div>
       </div>
+
+      <Timer />
 
       <div className="exercise-container">
         <div className="exercise-box">
@@ -225,11 +245,11 @@ const WorkoutsDashboard = () => {
                         </div>
                         <div className="info-box">
                           <label>Peso:</label>
-                          <div className="info">{exercise.weight}</div>
+                          <div className="info">{exercise.weight}kg</div>
                         </div>
                         <div className="info-box">
                           <label>Descanso:</label>
-                          <div className="info">{exercise.time}</div>
+                          <div className="info">{exercise.time}s</div>
                         </div>
                       </div>
                     </div>
@@ -344,12 +364,24 @@ const WorkoutsDashboard = () => {
         </button>
       </div>
       <div className="footer-buttons">
-        <button type="button" className="btn-save-trainning" onClick={AllSave}>
-          Salvar e Sair
-        </button>
-        <button type="button" className="finnish-trainning">
-          Finalizar treino
-        </button>
+        {finishedTimer ? (
+          <button className="button-dashboard" onClick={backTimerDash}>Voltar ao dashboard</button>
+        ) : (
+          <div className="buttons-finnish">
+            {paused ? (
+              <button
+                className="finnish-trainning active"
+                onClick={HandleFinnish}
+              >
+                Finalizar treino {TimerValueContext}
+              </button>
+            ) : (
+              <button type="button" className="finnish-trainning">
+                Finalizar treino
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

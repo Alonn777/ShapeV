@@ -8,6 +8,7 @@ import { Search, Calendar, Plus, ArrowLeft, Utensils } from "lucide-react";
 import { SessionStorage } from "../hooks/SessionStorage.jsx";
 import { UseGetDiet } from "../hooks/useGetDiet.jsx";
 import { useEffect, useState } from "react";
+import Loader from "../components/Loader.jsx";
 
 const DietsLayout = () => {
   // Request dos dados da dieta
@@ -100,7 +101,7 @@ const DietsLayout = () => {
           {SnackDiaryData && SnackDiaryData.length > 0 ? (
             <ResumoNutricional SnackDiet={SnackDiaryData} />
           ) : (
-            <p>Carregando...</p>
+            <Loader />
           )}
         </section>
 
@@ -108,7 +109,7 @@ const DietsLayout = () => {
           {HidrateData ? (
             <WaterManage HidrateItem={HidrateData} token={token}/>
           ) : (
-            <p>Carregando os dados...</p>
+            <Loader />
           )}
         </section>
 
@@ -121,7 +122,7 @@ const DietsLayout = () => {
           {SnackDiaryData && SnackDiaryData.length > 0 ? (
             <SnackDiary SnackDiet={SnackDiaryData} token={token} />
           ) : (
-            <p>Carregando...</p>
+            <Loader />
           )}
         </section>
         <div className="fast-cardap"></div>

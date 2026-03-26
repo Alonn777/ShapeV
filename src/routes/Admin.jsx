@@ -1,10 +1,69 @@
-import '../css/Admin.css'
+import "../css/Admin.css";
+import Loader from "../components/Loader.jsx";
 import HeaderMain from "../components/HeaderMain.jsx";
+import { use, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Shield, ArrowLeft, UsersRound, UserRoundPlus, EllipsisVertical } from "lucide-react";
+import {
+  Shield,
+  ArrowLeft,
+  UsersRound,
+  UserRoundPlus,
+  EllipsisVertical,
+} from "lucide-react";
+import { useAdmin } from "../hooks/useAdmin.jsx";
+import { SessionStorage } from "../hooks/SessionStorage.jsx";
+import UserRegister from "../components/UserRegister.jsx";
+import UserAdminUpdate from "../components/UserAdminUpdate.jsx";
 
 const Admin = () => {
+  const { data, getStorageUser } = SessionStorage();
+  const token = data?.token;
+  const { CountInfos, UsersInfo } = useAdmin(token);
+  useEffect(() => {
+    getStorageUser();
+  }, {});
+  useEffect(() => {
+    SetDataUsersInfo(UsersInfo);
+  }, [UsersInfo]);
   const navigate = useNavigate();
+
+  const [DataUsersInfo, SetDataUsersInfo] = useState([]);
+  const [RegisterUser, SetRegisterUser] = useState(false);
+  const [UpdateUser, SetUpdateUser] = useState(false);
+  const [SelectId, SetSelectId] = useState("")
+
+  const HandleRenderStatus = (id, status) => {
+    if (status === false) {
+      SetDataUsersInfo((prev) =>
+        prev.map((user) => {
+          if (user.id === id) {
+            return {
+              ...user,
+              render_status: true,
+            };
+          }
+          return user;
+        }),
+      );
+
+      SetSelectId(id)
+    }
+    if (status === true) {
+      SetDataUsersInfo((prev) =>
+        prev.map((user) => {
+          if (user.id === id) {
+            return {
+              ...user,
+              render_status: false,
+            };
+          }
+          return user;
+        }),
+      );
+      SetSelectId("")
+    }
+  };
+
   return (
     <div className="admin">
       <HeaderMain />
@@ -26,14 +85,18 @@ const Admin = () => {
           <div className="info-adm">
             <div className="info-text">
               <p>Total de usuários:</p>
-              <p className="total">1.234</p>
+              <p className="total">
+                {CountInfos ? CountInfos.all : <Loader />}
+              </p>
             </div>
           </div>
 
           <div className="info-adm">
             <div className="info-text">
               <p>Total de assinantes:</p>
-              <p className="total">200</p>
+              <p className="total">
+                {CountInfos ? CountInfos.premium : <Loader />}
+              </p>
             </div>
           </div>
 
@@ -51,13 +114,37 @@ const Admin = () => {
             </div>
           </div>
         </div>
+
+        {RegisterUser ? (
+          <div className="admin-interaction">
+            <UserRegister />
+            <div
+              className="shadow-interaction"
+              onClick={() => SetRegisterUser(false)}
+            ></div>
+          </div>
+        ) : (
+          ""
+        )}
+
+        {UpdateUser ? (
+          <div className="admin-interaction">
+            <UserAdminUpdate id={SelectId} token={token} />
+            <div
+              className="shadow-interaction"
+              onClick={() => SetUpdateUser(false)}
+            ></div>
+          </div>
+        ) : (
+          ""
+        )}
         <div className="manager-user">
           <div className="header-manager-user">
             <div className="title">
               <UsersRound />
               <h2>Gerenciador de usuários</h2>
             </div>
-            <button>
+            <button onClick={() => SetRegisterUser(true)}>
               <UserRoundPlus /> Novo Usuário
             </button>
           </div>
@@ -82,36 +169,54 @@ const Admin = () => {
           <div className="table-user">
             <div className="row">
               <div className="collumn">
-                <p>Usuário</p>
+                <p>Role</p>
               </div>
 
               <div className="collumn">
-                <p>Plano</p>
+                <p>Usuário</p>
               </div>
               <div className="collumn">
-                <p>Status</p>
+                <p>Plano</p>
               </div>
               <div className="collumn">
                 <p>Ações</p>
               </div>
             </div>
 
-            <div className="row">
-              <div className="collumn">
-                <p>Usuário</p>
-              </div>
+            {DataUsersInfo.length > 1 ? (
+              DataUsersInfo.map((item) => (
+                <div className="row" key={item.id}>
+                  <div className="collumn">
+                    <p>{item.role}</p>
+                  </div>
 
-              <div className="collumn">
-                <p className="name">Carlos Henrique</p>
-                <p>henriquevilas764@gmail.com</p>
-              </div>
-              <div className="collumn">
-                <p className="plan">Free</p>
-              </div>
-              <div className="collumn">
-               <button> <EllipsisVertical/> </button>
-              </div>
-            </div>
+                  <div className="collumn">
+                    <p className="name">{item.name}</p>
+                    <p>{item.email}</p>
+                  </div>
+                  <div className="collumn">
+                    <p className="plan">{item.plan}</p>
+                  </div>
+                  <div className="collumn">
+                    <button onClick={() => HandleRenderStatus(item.id, item.render_status)}>
+                      <EllipsisVertical />
+                    </button>
+                  </div>
+                  {item.render_status ? (
+                    <div className="container-updates">
+                      <button>Detalhes</button>
+                      <button onClick={() => SetUpdateUser(true)}>
+                        Editar
+                      </button>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              ))
+            ) : (
+              <Loader />
+            )}
           </div>
         </div>
       </div>
