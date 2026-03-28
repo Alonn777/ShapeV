@@ -1,5 +1,10 @@
 .WorkoutDay-dashboard {
   padding: 0 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
 }
 
 .header-workout-day,
@@ -41,6 +46,10 @@
 
 .workout-day-content form {
   display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.5rem;
+  width: 100%;
 }
 
 .workout-day-content .control-content {
@@ -80,8 +89,11 @@
 
 .workout-day-save {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
 }
 
 .workout-day-save button:hover {
@@ -103,9 +115,11 @@
   align-items: center;
   margin: 0 auto;
   text-align: center;
-  width: 30vw;
+  width: 100%;
+  max-width: 22rem;
   padding: 1.5rem 1rem;
   gap: 0.75rem;
+  box-sizing: border-box;
 }
 
 .FirstStep-timer .icon-timer {
@@ -162,6 +176,7 @@
 
 .timer-box {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
@@ -220,6 +235,7 @@
 }
 
 .timer-box button {
+  flex-shrink: 0;
   padding: 0.5rem 1rem;
   background-color: hsl(226, 30%, 18%);
   color: #fff;
@@ -385,6 +401,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
 }
 
 .content-header .exercise-name h2 {
@@ -427,9 +444,11 @@
 
 .infos {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
   margin-top: 2.5rem;
+  gap: 0.5rem;
 }
 
 .infos .control-infos {
@@ -536,4 +555,211 @@
   font-weight: bold;
   border: 1px solid #1f2937;
   opacity: 0.9;
+}
+
+/* ========== Responsivo (max-width) ========== */
+
+@media (max-width: 992px) {
+  .WorkoutDay-dashboard {
+    padding: 0 1.25rem;
+    max-width: none;
+  }
+
+  .header-workout-day,
+  .timer-container {
+    margin-top: 2rem;
+    padding: 1.5rem 1rem;
+    min-height: auto;
+  }
+
+  .exercise-container {
+    padding: 1rem 0;
+  }
+
+  .exercise-box .exercise-card {
+    padding: 1rem 1.25rem;
+  }
+
+  .infos .control-infos {
+    flex: 1 1 calc(50% - 1rem);
+    min-width: 140px;
+    width: auto;
+    max-width: calc(50% - 0.5rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .WorkoutDay-dashboard {
+    padding: 0 1rem;
+  }
+
+  .workout-day-content form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .workout-day-content form > button[type="submit"] {
+    align-self: flex-end;
+  }
+
+  .workout-day-save {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .workout-day-save > button {
+    align-self: flex-end;
+  }
+
+  .control-content h2 {
+    font-size: clamp(1.2rem, 4.5vw, 1.65rem);
+    word-break: break-word;
+    margin: 0 0 0.25rem 0;
+  }
+
+  .timer-box .timer .clock {
+    font-size: 1.5rem;
+  }
+
+  .exercise-content .form-control-header {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0;
+    gap: 0.75rem;
+  }
+
+  .form-control-header .inputs-box {
+    flex-wrap: nowrap;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .form-control-header .inputs-box input[type="text"] {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .form-control-header .actions {
+    margin-left: 0;
+    align-self: flex-end;
+  }
+
+  .exercise-card .content-header {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .content-header .exercise-name h2 {
+    font-size: 1.05rem;
+    word-break: break-word;
+  }
+
+  .content-infos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .infos {
+    justify-content: flex-start;
+  }
+
+  .infos .control-infos {
+    flex: 1 1 calc(50% - 0.75rem);
+    max-width: none;
+    padding: 0 0.35rem;
+  }
+
+  .finnish-trainning,
+  .button-dashboard {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 576px) {
+  .WorkoutDay-dashboard {
+    padding: 0 0.75rem;
+  }
+
+  .header-workout-day,
+  .timer-container {
+    padding: 1.25rem 0.85rem;
+    border-radius: 12px;
+  }
+
+  .FirstStep-timer {
+    padding: 1rem 0.5rem;
+  }
+
+  .FirstStep-timer button {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .timer-box {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .timer-box button {
+    width: 100%;
+  }
+
+  .timer-box .timer .clock {
+    font-size: 1.35rem;
+  }
+
+  .finnished-content {
+    padding: 1.75rem 1rem;
+  }
+
+  .finnished-content h3 {
+    font-size: 1rem;
+  }
+
+  .exercise-box .exercise-card {
+    padding: 0.85rem 1rem;
+    margin-top: 1rem;
+  }
+
+  .content-infos {
+    grid-template-columns: 1fr;
+  }
+
+  .infos .control-infos {
+    flex: 1 1 100%;
+    min-width: 0;
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .add-exercise {
+    padding: 1.25rem 1rem;
+    font-size: 0.95rem;
+    flex-wrap: wrap;
+    text-align: center;
+  }
+
+  .footer-buttons {
+    padding: 1rem 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .WorkoutDay-dashboard {
+    padding: 0 0.5rem;
+  }
+
+  .timer-box .timer p {
+    font-size: 0.7rem;
+  }
+
+  .actions {
+    flex-shrink: 0;
+  }
 }

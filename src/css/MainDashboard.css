@@ -3,7 +3,11 @@
     grid-template-rows: auto 1fr;
     gap: 2.5rem;
     width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
     padding: 2rem 1.2rem;
+    box-sizing: border-box;
 }
 
 .title-main {
@@ -13,14 +17,23 @@
 
 .title-main h2 {
     margin-bottom: 0.5rem;
-    font-size: 2.2rem;
+    font-size: clamp(1.5rem, 2.5vw + 1rem, 2.2rem);
+    line-height: 1.2;
+}
+
+.title-main p {
+    margin: 0;
+    color: #cbd5e1;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    padding: 0 0.5rem;
 }
 
 .main-dashboard .action-card {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
-
+    align-content: start;
 }
 
 .card-section {
@@ -28,11 +41,14 @@
     padding: 1.5rem;
     cursor: pointer;
     width: 100%;
-    height: 35vh;
+    min-height: min(35vh, 280px);
+    height: auto;
     border-radius: 10px;
     border: 1px solid #1e293b;
     opacity: 0.9;
-
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
 
 .card-section:hover {
@@ -52,7 +68,7 @@
     justify-content: center;
     align-items: center;
     border-radius: 10px;
-
+    flex-shrink: 0;
 }
 
 .card-section .icon-apple {
@@ -65,6 +81,7 @@
     justify-content: center;
     align-items: center;
     border-radius: 10px;
+    flex-shrink: 0;
 }
 
 .card-section .icon-body {
@@ -77,20 +94,178 @@
     justify-content: center;
     align-items: center;
     border-radius: 10px;
-
+    flex-shrink: 0;
 }
-.card-section h4{
+
+.card-section .icon-dumbbell svg,
+.card-section .icon-apple svg,
+.card-section .icon-body svg {
+    width: 100%;
+    height: 100%;
+    max-width: 2.25rem;
+    max-height: 2.25rem;
+}
+
+.card-section h4 {
     font-size: 1.2rem;
     margin-top: 10px;
     font-weight: 600;
-    
 }
-.card-section p{
+
+.card-section p {
     font-size: 0.9rem;
+    margin: 0;
+    flex-grow: 1;
 }
-.card-section .enter{
-   margin-top: 8px;
+
+.card-section p + p {
+    margin-top: 0.35rem;
+}
+
+.card-section .enter {
+    margin-top: auto;
+    padding-top: 8px;
     color: #0f6bff;
     font-size: 1rem;
     font-weight: 600;
+    flex-grow: 0;
+}
+
+/* ========== Responsivo (max-width) ========== */
+
+@media (max-width: 992px) {
+    .main-dashboard {
+        padding: 1.25rem 1rem;
+        gap: 2rem;
+        max-width: none;
+    }
+
+    .title-main {
+        margin-top: 1.25rem;
+    }
+
+    .main-dashboard .action-card {
+        gap: 0.85rem;
+    }
+
+    .card-section {
+        min-height: min(28vh, 220px);
+        padding: 1.25rem;
+    }
+
+    .card-section h4 {
+        font-size: 1.1rem;
+    }
+
+    .card-section p {
+        font-size: 0.88rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-dashboard {
+        padding: 1rem 0.9rem;
+        gap: 1.5rem;
+    }
+
+    .title-main h2 {
+        font-size: clamp(1.35rem, 4.5vw, 1.85rem);
+    }
+
+    .title-main p {
+        font-size: 0.88rem;
+    }
+
+    .main-dashboard .action-card {
+        grid-template-columns: 1fr;
+        max-width: 26rem;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+    }
+
+    .card-section {
+        min-height: min(22vh, 200px);
+    }
+
+    .card-section .icon-dumbbell,
+    .card-section .icon-apple,
+    .card-section .icon-body {
+        width: 56px;
+        height: 56px;
+        padding: 0.85rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .main-dashboard {
+        padding: 0.75rem 0.65rem;
+        gap: 1.25rem;
+    }
+
+    .title-main {
+        margin-top: 0.75rem;
+    }
+
+    .title-main p {
+        font-size: 0.85rem;
+    }
+
+    .main-dashboard .action-card {
+        max-width: none;
+        gap: 0.75rem;
+    }
+
+    .card-section {
+        min-height: auto;
+        padding: 1.1rem 1rem;
+        border-radius: 12px;
+    }
+
+    .card-section .icon-dumbbell,
+    .card-section .icon-apple,
+    .card-section .icon-body {
+        width: 52px;
+        height: 52px;
+        padding: 0.75rem;
+    }
+
+    .card-section .icon-dumbbell svg,
+    .card-section .icon-apple svg,
+    .card-section .icon-body svg {
+        max-width: 1.85rem;
+        max-height: 1.85rem;
+    }
+
+    .card-section h4 {
+        font-size: 1.05rem;
+        margin-top: 8px;
+    }
+
+    .card-section .enter {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .main-dashboard {
+        padding: 0.5rem 0.45rem;
+        gap: 1rem;
+    }
+
+    .title-main h2 {
+        font-size: clamp(1.15rem, 6vw, 1.45rem);
+    }
+
+    .title-main p {
+        font-size: 0.8rem;
+    }
+
+    .card-section {
+        padding: 1rem 0.85rem;
+    }
+
+    .card-section p {
+        font-size: 0.82rem;
+    }
 }

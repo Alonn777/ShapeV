@@ -1,4 +1,5 @@
 import AddNutri from "./AddNutri.jsx";
+import NewFood from "./NewFood.jsx";
 import { UseGetDiet } from "../hooks/useGetDiet.jsx";
 import { Coffee, Utensils, Apple } from "lucide-react";
 import { useParams } from "react-router-dom";
@@ -18,6 +19,7 @@ const SnackDiary = ({ SnackDiet, token }) => {
   const [Food, SetFood] = useState([]);
   const [DietList, SetDiet] = useState([]);
   const [ViewNutrient, SetViewNutrient] = useState(false);
+  const [NewNutrient, SetNewNutrient] = useState(false);
   const [kcalSnack, SetKcalSnack] = useState(0);
   const [SnackList, SetSnackList] = useState();
   const [SnackSectionID, SetSnackSection] = useState(null);
@@ -32,7 +34,6 @@ const SnackDiary = ({ SnackDiet, token }) => {
       SetDiet(SnackDiet);
     }
   }, [SnackDiet]);
-
 
   const ExpandCard = (id, expandBoolean) => {
     if (expandBoolean === false) {
@@ -86,7 +87,6 @@ const SnackDiary = ({ SnackDiet, token }) => {
       SetViewNutrient(false);
     }
   };
-  
 
   return (
     <div className="snack-box">
@@ -144,8 +144,7 @@ const SnackDiary = ({ SnackDiet, token }) => {
                                 {Number(item.protein_g || 0).toFixed(1)} |
                                 Carboidrato:{" "}
                                 {Number(item.carbohydrate_g || 0).toFixed(1)} |
-                                Gordura:{" "}
-                                {Number(item.lipid_g || 0).toFixed(1)}
+                                Gordura: {Number(item.lipid_g || 0).toFixed(1)}
                               </p>
                             </div>
 
@@ -186,12 +185,16 @@ const SnackDiary = ({ SnackDiet, token }) => {
                   SnackSection={SnackSectionID}
                   SetDiet={SetDiet}
                   token={token}
+                  SetViewNutrient={SetViewNutrient}
+                  SetNewNutrient={SetNewNutrient}
                 />
                 <div className="shadow-search" onClick={invisibleCard}></div>
               </div>
             ) : (
               ""
             )}
+
+            {NewNutrient ? <NewFood /> : ""}
           </div>
         ))}
     </div>

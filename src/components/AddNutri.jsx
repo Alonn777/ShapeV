@@ -3,13 +3,22 @@ import { UsePost } from "../hooks/usePost";
 import { UseGet } from "../hooks/useGet";
 import { UseGetDiet } from "../hooks/useGetDiet";
 import debounce from "lodash.debounce";
-import { X } from "lucide-react";
+import { X, Plus } from "lucide-react";
 import Loader from "./Loader.jsx";
 import { data, useParams } from "react-router-dom";
 
-const AddNutri = ({ BackDash, FoodInfos, SnackSection, SetDiet, token }) => {
+const AddNutri = ({
+  BackDash,
+  FoodInfos,
+  SnackSection,
+  SetDiet,
+  token,
+  SetViewNutrient,
+  SetNewNutrient,
+}) => {
   const { id } = useParams();
-  const { CreateSnackFood, RefreshSnackDiary, SearchFood, SearchFoodServer  } = UseGetDiet();
+  const { CreateSnackFood, RefreshSnackDiary, SearchFood, SearchFoodServer } =
+    UseGetDiet();
 
   const [Food, SetFood] = useState([]);
   const [SearchValue, SetSearchValue] = useState("");
@@ -65,6 +74,10 @@ const AddNutri = ({ BackDash, FoodInfos, SnackSection, SetDiet, token }) => {
     SetMultiplicate(1);
   };
 
+  const HandleCreate = () => {
+    SetViewNutrient(false);
+    SetNewNutrient(true);
+  };
   // 3.1 - Duplicando valor com a quantidade de porções comidas
   useEffect(() => {
     const resultadoGramas = () => {
@@ -114,6 +127,14 @@ const AddNutri = ({ BackDash, FoodInfos, SnackSection, SetDiet, token }) => {
           onChange={(e) => HandleChange(e.target.value)}
         />
       </form>
+      <div className="Nutri-actions">
+        <button onClick={HandleCreate}>
+          <span>
+            <Plus />
+          </span>
+          Criar alimento
+        </button>
+      </div>
       <div className="food-sugestion">
         <p>Alimentos abaixo</p>
 
