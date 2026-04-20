@@ -9,13 +9,18 @@ import {
   postHydrationCup,
   putHydrationCup,
   PostSnackFood,
+  create,
+  remove,
+  find,
 } from "../services/DietDataService.js";
+import toast from "react-hot-toast";
 
 export const UseGetDiet = (url, userId = null, token) => {
   const [DietServer, SetDietServer] = useState({});
   const [SnackDiaryData, SetSnackDiary] = useState(null);
   const [HidrateData, SetHidrateData] = useState(null);
   const [FoodServer, SetFood] = useState([]);
+  const [HistoricSnack, SetHistoricSnack] = useState([]);
   const [SearchFoodServer, SetFoodServer] = useState([]);
 
   useEffect(() => {
@@ -45,6 +50,7 @@ export const UseGetDiet = (url, userId = null, token) => {
         SetSnackDiary(data);
       } catch (error) {
         console.error("Erro ao buscar snacks:", error);
+        toast.error(error);
       }
     };
     requestSnack();
@@ -55,9 +61,22 @@ export const UseGetDiet = (url, userId = null, token) => {
         SetHidrateData(data);
       } catch (error) {
         console.error("Erro ao buscar copos:", error);
+        toast.error(error);
       }
     };
     requestHidrate();
+
+    const GetHistoricSnack = async () => {
+      try {
+        const response = await find(`/diets/snack/historic/${userId}`, token);
+        SetHistoricSnack(response);
+        return response;
+      } catch (error) {
+        toast.error(error);
+      }
+    };
+
+    GetHistoricSnack();
   }, [userId, token]);
 
   // requsição nas dietas
@@ -67,6 +86,16 @@ export const UseGetDiet = (url, userId = null, token) => {
       SetFood(response);
     } catch (error) {
       console.error("Erro ao buscar alimentos:", error);
+    }
+  };
+
+  const CreateDietData = async (Route, data, tokenIn) => {
+    try {
+      console.log(tokenIn);
+      const response = await create(Route, data, tokenIn);
+      toast.success("Registrado com sucesso!");
+    } catch (error) {
+      toast.error("Error");
     }
   };
 
@@ -96,6 +125,9 @@ export const UseGetDiet = (url, userId = null, token) => {
 
   const DeleteSnackFood = async (foodId, tokenIn) => {
     return deleteSnackFood(foodId, tokenIn);
+  };
+  const DeleteCups = async (route, tokenIn) => {
+    return remove(route, tokenIn);
   };
 
   // Ações específicas do WaterManage (mantidas no hook, usando o service)
@@ -127,6 +159,9 @@ export const UseGetDiet = (url, userId = null, token) => {
     RefreshHydration,
     CreateHydrationCup,
     UpdateHydrationCup,
-    CreateSnackFood
+    CreateSnackFood,
+    CreateDietData,
+    DeleteCups,
+    HistoricSnack
   };
 };

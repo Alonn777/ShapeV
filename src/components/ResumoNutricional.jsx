@@ -3,7 +3,13 @@ import "../css/ResumoNutricional.css";
 
 const ResumoNutricional = ({ SnackDiet }) => {
   const [DietList, SetDietList] = useState([]);
-  const [BodyPlan, SetBodyPlan] = useState(null);
+  const [BodyPlan, SetBodyPlan] = useState({
+    type: "stay",
+    kcal: 2200,
+    protein: 140,
+    carbo: 250,
+    lipid: 70,
+  });
   const [KcalList, SetKcalList] = useState([]);
   const [Protein, SetProtein] = useState([]);
   const [Carboidrato, SetCarboidrato] = useState([]);

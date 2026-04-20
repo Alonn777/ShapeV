@@ -2,6 +2,7 @@ import "../css/DietsLayout.css";
 import WaterManage from "../components/WaterManage.jsx";
 import SnackDiary from "../components/SnackDiary.jsx";
 import SearchNutri from "../components/SearchNutri.jsx";
+import ProgressoSemanal from "../components/ProgressoSemanal.jsx";
 import ResumoNutricional from "../components/ResumoNutricional.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { Search, Calendar, Plus, ArrowLeft, Utensils } from "lucide-react";
@@ -23,11 +24,8 @@ const DietsLayout = () => {
 
   // Validação do id antes de fazer requisições
 
-  const { HidrateData, SnackDiaryData, GetFood, FoodServer } = UseGetDiet(
-    null,
-    id,
-    token,
-  );
+  const { HidrateData, SnackDiaryData, GetFood, FoodServer, HistoricSnack } =
+    UseGetDiet(null, id, token);
 
   // States para controlar a aplicação
   const [SearchDiet, SetSearchDiet] = useState(false);
@@ -79,23 +77,16 @@ const DietsLayout = () => {
             </span>
             Buscar alimento
           </button>
-          <button type="button" className="Create-snack">
-            <span>
-              <Plus />
-            </span>
-            Nova refeição
-          </button>
         </div>
       </header>
 
-      {SearchDiet ? (
+      {SearchDiet && (
         <section className="search-container">
           <SearchNutri ChangeDiet={SetSearchDiet} FoodInfos={FoodServer} />
-          <div className="shadow-search" onClick={ModalClick}></div>
+          <div className="shadow-container" onClick={ModalClick}></div>
         </section>
-      ) : (
-        ""
       )}
+
       <div className="main-diet">
         <section className="nutrition-container">
           {SnackDiaryData && SnackDiaryData.length > 0 ? (
@@ -105,9 +96,10 @@ const DietsLayout = () => {
           )}
         </section>
 
+  
         <section className="hidatration-container">
           {HidrateData ? (
-            <WaterManage HidrateItem={HidrateData} token={token}/>
+            <WaterManage HidrateItem={HidrateData} token={token} />
           ) : (
             <Loader />
           )}
@@ -125,6 +117,15 @@ const DietsLayout = () => {
             <Loader />
           )}
         </section>
+
+        <section className="historic-container">
+          {HistoricSnack ? (
+            <ProgressoSemanal HistoricSnack={HistoricSnack} />
+          ) : (
+            <Loader />
+          )}
+        </section>
+
         <div className="fast-cardap"></div>
       </div>
     </div>

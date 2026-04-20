@@ -69,6 +69,34 @@ export const putHydrationCup = async (cupId, cupPatch, token) => {
   });
 };
 
+export const create = async (Route, data, token) => {
+  return request(Route, {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+}
+
+export const remove = async (Route, token) => {
+  return request(Route, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+}
+
+export const find = async (Route, token) => {
+  return request(Route, {
+    headers: {
+      Authorization: `Bearer ${token}`
+
+    }
+  })
+}
+
 // Taco
 export const getTacoFoods = async (token) => {
   return request(`/taco`, {

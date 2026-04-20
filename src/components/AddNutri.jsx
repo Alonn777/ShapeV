@@ -5,7 +5,19 @@ import { UseGetDiet } from "../hooks/useGetDiet";
 import debounce from "lodash.debounce";
 import { X, Plus } from "lucide-react";
 import Loader from "./Loader.jsx";
-import { data, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+
+/**
+ * @typedef {Object} FoodItem
+ * @property {string|number} id
+ * @property {string} [description]
+ * @property {string} [category]
+ * @property {number} [energy_kcal]
+ * @property {number} [protein_g]
+ * @property {number} [carbohydrate_g]
+ * @property {number} [lipid_g]
+ * @property {number} [portion_g]
+ */
 
 const AddNutri = ({
   BackDash,
@@ -22,8 +34,8 @@ const AddNutri = ({
 
   const [Food, SetFood] = useState([]);
   const [SearchValue, SetSearchValue] = useState("");
-  const [SelectOriginal, SetOriginalSelected] = useState(null);
-  const [SelectFood, SetSelectedFood] = useState(null);
+  /** ID estável do card selecionado (evita === entre objetos quando a lista recarrega). */
+  const [selectedFoodId, setSelectedFoodId] = useState(null);
   const [Multiplcate, SetMultiplicate] = useState(1);
   const [GramasTotal, SetGramasTotal] = useState(100);
   // const { SearchFoodServer, SearchFood } = UseGet();
@@ -67,10 +79,7 @@ const AddNutri = ({
   };
 
   const toggleCard = (item) => {
-    SetOriginalSelected((prevSelected) =>
-      prevSelected === item ? null : item,
-    );
-    SetSelectedFood((prevSelected) => (prevSelected === item ? null : item));
+    setSelectedFoodId((prev) => (prev === item.id ? null : item.id));
     SetMultiplicate(1);
   };
 
@@ -78,34 +87,40 @@ const AddNutri = ({
     SetViewNutrient(false);
     SetNewNutrient(true);
   };
-  // 3.1 - Duplicando valor com a quantidade de porções comidas
-  useEffect(() => {
-    const resultadoGramas = () => {
-      if (!SelectOriginal) return;
-      const factorNumber = Number(GramasTotal) / 100;
-      SetSelectedFood(() => {
-        return Object.fromEntries(
-          Object.entries(SelectOriginal).map(([key, value]) => {
-            if (key === "id" || key === "description" || key === "category") {
-              return [key, value];
-            }
-            if (key === "portion_g") {
-              return [key, Number(GramasTotal)];
-            }
-            if (typeof value === "number" && !isNaN(value)) {
-              return [key, parseFloat((value * factorNumber).toFixed(4))];
-            }
+  const SelectOriginal = useMemo(() => {
+    if (selectedFoodId == null) return null;
+    return Food.find((f) => f.id === selectedFoodId) ?? null;
+  }, [Food, selectedFoodId]);
 
-            return [key, value];
-          }),
-        );
-      });
-    };
-    resultadoGramas();
+  const SelectFood = useMemo(() => {
+    if (!SelectOriginal) return null;
+    const factorNumber = Number(GramasTotal) / 100;
+    return Object.fromEntries(
+      Object.entries(SelectOriginal).map(([key, value]) => {
+        if (key === "id" || key === "description" || key === "category") {
+          return [key, value];
+        }
+        if (key === "portion_g") {
+          return [key, Number(GramasTotal)];
+        }
+        if (typeof value === "number" && !isNaN(value)) {
+          return [key, parseFloat((value * factorNumber).toFixed(4))];
+        }
+        return [key, value];
+      }),
+    );
   }, [GramasTotal, SelectOriginal]);
+
+  useEffect(() => {
+    if (selectedFoodId == null) return;
+    if (!Food.some((f) => f.id === selectedFoodId)) {
+      setSelectedFoodId(null);
+    }
+  }, [Food, selectedFoodId]);
 
   const addNutrient = async (event) => {
     event.preventDefault();
+    if (!SelectFood) return;
     await CreateSnackFood(SnackSection, SelectFood, token);
     await getDiet();
     await BackDash(false);
@@ -128,7 +143,7 @@ const AddNutri = ({
         />
       </form>
       <div className="Nutri-actions">
-        <button onClick={HandleCreate}>
+        <button onClick={HandleCreate} className="btn-action">
           <span>
             <Plus />
           </span>
@@ -142,7 +157,7 @@ const AddNutri = ({
           Food.map((foodItem) => (
             <div
               className={`nutri-card ${
-                SelectOriginal === foodItem ? `active` : ``
+                selectedFoodId === foodItem.id ? `active` : ``
               }`}
               onClick={() => toggleCard(foodItem)}
               key={foodItem.id}
@@ -167,7 +182,7 @@ const AddNutri = ({
           <Loader />
         )}
       </div>
-      {SelectOriginal ? (
+      {SelectOriginal && SelectFood ? (
         <form className="form-addNutri" onSubmit={(e) => addNutrient(e)}>
           <div className="box-nutri">
             <label htmlFor="gramas">Quantidade de Gramas:</label>
@@ -181,7 +196,7 @@ const AddNutri = ({
             />
           </div>
           <p className="nutri-info">
-            Total: {SelectFood.energy_kcal.toFixed(0)}kcal
+            Total: {Number(SelectFood.energy_kcal ?? 0).toFixed(0)}kcal
           </p>
           <p className="nutri-info">Alimento: {SelectFood.description}</p>
           <button type="submit">Confirmar</button>

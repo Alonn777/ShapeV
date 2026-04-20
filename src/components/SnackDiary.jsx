@@ -88,6 +88,7 @@ const SnackDiary = ({ SnackDiet, token }) => {
     }
   };
 
+
   return (
     <div className="snack-box">
       {DietList &&
@@ -188,13 +189,23 @@ const SnackDiary = ({ SnackDiet, token }) => {
                   SetViewNutrient={SetViewNutrient}
                   SetNewNutrient={SetNewNutrient}
                 />
-                <div className="shadow-search" onClick={invisibleCard}></div>
+                <div className="shadow-container" onClick={invisibleCard}></div>
               </div>
             ) : (
               ""
             )}
 
-            {NewNutrient ? <NewFood /> : ""}
+            {NewNutrient ? (
+              <div className="NewFood-container">
+                <NewFood onClose={() => SetNewNutrient(false)} token={token} />
+                <div
+                  className="shadow-container"
+                  onClick={() => SetNewNutrient(false)}
+                ></div>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         ))}
     </div>

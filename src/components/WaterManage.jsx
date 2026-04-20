@@ -1,4 +1,4 @@
-import { GlassWater, Plus } from "lucide-react";
+import { GlassWater, Plus, Minus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { UseGetDiet } from "../hooks/useGetDiet.jsx";
@@ -7,7 +7,7 @@ const WaterManage = ({ HidrateItem, token }) => {
   // utilizando hooks seção
   const { id } = useParams();
   const DietID = HidrateItem.id;
-  const { RefreshHydration, CreateHydrationCup, UpdateHydrationCup } =
+  const { RefreshHydration, CreateHydrationCup, UpdateHydrationCup, DeleteCups } =
     UseGetDiet(null, null);
 
   const [Diet, SetDiet] = useState({});
@@ -16,7 +16,7 @@ const WaterManage = ({ HidrateItem, token }) => {
   const [percentual, SetPercentual] = useState(0);
 
   useEffect(() => {
-    SetCups(HidrateItem)
+    SetCups(HidrateItem);
   }, [HidrateItem]);
 
   useEffect(() => {
@@ -27,9 +27,9 @@ const WaterManage = ({ HidrateItem, token }) => {
   }, [cups]);
 
   useEffect(() => {
-      const percentualDrunk = (CupDrunk / cups.length) * 100;
-      const PercentualFormated = percentualDrunk.toFixed(0);
-      SetPercentual(PercentualFormated)
+    const percentualDrunk = (CupDrunk / cups.length) * 100;
+    const PercentualFormated = percentualDrunk.toFixed(0);
+    SetPercentual(PercentualFormated);
   }, [CupDrunk]);
 
   // Funções de requsição
@@ -49,7 +49,6 @@ const WaterManage = ({ HidrateItem, token }) => {
     const DrunkTrue = { drunk: true };
     const DrunkFalse = { drunk: false };
 
-    
     if (CurrentCup === false) {
       await UpdateHydrationCup(CupId, DrunkTrue, token);
       await UpdateState(token);
@@ -59,6 +58,12 @@ const WaterManage = ({ HidrateItem, token }) => {
       await UpdateState(token);
     }
   };
+
+  const removeCups = async ()=>{
+   await DeleteCups(`/diets/hidrate/${id}`, token)
+   await UpdateState(token);
+
+  }
   return (
     <div className="hidration-content">
       <div className="icon-hidration">
@@ -81,8 +86,8 @@ const WaterManage = ({ HidrateItem, token }) => {
             style={{ width: `${percentual}%` }}
           ></div>
         </div>
-         <div className="cups-box">
-           {cups
+        <div className="cups-box">
+          {cups
             ? cups.map((item) => (
                 <div
                   className={`cup ${item.drunk ? "active" : ""}`}
@@ -92,14 +97,22 @@ const WaterManage = ({ HidrateItem, token }) => {
                   <GlassWater />
                 </div>
               ))
-            : ""} 
-        </div> 
-        <button type="button" onClick={AddCup}>
-          <span>
-            <Plus></Plus>
-          </span>
-          Adicionar copo
-        </button>
+            : ""}
+        </div>
+        <div className="buttons-box">
+          <button type="button" onClick={AddCup}>
+            <span>
+              <Plus></Plus>
+            </span>
+            Adicionar copo
+          </button>
+          <button onClick={()=> removeCups()}>
+            <span>
+              <Minus />
+            </span>
+            Limpar copos
+          </button>
+        </div>
       </div>
     </div>
   );
