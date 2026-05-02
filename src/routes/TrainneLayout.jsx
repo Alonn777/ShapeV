@@ -157,7 +157,7 @@ const TrainneLayout = () => {
                           </div>
 
                           <div className="start-trainning">
-                          <p className="time-info">{item.time}</p>
+                            <p className="time-info">{item.time}</p>
 
                             <button className="button-blocked">-</button>
 
@@ -202,23 +202,15 @@ const TrainneLayout = () => {
                         </div>
 
                         <div className="start-trainning">
-                            <p className="time-info">{item.time}</p>
-                         
-                          {item.trainningCreate ? (
-                            <button
-                              className="btn-start-trainning"
-                              onClick={() => handleExercise(item)}
-                            >
-                              Iniciar
-                            </button>
-                          ) : (
-                            <button
-                              className="btn-exercise"
-                              onClick={() => handleExercise(item)}
-                            >
-                              Criar
-                            </button>
-                          )}
+                          <p className="time-info">{item.time}</p>
+
+                          <button
+                            className="btn-start-trainning"
+                            onClick={() => handleExercise(item)}
+                          >
+                            Iniciar
+                          </button>
+
                           <button
                             onClick={() => showRest(index, item)}
                             className="btn-ellipsis"

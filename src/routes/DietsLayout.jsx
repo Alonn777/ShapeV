@@ -4,6 +4,7 @@ import SnackDiary from "../components/SnackDiary.jsx";
 import SearchNutri from "../components/SearchNutri.jsx";
 import ProgressoSemanal from "../components/ProgressoSemanal.jsx";
 import ResumoNutricional from "../components/ResumoNutricional.jsx";
+import WeekHistoric from "../components/WeekHistoric.jsx"
 import { useNavigate, useParams } from "react-router-dom";
 import { Search, Calendar, Plus, ArrowLeft, Utensils } from "lucide-react";
 import { SessionStorage } from "../hooks/SessionStorage.jsx";
@@ -117,6 +118,16 @@ const DietsLayout = () => {
             <Loader />
           )}
         </section>
+
+
+        <section className="historic-container">
+          {HistoricSnack ? (
+            <WeekHistoric HistoricSnack={HistoricSnack}/>
+) : (
+            <Loader />
+          )}
+        </section>
+
 
         <section className="historic-container">
           {HistoricSnack ? (

@@ -748,6 +748,187 @@ border: 1px solid #21dbf3;
   margin: 1rem 0 1.5rem;
 }
 
+.week-historic {
+  background: #090d1e;
+  border: 1px solid #1f2937;
+  border-radius: 14px;
+  padding: 1.15rem 1.25rem 0.75rem;
+}
+
+.week-historic__header {
+  margin-bottom: 0.75rem;
+}
+
+.week-historic__title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.week-historic__title h3 {
+  margin: 0;
+  font-size: 1.12rem;
+}
+
+.week-historic__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.week-historic__item {
+  border-bottom: 1px solid #172035;
+}
+
+.week-historic__item:last-child {
+  border-bottom: none;
+}
+
+.week-historic__row {
+  width: 100%;
+  background: transparent;
+  color: #e2e8f0;
+  border: none;
+  cursor: pointer;
+  padding: 0.85rem 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 0.7rem;
+  text-align: left;
+}
+
+.week-historic__date-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.week-historic__icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid #1e2b47;
+  background: #0a1329;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.week-historic__day {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.week-historic__date {
+  margin: 0.2rem 0 0;
+  color: #8ea1c6;
+  font-size: 0.78rem;
+}
+
+.week-historic__kcal-group {
+  text-align: right;
+}
+
+.week-historic__kcal {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 700;
+}
+
+.week-historic__meals {
+  margin: 0.2rem 0 0;
+  color: #9eb0d2;
+  font-size: 0.78rem;
+}
+
+.week-historic__chevron {
+  color: #b7c6e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.week-historic__expand {
+  background: #0a1125;
+  border: 1px solid #1a2743;
+  border-radius: 10px;
+  margin: 0 0 0.85rem;
+  padding: 0.8rem 0.85rem;
+}
+
+.week-historic__macros {
+  margin: 0;
+  color: #b4c3df;
+  font-size: 0.84rem;
+}
+
+.week-historic__meals-list {
+  margin-top: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.week-historic__meal {
+  border: 1px solid #1a2743;
+  background: #091128;
+  border-radius: 9px;
+  padding: 0.65rem 0.7rem;
+}
+
+.week-historic__meal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.35rem;
+}
+
+.week-historic__meal-header h4 {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.week-historic__meal-header p {
+  margin: 0;
+  color: #c0d0eb;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.week-historic__foods {
+  margin: 0.6rem 0 0;
+  padding: 0;
+  list-style: none;
+  color: #e0e9fb;
+  font-size: 0.82rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.week-historic__foods li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.7rem;
+}
+
+.week-historic__foods li span:last-child {
+  color: #a9bcdd;
+  font-size: 0.78rem;
+  flex-shrink: 0;
+}
+
+.week-historic__empty {
+  margin: 0.35rem 0 0;
+  color: #8ea1c6;
+  font-size: 0.82rem;
+}
+
 .weekly-progress {
   background: #090d1e;
   border: 1px solid #1f2937;
@@ -869,6 +1050,10 @@ border: 1px solid #21dbf3;
     padding: 1.1rem 1.1rem 0.95rem;
   }
 
+  .week-historic {
+    padding: 1.05rem 1.05rem 0.65rem;
+  }
+
   .weekly-progress__bar-shell {
     height: 84px;
   }
@@ -953,6 +1138,28 @@ border: 1px solid #21dbf3;
     gap: 0.45rem;
   }
 
+  .week-historic__row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "date chevron"
+      "kcal chevron";
+    gap: 0.25rem 0.7rem;
+  }
+
+  .week-historic__date-group {
+    grid-area: date;
+  }
+
+  .week-historic__kcal-group {
+    grid-area: kcal;
+    text-align: left;
+    margin-left: 2.75rem;
+  }
+
+  .week-historic__chevron {
+    grid-area: chevron;
+  }
+
   .weekly-progress__tab {
     font-size: 0.8rem;
   }
@@ -1021,6 +1228,31 @@ border: 1px solid #21dbf3;
 
   .weekly-progress {
     padding: 1rem 0.85rem 0.9rem;
+  }
+
+  .week-historic {
+    padding: 0.95rem 0.8rem 0.6rem;
+  }
+
+  .week-historic__title h3 {
+    font-size: 1rem;
+  }
+
+  .week-historic__icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .week-historic__day {
+    font-size: 0.92rem;
+  }
+
+  .week-historic__date,
+  .week-historic__meals,
+  .week-historic__macros,
+  .week-historic__foods,
+  .week-historic__empty {
+    font-size: 0.74rem;
   }
 
   .weekly-progress__tabs {
