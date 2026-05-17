@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Loader from "./Loader.jsx";
+import Loader from "../Loader.jsx";
 import {
   LineChart,
   Line,

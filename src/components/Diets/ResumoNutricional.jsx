@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "../css/ResumoNutricional.css";
+import "../../css/ResumoNutricional.css";
 
 const ResumoNutricional = ({ SnackDiet }) => {
   const [DietList, SetDietList] = useState([]);

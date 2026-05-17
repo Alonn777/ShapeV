@@ -1,6 +1,6 @@
 import AddNutri from "./AddNutri.jsx";
 import NewFood from "./NewFood.jsx";
-import { UseGetDiet } from "../hooks/useGetDiet.jsx";
+import { UseGetDiet } from "../../hooks/useGetDiet.jsx";
 import { Coffee, Utensils, Apple } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { ChevronDown, ChevronUp, Trash, Plus } from "lucide-react";

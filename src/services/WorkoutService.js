@@ -1,6 +1,27 @@
 import request from './api.js'
 
 
+
+export const Create = async (route, data, token) => {
+    return request(route, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+}
+
+export const Patch = async (route, data, token) => {
+    return request(route, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+}
+
 export const PostWorkoutService = async (id, data, token) => {
     return request(`/users/workouts/exercise/${id}`, {
         method: "POST",

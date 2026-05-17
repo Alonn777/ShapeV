@@ -3,7 +3,7 @@ import { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { SessionStorage } from "../hooks/SessionStorage.jsx";
 import { UseWorkouts } from "../hooks/useWorkouts.jsx";
-import Timer from "../components/Timer.jsx";
+import Timer from "../components/workouts/TImer.jsx";
 import { TimerContext } from "../context/TimerContext.jsx";
 import "../css/WorkoutsDashboard.css";
 
@@ -19,7 +19,8 @@ const WorkoutsDashboard = () => {
 
   const { id } = useParams();
   const location = useLocation();
-  const { userid, bodydataID } = location.state;
+  const { userid, bodydataID, session_data } = location.state;
+  const session_id = session_data[0].id;
   const navigate = useNavigate();
   const { data, getStorageUser } = SessionStorage();
   const token = data?.token;
@@ -37,6 +38,8 @@ const WorkoutsDashboard = () => {
     createExercise,
     deleteExercise,
     refreshExercises,
+    create_workout_session,
+    PatchRequest,
   } = UseWorkouts(id, userid, token);
 
   useEffect(() => {
@@ -85,7 +88,21 @@ const WorkoutsDashboard = () => {
       [name]: ChangeDay,
     }));
   };
-  const toggleExerciseCompletion = (exerciseId) => {
+  const toggleExerciseCompletion = async (exercise) => {
+    const exerciseId = exercise.id;
+    const data = {
+      exercise_name: exercise.name,
+      series: exercise.series,
+      reps: exercise.reps,
+      weight: exercise.weight,
+      rest: exercise.time,
+    };
+    if (!session_id) return;
+    await create_workout_session(
+      `/exercise-session/${session_id}`,
+      data,
+      token,
+    );
     setCompletedExercises((prev) =>
       prev.includes(exerciseId)
         ? prev.filter((id) => id !== exerciseId)
@@ -137,17 +154,20 @@ const WorkoutsDashboard = () => {
 
   // Botões timer
   const HandleFinnish = async () => {
-    const timer = {time: TimerValueContext}
-    await updateWorkout(id, timer, token); 
+    const timer = { time: TimerValueContext };
+    await updateWorkout(id, timer, token);
+    await PatchRequest(
+      `/workout-session/${session_id}`,
+      { duration: TimerValueContext },
+      token,
+    );
     SetPause(false);
     SetFinnished(true);
   };
-  const backTimerDash =  ()=>{
- 
+  const backTimerDash = () => {
     navigate(`/home/workouts/${bodydataID}`);
-    SetFinnished(false)
-  }
-  console.log(WorkoutPrev)
+    SetFinnished(false);
+  };
 
   // Função para alternar o estado de conclusão do exercício
   return (
@@ -211,9 +231,7 @@ const WorkoutsDashboard = () => {
                             type="checkbox"
                             className="checkmark"
                             checked={completedExercises.includes(exercise.id)}
-                            onChange={() =>
-                              toggleExerciseCompletion(exercise.id)
-                            }
+                            onChange={() => toggleExerciseCompletion(exercise)}
                           />
                           <h2>{exercise.name}</h2>
                         </div>
@@ -245,7 +263,7 @@ const WorkoutsDashboard = () => {
                         </div>
                         <div className="info-box">
                           <label>Peso:</label>
-                          <div className="info">{exercise.weight}kg</div>
+                          <div className="info">{exercise.weight}</div>
                         </div>
                         <div className="info-box">
                           <label>Descanso:</label>
@@ -365,7 +383,9 @@ const WorkoutsDashboard = () => {
       </div>
       <div className="footer-buttons">
         {finishedTimer ? (
-          <button className="button-dashboard" onClick={backTimerDash}>Voltar ao dashboard</button>
+          <button className="button-dashboard" onClick={backTimerDash}>
+            Voltar ao dashboard
+          </button>
         ) : (
           <div className="buttons-finnish">
             {paused ? (

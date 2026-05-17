@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import "../css/BodyData.css";
 import { SessionStorage } from "../hooks/SessionStorage.jsx";
 import { useBodyData } from "../hooks/useBodyData.jsx";
-import GraphBodyData from "../components/GraphBodyData.jsx";
+import GraphBodyData from "../components/BodyData/GraphBodyData.jsx";
 import Loader from "../components/Loader.jsx";
 
 const BodyData = () => {

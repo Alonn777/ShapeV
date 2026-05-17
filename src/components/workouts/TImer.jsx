@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { Clock, Play, Trophy } from "lucide-react";
-import { TimerContext } from "../context/TimerContext.jsx";
+import { TimerContext } from "../../context/TimerContext.jsx";
 
 const Timer = () => {
   const {

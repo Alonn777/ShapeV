@@ -1,10 +1,10 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
-import { UsePost } from "../hooks/usePost";
-import { UseGet } from "../hooks/useGet";
-import { UseGetDiet } from "../hooks/useGetDiet";
+import { UsePost } from "../../hooks/usePost.jsx";
+import { UseGet } from "../../hooks/useGet.jsx";
+import { UseGetDiet } from "../../hooks/useGetDiet.jsx";
 import debounce from "lodash.debounce";
 import { X, Plus } from "lucide-react";
-import Loader from "./Loader.jsx";
+import Loader from "../Loader.jsx";
 import { useParams } from "react-router-dom";
 
 /**

@@ -1,8 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
-import { UseGet } from "../hooks/useGet";
+import { UseGet } from "../../hooks/useGet.jsx";
 import debounce from "lodash.debounce";
 import { X } from "lucide-react";
-import Loader from "./Loader.jsx";
+import Loader from "../Loader.jsx";
 
 const SearchNutri = ({ ChangeDiet, FoodInfos }) => {
   const [Food, SetFood] = useState([]);

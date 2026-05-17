@@ -6,14 +6,18 @@ import {
   DeleteExerciseService,
   GetExerciseService,
   PostWorkoutService,
+  Create,
+  Patch,
 } from "../services/WorkoutService.js";
+import { create } from "../services/DietDataService.js";
+import { AwardIcon } from "lucide-react";
 
 export const UseWorkouts = (exerciseID = null, userId = null, token) => {
   const [Exercise, SetExercise] = useState([]);
   const [WorkoutsList, SetWorkoutsList] = useState([]);
 
   useEffect(() => {
-    if (!exerciseID || !token) return ;
+    if (!exerciseID || !token) return;
     const requestData = async () => {
       try {
         const response = await GetExerciseService(exerciseID, token);
@@ -38,10 +42,29 @@ export const UseWorkouts = (exerciseID = null, userId = null, token) => {
     requestWorkouts();
   }, [userId, token]);
 
+  // Novas funções de requisição
+  const create_workout_session = async (Route, data, token) => {
+    try {
+      const response = await Create(Route, data, token);
+      return response;
+    } catch (error) {
+      console.error({ Error: "Error in the request, verify" });
+    }
+  };
+
+  const PatchRequest = async (Route, data, token) => {
+    try {
+      const response = await Patch(Route, data, token);
+      return response
+    } catch (error) {
+      console.error({ Error: "Error in the request, verify" });
+    }
+  };
+
+  // Funções de requisição hard coded
   const refreshWorkouts = async (id, tokenIn) => {
     try {
       const response = await GetWorkoutService(id, tokenIn);
-      console.log(response);
       SetWorkoutsList(response);
     } catch (error) {
       console.error("Erro ao buscar workout:", error);
@@ -92,7 +115,6 @@ export const UseWorkouts = (exerciseID = null, userId = null, token) => {
     }
   };
 
-
   return {
     Exercise,
     WorkoutsList,
@@ -102,5 +124,7 @@ export const UseWorkouts = (exerciseID = null, userId = null, token) => {
     createExercise,
     deleteExercise,
     refreshExercises,
+    create_workout_session,
+    PatchRequest,
   };
 };

@@ -1,7 +1,7 @@
 import { GlassWater, Plus, Minus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { UseGetDiet } from "../hooks/useGetDiet.jsx";
+import { UseGetDiet } from "../../hooks/useGetDiet.jsx";
 
 const WaterManage = ({ HidrateItem, token }) => {
   // utilizando hooks seção

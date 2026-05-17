@@ -1,4 +1,4 @@
-import GraphBodyData from "../components/GraphBodyData.jsx";
+import GraphBodyData from "../components/BodyData/GraphBodyData.jsx";
 import { useBodyData } from "../hooks/useBodyData.jsx";
 import { useEffect, useContext, useState } from "react";
 import {
@@ -15,7 +15,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { SessionStorage } from "../hooks/SessionStorage";
 import { UseWorkouts } from "../hooks/useWorkouts";
 import "../css/TrainneLayout.css";
-import "../components/GraphBodyData.jsx";
+import "../components/BodyData/GraphBodyData.jsx";
 import Loader from "../components/Loader.jsx";
 
 const TrainneLayout = () => {
@@ -27,11 +27,8 @@ const TrainneLayout = () => {
   const { data, getStorageUser, deleteStorage } = SessionStorage();
   const id = data?.user.id;
   const token = data?.token;
-  const { WorkoutsList, updateWorkout, refreshWorkouts } = UseWorkouts(
-    null,
-    id,
-    token,
-  );
+  const { WorkoutsList, updateWorkout, refreshWorkouts, create_workout_session} =
+    UseWorkouts(null, id, token);
 
   const { BodyData, BodyMeta, BodyHistoricMetric } = useBodyData(
     bodydataID,
@@ -47,12 +44,23 @@ const TrainneLayout = () => {
     SetWorkoutRender(WorkoutsList);
   }, [WorkoutsList]);
 
-  const handleExercise = (itemDay) => {
+  const handleExercise = async (itemDay) => {
     if (!id) return;
-    navigate(`/home/workouts/exercise/${itemDay.id}`, {
-      state: { userid: id, bodydataID: bodydataID },
+    const session_data = await create_workout_session(
+      `/workout-session/${id}`,
+      {
+        workout_id: itemDay.id,
+        workout_name: itemDay.workout,
+        workout_day: itemDay.day,
+      },
+      token
+    );
+
+    await navigate(`/home/workouts/exercise/${itemDay.id}`, {
+      state: { userid: id, bodydataID: bodydataID, session_data},
     });
   };
+
   const BackHome = () => {
     navigate("/home");
   };

@@ -1,10 +1,10 @@
 import "../css/DietsLayout.css";
-import WaterManage from "../components/WaterManage.jsx";
-import SnackDiary from "../components/SnackDiary.jsx";
-import SearchNutri from "../components/SearchNutri.jsx";
-import ProgressoSemanal from "../components/ProgressoSemanal.jsx";
-import ResumoNutricional from "../components/ResumoNutricional.jsx";
-import WeekHistoric from "../components/WeekHistoric.jsx"
+import WaterManage from "../components/Diets/WaterManage.jsx";
+import SnackDiary from "../components/Diets/SnackDiary.jsx";
+import SearchNutri from "../components/Diets/SearchNutri.jsx";
+import ProgressoSemanal from "../components/Diets/ProgressoSemanal.jsx";
+import ResumoNutricional from "../components/Diets/ResumoNutricional.jsx";
+import WeekHistoric from "../components/Diets/WeekHistoric.jsx"
 import { useNavigate, useParams } from "react-router-dom";
 import { Search, Calendar, Plus, ArrowLeft, Utensils } from "lucide-react";
 import { SessionStorage } from "../hooks/SessionStorage.jsx";

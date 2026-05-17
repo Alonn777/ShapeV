@@ -1,7 +1,7 @@
 import React, { use } from "react";
 import { X } from "lucide-react";
 import { useState } from "react";
-import { UseGetDiet } from "../hooks/useGetDiet";
+import { UseGetDiet } from "../../hooks/useGetDiet";
 
 const NewFood = ({ onClose, token }) => {
   const { CreateDietData } = UseGetDiet();
