@@ -22,6 +22,13 @@ export const Patch = async (route, data, token) => {
     })
 }
 
+export const Get = async(route, token)=>{
+    return request(route, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+}
 export const PostWorkoutService = async (id, data, token) => {
     return request(`/users/workouts/exercise/${id}`, {
         method: "POST",

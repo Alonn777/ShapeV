@@ -8,13 +8,16 @@ import {
   PostWorkoutService,
   Create,
   Patch,
+  Get,
 } from "../services/WorkoutService.js";
 import { create } from "../services/DietDataService.js";
 import { AwardIcon } from "lucide-react";
+import { data } from "react-router-dom";
 
 export const UseWorkouts = (exerciseID = null, userId = null, token) => {
   const [Exercise, SetExercise] = useState([]);
   const [WorkoutsList, SetWorkoutsList] = useState([]);
+  const [LogsExerciseUser, SetLogExercisesUser] = useState([]);
 
   useEffect(() => {
     if (!exerciseID || !token) return;
@@ -43,6 +46,27 @@ export const UseWorkouts = (exerciseID = null, userId = null, token) => {
   }, [userId, token]);
 
   // Novas funções de requisição
+  useEffect(() => {
+    const requestExerciseLogsUser = async () => {
+      try {
+        const response = await Get(`/exercises-logs/${userId}`, token);
+        SetLogExercisesUser(response);
+      } catch (error) {
+        console.error({ Error: "Error in the request, verify" });
+      }
+    };
+    requestExerciseLogsUser();
+  }, [userId, token]);
+
+  // Requisições sem useEffect
+  const GetExerciseHistoric = async (Route, token) => {
+    try {
+      const response = await Get(Route, token);
+      return response
+    } catch (error) {
+      console.error({ Error: "Error in the request, verify" });
+    }
+  };
   const create_workout_session = async (Route, data, token) => {
     try {
       const response = await Create(Route, data, token);
@@ -55,7 +79,7 @@ export const UseWorkouts = (exerciseID = null, userId = null, token) => {
   const PatchRequest = async (Route, data, token) => {
     try {
       const response = await Patch(Route, data, token);
-      return response
+      return response;
     } catch (error) {
       console.error({ Error: "Error in the request, verify" });
     }
@@ -126,5 +150,7 @@ export const UseWorkouts = (exerciseID = null, userId = null, token) => {
     refreshExercises,
     create_workout_session,
     PatchRequest,
+    LogsExerciseUser,
+    GetExerciseHistoric,
   };
 };

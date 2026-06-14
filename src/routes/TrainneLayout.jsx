@@ -1,6 +1,6 @@
 import GraphBodyData from "../components/BodyData/GraphBodyData.jsx";
 import { useBodyData } from "../hooks/useBodyData.jsx";
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useContext, useState, useEffectEvent, use } from "react";
 import {
   Calendar,
   ArrowLeft,
@@ -17,6 +17,7 @@ import { UseWorkouts } from "../hooks/useWorkouts";
 import "../css/TrainneLayout.css";
 import "../components/BodyData/GraphBodyData.jsx";
 import Loader from "../components/Loader.jsx";
+import AnalysisWorkouts from "../components/workouts/premium/AnalysisWorkouts.jsx";
 
 const TrainneLayout = () => {
   // Configuração para determinadas funcionalidades
@@ -27,8 +28,13 @@ const TrainneLayout = () => {
   const { data, getStorageUser, deleteStorage } = SessionStorage();
   const id = data?.user.id;
   const token = data?.token;
-  const { WorkoutsList, updateWorkout, refreshWorkouts, create_workout_session} =
-    UseWorkouts(null, id, token);
+  const {
+    WorkoutsList,
+    updateWorkout,
+    refreshWorkouts,
+    create_workout_session,
+    LogsExerciseUser,
+  } = UseWorkouts(null, id, token);
 
   const { BodyData, BodyMeta, BodyHistoricMetric } = useBodyData(
     bodydataID,
@@ -53,11 +59,11 @@ const TrainneLayout = () => {
         workout_name: itemDay.workout,
         workout_day: itemDay.day,
       },
-      token
+      token,
     );
 
     await navigate(`/home/workouts/exercise/${itemDay.id}`, {
-      state: { userid: id, bodydataID: bodydataID, session_data},
+      state: { userid: id, bodydataID: bodydataID, session_data },
     });
   };
 
@@ -98,6 +104,7 @@ const TrainneLayout = () => {
       <button type="button" className="home-back" onClick={BackHome}>
         <ArrowLeft /> <span>Voltar para home</span>
       </button>
+
       <div className="box-insight-trainning">
         <div className="week-day">
           <div className="calendar-icon">
@@ -281,6 +288,9 @@ const TrainneLayout = () => {
             )}
           </div>
         </section>
+      </div>
+      <div className="analysis-container">
+        <AnalysisWorkouts LogsExercise={LogsExerciseUser} token={token}/>
       </div>
     </div>
   );

@@ -243,7 +243,9 @@
     color: #0ae641;
 }
 
-
+.analysis-container{
+    padding: 2rem;
+}
 /* ========== Responsivo (desktop first, max-width) ========== */
 
 /* Tablets e notebooks menores */

@@ -63,9 +63,11 @@ const WorkoutsDashboard = () => {
   const Back = () => {
     navigate(`/home/workouts/${bodydataID}`);
   };
+
   // função para criar novo exercicio
   const handleCreateExercise = async () => {
     const exerciseCard = {
+      user_id: userid,
       name: "Novo Exercício",
       series: 3,
       reps: 12,
@@ -91,13 +93,15 @@ const WorkoutsDashboard = () => {
   const toggleExerciseCompletion = async (exercise) => {
     const exerciseId = exercise.id;
     const data = {
+      user_id: userid,
+      exercise_id: exerciseId,
       exercise_name: exercise.name,
       series: exercise.series,
       reps: exercise.reps,
       weight: exercise.weight,
       rest: exercise.time,
     };
-    if (!session_id) return;
+    if (!session_id && !userid) return;
     await create_workout_session(
       `/exercise-session/${session_id}`,
       data,
